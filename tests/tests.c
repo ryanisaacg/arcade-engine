@@ -96,34 +96,34 @@ void rect_overlaps_test() {
 	Rect b = rect_new(6.f, 6.f, 5.f, 5.f);
 	Rect c = rect_new(2.f, 2.f, 10.f, 10.f);
 	Rect d = rect_new(1.f, 1.f, 1.f, 1.f);
-	assert(!rect_overlaps_rect(a,b));
-	assert(!rect_overlaps_rect(b,a));
-	assert(rect_overlaps_rect(a,c));
-	assert(rect_overlaps_rect(a,d));
-	assert(rect_overlaps_rect(c,a));
-	assert(rect_overlaps_rect(b,c));
-	assert(rect_overlaps_rect(c,b));
-	assert(rect_overlaps_rect(d,a));
+	assert(!overlaps_rect(a,b));
+	assert(!overlaps_rect(b,a));
+	assert(overlaps_rect(a,c));
+	assert(overlaps_rect(a,d));
+	assert(overlaps_rect(c,a));
+	assert(overlaps_rect(b,c));
+	assert(overlaps_rect(c,b));
+	assert(overlaps_rect(d,a));
 }
 
 void circle_overlaps_test() {
 	Circ a = circ_new(0.f, 0.f, 5.f);
 	Circ b = circ_new(10.f, 10.f, 2.f);
 	Circ c = circ_new(5.f, 5.f, 32.f);
-	assert(!circ_overlaps_circ(a, b));
-	assert(!circ_overlaps_circ(b, a));
-	assert(circ_overlaps_circ(a, c));
-	assert(circ_overlaps_circ(c, a));
-	assert(circ_overlaps_circ(b, c));
-	assert(circ_overlaps_circ(c, b));
+	assert(!overlaps_circ(a, b));
+	assert(!overlaps_circ(b, a));
+	assert(overlaps_circ(a, c));
+	assert(overlaps_circ(c, a));
+	assert(overlaps_circ(b, c));
+	assert(overlaps_circ(c, b));
 }
 
 void rect_circ_overlaps_test() {
 	Rect a = rect_new(0.f, 0.f, 32.f, 32.f); 
 	Circ b = circ_new(0.f, 0.f, 5.f);
 	Rect c = rect_new(-10.f, -20.f, 1.f, 5.f);
-	assert(rect_overlaps_circ(a, b));
-	assert(!rect_overlaps_circ(c, b));
+	assert(overlaps_rect_circ(a, b));
+	assert(!overlaps_rect_circ(c, b));
 }
 
 int main(int argc, char *argv[]) {
