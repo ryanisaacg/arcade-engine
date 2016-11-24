@@ -35,3 +35,7 @@ bool rect_intersects(Rect r, Line line) {
 	return rect_contains(r, line.start) || rect_contains(r, line.end) || line_intersects(rect_left(r), line) ||
 		line_intersects(rect_top(r), line) || line_intersects(rect_right(r), line) || line_intersects(rect_bottom(r), line);
 }
+//Check if two rectangles overlap
+bool rect_overlaps_rect(Rect a, Rect b) {
+	return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
+}

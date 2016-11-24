@@ -22,3 +22,5 @@ bool rect_engulfs(Rect outer, Rect inner);
 bool rect_contains(Rect r, Vector2 point);
 //Check to see if a rect intersects a line
 bool rect_intersects(Rect r, Line l);
+//Check if two rectangles overlap
+bool rect_overlaps_rect(Rect a, Rect b);
