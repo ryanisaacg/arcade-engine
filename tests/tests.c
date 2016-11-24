@@ -145,6 +145,8 @@ int main(int argc, char *argv[]) {
 		rect_overlaps_test();
 	else if(strcmp(argv[1], "circovr"))
 		circle_overlaps_test();
+	else if(strcmp(argv[1], "rectcirc"))
+		rect_circ_overlaps_test();
 	else
 		return 1;
 	return 0;
