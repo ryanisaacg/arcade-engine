@@ -7,10 +7,10 @@ file(GLOB SOURCES src/*.cpp)
 file(GLOB INCLUDES include/*.h)
 
 add_library(arcade-physics STATIC ${SOURCES} ${INCLUDES})
-set_property(TARGET arcade-physics PROPERTY CXX_STANDARD 14)
+set_property(TARGET arcade-physics PROPERTY C_STANDARD 99)
 
 add_executable(tests tests/tests.cpp)
-set_property(TARGET tests PROPERTY CXX_STANDARD 14)
+set_property(TARGET tests PROPERTY C_STANDARD 99)
 target_link_libraries(tests arcade-physics)
 
 enable_testing()
