@@ -39,3 +39,7 @@ bool rect_intersects(Rect r, Line line) {
 bool rect_overlaps_rect(Rect a, Rect b) {
 	return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
 }
+//Check if a rectangle overlaps a circle
+bool rect_overlaps_circ(Rect r, Circ c) {
+	return circ_intersects(c, rect_left(r)) || circ_intersects(c, rect_right(r)) || circ_intersects(c, rect_top(r)) || circ_intersects(c, rect_bottom(r));
+}

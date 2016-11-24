@@ -1,5 +1,6 @@
 #pragma once
 
+#include "circ.h"
 #include "lines.h"
 #include <stdbool.h>
 
@@ -24,3 +25,5 @@ bool rect_contains(Rect r, Vector2 point);
 bool rect_intersects(Rect r, Line l);
 //Check if two rectangles overlap
 bool rect_overlaps_rect(Rect a, Rect b);
+//Check if a rectangle overlaps a circle
+bool rect_overlaps_circ(Rect r, Circ c);

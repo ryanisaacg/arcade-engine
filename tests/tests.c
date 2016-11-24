@@ -117,6 +117,14 @@ void circle_overlaps_test() {
 	assert(circ_overlaps_circ(c, b));
 }
 
+void rect_circ_overlaps_test() {
+	Rect a = rect_new(0.f, 0.f, 32.f, 32.f); 
+	Circ b = circ_new(0.f, 0.f, 5.f);
+	Rect c = rect_new(-10.f, -20.f, 1.f, 5.f);
+	assert(rect_overlaps_circ(a, b));
+	assert(!rect_overlaps_circ(c, b));
+}
+
 int main(int argc, char *argv[]) {
 	if(strcmp(argv[1], "veclen"))
 		vector_length();
