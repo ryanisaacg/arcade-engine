@@ -3,7 +3,7 @@ project (arcade-physics)
 set(CMAKE_BUILD_TYPE Debug)
 
 include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
-file(GLOB SOURCES src/*.cpp)
+file(GLOB SOURCES src/*.c)
 file(GLOB INCLUDES include/*.h)
 
 add_library(arcade-physics STATIC ${SOURCES} ${INCLUDES})
