@@ -22,7 +22,7 @@ Line rect_bottom(Rect r) {
 	return line_new(vec2_new(r.x, r.y + r.height), vec2_new(r.x + r.width, r.y + r.height));
 }
 //Check if the inner rect is entirely contained within the outer rect
-bool engulfs(Rect outer, Rect inner) {
+bool rect_engulfs(Rect outer, Rect inner) {
 	return inner.x >= outer.x && inner.x + inner.width <= outer.x + outer.width && 
 		inner.y >= outer.y && inner.y + inner.height <= outer.y + outer.height;
 }

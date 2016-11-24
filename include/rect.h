@@ -17,7 +17,7 @@ Line rect_top(Rect r);
 //Get the bottom of the rect
 Line rect_bottom(Rect r);
 //Check if the inner rect is entirely contained within the outer rect
-bool engulfs(Rect outer, Rect inner);
+bool rect_engulfs(Rect outer, Rect inner);
 //Check if a rect contains a point
 bool rect_contains(Rect r, Vector2 point);
 //Check to see if a rect intersects a line
