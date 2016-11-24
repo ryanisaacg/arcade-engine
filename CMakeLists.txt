@@ -9,6 +9,7 @@ file(GLOB INCLUDES include/*.h)
 add_library(arcade-physics STATIC ${SOURCES} ${INCLUDES})
 set_property(TARGET arcade-physics PROPERTY C_STANDARD 99)
 set_target_properties(arcade-physics PROPERTIES LINKER_LANGUAGE C)
+target_link_libraries(arcade-physics m)
 
 add_executable(tests tests/tests.c)
 set_property(TARGET tests PROPERTY C_STANDARD 99)
