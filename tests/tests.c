@@ -1,4 +1,5 @@
 #include <assert.h>
+#include "circ.h"
 #include "lines.h"
 #include "rect.h"
 #include <stdbool.h>
@@ -104,8 +105,19 @@ void rect_overlaps_test() {
 	assert(rect_overlaps_rect(d,a));
 }
 
+void circle_overlaps_test() {
+	Circ a = circ_new(0.f, 0.f, 5.f);
+	Circ b = circ_new(10.f, 10.f, 2.f);
+	Circ c = circ_new(5.f, 5.f, 32.f);
+	assert(!circ_overlaps_circ(a, b));
+	assert(!circ_overlaps_circ(b, a));
+	assert(circ_overlaps_circ(a, c));
+	assert(circ_overlaps_circ(c, a));
+	assert(circ_overlaps_circ(b, c));
+	assert(circ_overlaps_circ(c, b));
+}
+
 int main(int argc, char *argv[]) {
-	if(argc == 1) return 0;
 	if(strcmp(argv[1], "veclen"))
 		vector_length();
 	else if(strcmp(argv[1], "vecscl"))
@@ -122,5 +134,9 @@ int main(int argc, char *argv[]) {
 		rect_engulf_test();
 	else if(strcmp(argv[1], "rectovr"))
 		rect_overlaps_test();
+	else if(strcmp(argv[1], "circovr"))
+		circle_overlaps_test();
+	else
+		return 1;
 	return 0;
 }
