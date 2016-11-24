@@ -30,6 +30,8 @@ Vector2 vec2_add(Vector2 a, Vector2 b);
 Vector2 vec2_sub(Vector2 a, Vector2 b);
 //Invert a vector2
 Vector2 vec2_neg(Vector2 vec);
+//Check if two vectors are equal
+bool vec2_eql(Vector2 a, Vector2 b);
 typedef struct {
 	Vector2 start, end;
 } Line;
