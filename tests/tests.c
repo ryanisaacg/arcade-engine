@@ -89,6 +89,21 @@ void rect_engulf_test() {
 	assert(!rect_engulfs(c,b));
 }
 
+void rect_overlaps_test() {
+	Rect a = rect_new(0.f, 0.f, 5.f, 5.f);
+	Rect b = rect_new(6.f, 6.f, 5.f, 5.f);
+	Rect c = rect_new(2.f, 2.f, 10.f, 10.f);
+	Rect d = rect_new(1.f, 1.f, 1.f, 1.f);
+	assert(!rect_overlaps_rect(a,b));
+	assert(!rect_overlaps_rect(b,a));
+	assert(rect_overlaps_rect(a,c));
+	assert(rect_overlaps_rect(a,d));
+	assert(rect_overlaps_rect(c,a));
+	assert(rect_overlaps_rect(b,c));
+	assert(rect_overlaps_rect(c,b));
+	assert(rect_overlaps_rect(d,a));
+}
+
 int main(int argc, char *argv[]) {
 	if(argc == 1) return 0;
 	if(strcmp(argv[1], "veclen"))
@@ -105,5 +120,7 @@ int main(int argc, char *argv[]) {
 		rect_intersect();
 	else if(strcmp(argv[1], "recteng"))
 		rect_engulf_test();
+	else if(strcmp(argv[1], "rectovr"))
+		rect_overlaps_test();
 	return 0;
 }
