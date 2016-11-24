@@ -89,3 +89,7 @@ bool line_intersects(Line a, Line b) {
 		return t >= 0.f && t <= 1.f && u >= 0.f && u <= 1.f;
 	}
 }
+//Check if two lines are equal
+bool line_eql(Line a, Line b) {
+	return vec2_eql(a.start, b.start) && vec2_eql(a.end, b.end);
+}

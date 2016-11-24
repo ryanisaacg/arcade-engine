@@ -40,3 +40,5 @@ Line line_new(Vector2 start, Vector2 end);
 //Check if two lines intersect
 //The end points are included
 bool line_intersects(Line a, Line b);
+//Check if two lines are equal
+bool line_eql(Line a, Line b);
