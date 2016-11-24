@@ -13,10 +13,10 @@ I want to release a 1.0 version as soon as possible to begin providing a stable 
 Version 0.1: 
 
 - [x] Basic vector and line math
-- [ ] Implementation of basic shapes such as AABB, circles, and polygons
+- [x] Implementation of basic shapes such as AABB, circles, and polygons
 - [ ] A universal shape handle
-- [ ] Rotated polygons
-- [ ] Simple rectangle polygon constructors
+- [x] Rotated polygons
+- [x] Simple rectangle polygon constructors
 
 Version 0.2:
 
