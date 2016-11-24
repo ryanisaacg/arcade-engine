@@ -62,3 +62,14 @@ bool shape_intersects(Shape s, Line line) {
 	}
 	return false;
 }
+Rect shape_bounding_box(Shape s) {
+	switch(s.type) {
+		case SHAPE_IS_RECT:
+			return s.data.r;
+		case SHAPE_IS_CIRC:
+			return circ_bounding_box(s.data.c);
+		case SHAPE_IS_POLY:
+			return poly_bounding_box(s.data.p);
+	}
+	return rect_new(0, 0, 0, 0);
+}

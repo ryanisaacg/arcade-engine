@@ -51,6 +51,27 @@ bool poly_intersects(Polygon poly, Line line) {
 	}
 	return false;
 }
+//Find the bounds of a polygon as a rect
+Rect poly_bounding_box(Polygon poly) {
+	float x_min, y_min, x_max, y_max;
+	Vector2 first = poly_get_vertex(poly, 0);
+	x_min = x_max = first.x;
+	y_min = y_max = first.y;
+	for(size_t i = 1; i < poly.num_points; i++) {
+		Vector2 point = poly_get_vertex(poly, i);
+		if(point.x < x_min) {
+			x_min = point.x;
+		} else if(point.x > x_max) {
+			x_max = point.y;
+		}
+		if(point.y < y_min) {
+			y_min = point.y;
+		} else if(point.y > y_max) {
+			y_max = point.y;
+		}
+	}
+	return rect_new(x_min, y_min, x_max - x_min, y_max - y_min);
+}
 void poly_destroy(Polygon poly) {
 	free(poly.points);
 }

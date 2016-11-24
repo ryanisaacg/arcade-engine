@@ -21,4 +21,6 @@ Vector2 poly_get_vertex(Polygon poly, size_t index);
 bool poly_contains(Polygon poly, Vector2 point);
 //Find if a polygon collided with a line
 bool poly_intersects(Polygon poly, Line line);
+//Find the bounds of a polygon as a rect
+Rect poly_bounding_box(Polygon poly);
 void poly_destroy(Polygon poly);
