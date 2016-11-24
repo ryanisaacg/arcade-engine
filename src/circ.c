@@ -27,10 +27,7 @@ bool circ_intersects(Circ c, Line l) {
 	// Check to see if the closest point is within the radius
 	return vec2_len2(vec2_sub(center, check_point)) < (c.radius * c.radius);
 }
-//Check if a circ overlaps another circ
-bool circ_overlaps_circ(Circ a, Circ b) {
-	Vector2 center = vec2_new(a.x, a.y);
-	Vector2 other = vec2_new(b.x, b.y);
-	float radius_sum = a.radius + b.radius;
-	return vec2_len2(vec2_sub(center, other)) < (radius_sum * radius_sum);
+//Get the rect bounding box of a circle
+Rect circ_bounding_box(Circ circ) {
+	return rect_new(circ.x - circ.radius, circ.y - circ.radius, circ.x + circ.radius, circ.y + circ.radius);
 }

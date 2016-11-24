@@ -1,8 +1,8 @@
 #pragma once
 
-#include <stdbool.h>
-
 #include "lines.h"
+#include "rect.h"
+#include <stdbool.h>
 
 typedef struct {
 	float x, y, radius;
@@ -14,6 +14,6 @@ Circ circ_new(float x, float y, float radius);
 bool circ_contains(Circ c, Vector2 v);
 //Check if a circle intersects a line
 bool circ_intersects(Circ c, Line l);
-//Check if a circ overlaps another circ
-bool circ_overlaps_circ(Circ a, Circ b);
+//Get the rect bounding box of a circle
+Rect circ_bounding_box(Circ circ);
 

@@ -1,5 +1,6 @@
 #include <assert.h>
 #include "circ.h"
+#include "collision.h"
 #include "lines.h"
 #include "rect.h"
 #include <stdbool.h>
@@ -82,12 +83,12 @@ void rect_engulf_test() {
 	Rect a = rect_new(0.f, 0.f, 64.f, 64.f);
 	Rect b = rect_new(0.f, 0.f, 32.f, 32.f);
 	Rect c = rect_new(0.f, 0.f, 16.f, 16.f);
-	assert(rect_engulfs(a,b));
-	assert(rect_engulfs(a,c));
-	assert(rect_engulfs(b,c));
-	assert(!rect_engulfs(b,a));
-	assert(!rect_engulfs(c,a));
-	assert(!rect_engulfs(c,b));
+	assert(engulfs_rect(a,b));
+	assert(engulfs_rect(a,c));
+	assert(engulfs_rect(b,c));
+	assert(!engulfs_rect(b,a));
+	assert(!engulfs_rect(c,a));
+	assert(!engulfs_rect(c,b));
 }
 
 void rect_overlaps_test() {

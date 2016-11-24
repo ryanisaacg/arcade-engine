@@ -1,6 +1,5 @@
 #pragma once
 
-#include "circ.h"
 #include "lines.h"
 #include <stdbool.h>
 
@@ -17,13 +16,7 @@ Line rect_right(Rect r);
 Line rect_top(Rect r);
 //Get the bottom of the rect
 Line rect_bottom(Rect r);
-//Check if the inner rect is entirely contained within the outer rect
-bool rect_engulfs(Rect outer, Rect inner);
 //Check if a rect contains a point
 bool rect_contains(Rect r, Vector2 point);
 //Check to see if a rect intersects a line
 bool rect_intersects(Rect r, Line l);
-//Check if two rectangles overlap
-bool rect_overlaps_rect(Rect a, Rect b);
-//Check if a rectangle overlaps a circle
-bool rect_overlaps_circ(Rect r, Circ c);
