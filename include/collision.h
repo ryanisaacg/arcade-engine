@@ -4,6 +4,7 @@
 #include "lines.h"
 #include "poly.h"
 #include "rect.h"
+#include "shape.h"
 
 bool engulfs_circ(Circ outer, Circ inner);
 bool engulfs_rect(Rect outer, Rect inner);
@@ -15,3 +16,4 @@ bool overlaps_rect(Rect a, Rect b);
 bool overlaps_rect_circ(Rect a, Circ b);
 bool overlaps_poly_rect(Polygon a, Rect b);
 bool overlaps_poly_circ(Polygon a, Circ b);
+bool overlaps_shape(Shape a, Shape b);

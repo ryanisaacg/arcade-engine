@@ -42,3 +42,39 @@ bool overlaps_poly_rect(Polygon a, Rect b) {
 bool overlaps_poly_circ(Polygon a, Circ b) {
 	POLY_OVERLAP(a, b, circ_intersects);
 }
+bool overlaps_shape(Shape a, Shape b) {
+	if(a.type == b.type) {
+		switch(a.type) {
+			case SHAPE_IS_CIRC:
+				return overlaps_circ(a.data.c, b.data.c);
+			case SHAPE_IS_POLY:
+				return overlaps_poly(a.data.p, b.data.p);
+			case SHAPE_IS_RECT:
+				return overlaps_rect(a.data.r, b.data.r);
+		}
+	} else {
+		switch(a.type) {
+			case SHAPE_IS_CIRC:
+				return overlaps_shape(b, a);
+			case SHAPE_IS_RECT:
+				switch(b.type) {
+					case SHAPE_IS_CIRC:
+						return overlaps_rect_circ(a.data.r, b.data.c);
+					case SHAPE_IS_RECT:
+						return overlaps_rect(a.data.r, b.data.r);
+					case SHAPE_IS_POLY:
+						return overlaps_poly_rect(b.data.p, a.data.r);
+				}
+			case SHAPE_IS_POLY:
+				switch(b.type) {
+					case SHAPE_IS_CIRC:
+						return overlaps_poly_circ(a.data.p, b.data.c);
+					case SHAPE_IS_RECT:
+						return overlaps_poly_rect(a.data.p, b.data.r);
+					case SHAPE_IS_POLY:
+						return overlaps_poly(a.data.p, b.data.p);
+				}
+		}
+	}
+	return false;
+}
