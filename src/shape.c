@@ -18,7 +18,7 @@ Shape shape_poly(Polygon p) {
 	s.type = SHAPE_IS_POLY;
 	return s;
 }
-void set_position(Shape *s, Vector2 position) {
+void shape_set_position(Shape *s, Vector2 position) {
 	switch(s->type) { 
 		case SHAPE_IS_RECT:
 			s->data.r.x = position.x;
@@ -30,7 +30,7 @@ void set_position(Shape *s, Vector2 position) {
 			s->data.p.pos = position;
 	}
 }
-Vector2 get_position(Shape s) {
+Vector2 shape_get_position(Shape s) {
 	switch(s.type) { 
 		case SHAPE_IS_RECT:
 			return vec2_new(s.data.r.x, s.data.r.y);

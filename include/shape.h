@@ -17,8 +17,8 @@ typedef struct {
 Shape shape_rect(Rect r);
 Shape shape_circ(Circ c);
 Shape shape_poly(Polygon p);
-void set_position(Shape *s, Vector2 position);
-Vector2 get_position(Shape s);
+void shape_set_position(Shape *s, Vector2 position);
+Vector2 shape_get_position(Shape s);
 bool shape_contains(Shape s, Vector2 point);
 bool shape_intersects(Shape s, Line line);
 Rect shape_bounding_box(Shape s);
