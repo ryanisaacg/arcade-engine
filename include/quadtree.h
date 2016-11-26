@@ -27,6 +27,7 @@ typedef struct {
 
 QuadTree qt_new(float width, float height, float min_width, float min_height);
 size_t qt_add(QuadTree *tree, ArcadeObject obj);
+ArcadeObject *qt_get(QuadTree tree, size_t index);
 ArcadeObject qt_remove(QuadTree *tree, size_t index);
 void qt_clear(QuadTree *tree);
 size_t qt_len(QuadTree tree);
