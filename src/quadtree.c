@@ -3,14 +3,14 @@
 #include <stdio.h>
 
 static QuadNode *get_node(QuadNode *subtree, Rect bounds);
-static QuadNode *node_new(QuadNode *parent, Rect region, float min_width, float min_height);
+static QuadNode *node_new(Rect region, float min_width, float min_height);
 static void node_clear(QuadNode *subtree);
 static void node_all_collisions(QuadNode *subtree, ArrayList objects, void (*collide)(ArcadeObject*, ArcadeObject*));
 static void node_collide(QuadNode *subtree, ArrayList objects, size_t current, void (*collide)(ArcadeObject*, ArcadeObject*));
 
 QuadTree qt_new(float width, float height, float min_width, float min_height) {
 	QuadTree tree;
-	tree.root = node_new(NULL, rect_new(0.f, 0.f, width, height), min_width, min_height);
+	tree.root = node_new(rect_new(0.f, 0.f, width, height), min_width, min_height);
 	tree.entities = al_new(sizeof(ArcadeObject));
 	return tree;
 }
@@ -52,9 +52,6 @@ static QuadNode *get_node(QuadNode *subtree, Rect bounds) {
 	if(subtree == NULL) {
 		return NULL;
 	}
-	if(!engulfs_rect(subtree->region, bounds)) {
-		return get_node(subtree->parent, bounds);
-	}
 	for(int i = 0; i < 4; i++) {
 		QuadNode *child = subtree->children[i];
 		if(child != NULL && engulfs_rect(child->region, bounds))
@@ -63,11 +60,10 @@ static QuadNode *get_node(QuadNode *subtree, Rect bounds) {
 	return subtree;
 }
 //PARENT MAY BE NULL, MAY RETURN NULL
-static QuadNode *node_new(QuadNode *parent, Rect region, float min_width, float min_height) {
+static QuadNode *node_new(Rect region, float min_width, float min_height) {
 	if(region.width < min_width || region.height < min_height)
 		return NULL;
 	QuadNode *node = malloc(sizeof(*node));
-	node->parent = parent;
 	node->region = region;
 	node->contains = al_new(sizeof(size_t));
 	float child_width = region.width / 2.f;
@@ -77,7 +73,7 @@ static QuadNode *node_new(QuadNode *parent, Rect region, float min_width, float 
 	for(int x = 0; x <= 1; x++) {
 		for(int y = 0; y <= 1; y++) {
 			Rect child = rect_new(region.x + x * child_width, region.y + y * child_height, child_width, child_height);
-			node->children[i] = node_new(node, child, min_width, min_height);
+			node->children[i] = node_new(child, min_width, min_height);
 			i++;
 		}
 	}

@@ -13,7 +13,6 @@ typedef struct {
 } QuadTree;
 
 struct QuadNode {
-	QuadNode *parent;
 	QuadNode *children[4];
 	Rect region;
 	ArrayList contains;
