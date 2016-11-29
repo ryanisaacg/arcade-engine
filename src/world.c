@@ -1,3 +1,4 @@
+#include <stdio.h>
 #include "world.h"
 
 World world_new(float width, float height, float qt_buckets_size) {
@@ -73,6 +74,8 @@ void world_update(World world, float milliseconds, void (*update)(ArcadeObject*)
 				attempt = vec2_sub(attempt, unit);
 				shape_set_position(&obj->bounds, attempt);
 			}
+			if(!world_region_free(world, obj->bounds, obj)) 
+				shape_set_position(&obj->bounds, pos);
 		}
 	}
 	if(collision_func != NULL) {
