@@ -1,8 +1,10 @@
 #pragma once
 
 #include "array_list.h"
+#include "lines.h"
 #include "rect.h"
 #include "shape.h"
+#include <stdbool.h>
 
 struct QuadNode;
 typedef struct QuadNode QuadNode;
@@ -21,12 +23,16 @@ struct QuadNode {
 typedef struct {
 	Shape bounds;
 	Vector2 velocity, acceleration;
+	bool solid;
 	void *data;
 } ArcadeObject;
 
+ArcadeObject arcobj_new(Shape bounds, bool solid, void *data);
 QuadTree qt_new(float width, float height, float min_width, float min_height);
 size_t qt_add(QuadTree *tree, ArcadeObject obj);
 ArcadeObject *qt_get(QuadTree tree, size_t index);
+ArcadeObject *qt_point_query(QuadTree tree, Vector2 point);
+ArcadeObject *qt_region_query(QuadTree tree, Shape region);
 ArcadeObject qt_remove(QuadTree *tree, size_t index);
 void qt_clear(QuadTree *tree);
 size_t qt_len(QuadTree tree);

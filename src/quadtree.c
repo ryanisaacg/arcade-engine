@@ -2,8 +2,14 @@
 #include "quadtree.h"
 #include <stdio.h>
 
+ArcadeObject arcobj_new(Shape bounds, bool solid, void *data) {
+	return (ArcadeObject) { bounds, vec2_new(0, 0), vec2_new(0, 0), solid, data };
+}
+
 static QuadNode *get_node(QuadNode *subtree, Rect bounds);
 static QuadNode *node_new(Rect region, float min_width, float min_height);
+static ArcadeObject *node_point_query(QuadNode *subtree, ArrayList objects, Vector2 point);
+static ArcadeObject *node_region_query(QuadNode *subtree, ArrayList objects, Shape region);
 static void node_clear(QuadNode *subtree);
 static void node_all_collisions(QuadNode *subtree, ArrayList objects, void (*collide)(ArcadeObject*, ArcadeObject*));
 static void node_collide(QuadNode *subtree, ArrayList objects, size_t current, void (*collide)(ArcadeObject*, ArcadeObject*));
@@ -42,6 +48,14 @@ size_t qt_len(QuadTree tree) {
 
 ArcadeObject *qt_get(QuadTree tree, size_t index) {
 	return al_get(tree.entities, index);
+}
+
+ArcadeObject *qt_point_query(QuadTree tree, Vector2 point) {
+	return node_point_query(tree.root, tree.entities, point);
+}
+
+ArcadeObject *qt_region_query(QuadTree tree, Shape region) {
+	return node_region_query(tree.root, tree.entities, region);
 }
 
 void qt_collisions(QuadTree tree, void (*collide)(ArcadeObject*, ArcadeObject*)) {
@@ -118,3 +132,41 @@ static void node_collide(QuadNode *subtree, ArrayList objects, size_t current, v
 	}
 }
 
+static ArcadeObject *node_point_query(QuadNode *subtree, ArrayList objects, Vector2 point) {
+	for(size_t i = 0; i < subtree->contains.length; i++) {
+		size_t *index = al_get(subtree->contains, i);
+		ArcadeObject *obj = al_get(objects, *index);
+		if(obj->solid && shape_contains(obj->bounds, point)) {
+			return obj;
+		}
+	}
+	for(size_t i = 0; i < 4; i++) {
+		QuadNode *child = subtree->children[i];
+		if(child != NULL && rect_contains(child->region, point)) {
+			ArcadeObject *obj = node_point_query(child, objects, point);
+			if(obj != NULL) {
+				return obj;
+			}
+		}
+	}
+	return NULL;
+}
+static ArcadeObject *node_region_query(QuadNode *subtree, ArrayList objects, Shape region) {
+	for(size_t i = 0; i < subtree->contains.length; i++) {
+		size_t *index = al_get(subtree->contains, i);
+		ArcadeObject *obj = al_get(objects, *index);
+		if(obj->solid && overlaps_shape(obj->bounds, region)) {
+			return obj;
+		}
+	}
+	for(size_t i = 0; i < 4; i++) {
+		QuadNode *child = subtree->children[i];
+		if(child != NULL && overlaps_shape(shape_rect(child->region), region)) {
+			ArcadeObject *obj = node_region_query(child, objects, region);
+			if(obj != NULL) {
+				return obj;
+			}
+		}
+	}
+	return NULL;
+}
