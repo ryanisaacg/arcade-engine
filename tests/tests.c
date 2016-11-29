@@ -4,7 +4,9 @@
 #include "lines.h"
 #include "rect.h"
 #include <stdbool.h>
+#include <stdio.h>
 #include <string.h>
+#include "quadtree.h"
 
 void vector_length() {
 	Vector2 vec = vec2_new(3.f, 4.f);
@@ -126,7 +128,45 @@ void rect_circ_overlaps_test() {
 	assert(!overlaps_rect_circ(c, b));
 }
 
+typedef struct {
+	size_t id, collided;
+} EntityData;
+
+void do_collision(ArcadeObject *a, ArcadeObject *b) {
+	EntityData *aData = a->data;
+	EntityData *bData = b->data;
+	aData->collided = bData->id;
+	bData->collided = aData->id;
+}
+
+void assert_collided(QuadTree tree, size_t a, size_t b) {
+	ArcadeObject *objA = qt_get(tree, a);
+	ArcadeObject *objB = qt_get(tree, b);
+	EntityData *dataA = objA->data;
+	EntityData *dataB = objB->data;
+	assert(dataA->collided == dataB->id);
+	assert(dataB->collided == dataA->id);
+}
+
+void qt_tests_collide() {
+	QuadTree qt = qt_new(640.f, 480.f, 32.f, 32.f);
+	EntityData a, b;
+	a.id = 0;
+	b.id = 0;
+	size_t a_index = qt_add(&qt, (ArcadeObject) { shape_rect(rect_new(0, 0, 32, 32)), vec2_new(0, 0), vec2_new(0, 0), &a });
+	size_t b_index = qt_add(&qt, (ArcadeObject) { shape_rect(rect_new(16, 16, 16, 16)), vec2_new(0, 0), vec2_new(0, 0), &b });
+	exit(-1);
+	assert_collided(qt, a_index, b_index);
+	qt_collisions(qt, &do_collision);
+	assert_collided(qt, a_index, b_index);
+	qt_clear(&qt);
+}
+
 int main(int argc, char *argv[]) {
+	if(argc < 2) {
+		puts("Enter a test name.");
+		return 2;
+	}
 	if(strcmp(argv[1], "veclen"))
 		vector_length();
 	else if(strcmp(argv[1], "vecscl"))
@@ -147,7 +187,12 @@ int main(int argc, char *argv[]) {
 		circle_overlaps_test();
 	else if(strcmp(argv[1], "rectcirc"))
 		rect_circ_overlaps_test();
-	else
+	else if(strcmp(argv[1], "quadtree")) 
+		qt_tests_collide();
+	else {
 		return 1;
+		puts("No such test.\n");
+	}
+	puts("Test succesful.\n");
 	return 0;
 }

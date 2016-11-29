@@ -4,6 +4,7 @@ World world_new(float width, float height, float qt_buckets_size) {
 	World world;
 	world.entities = qt_new(width, height, qt_buckets_size, qt_buckets_size);
 	world.layers = al_new(sizeof(TileMap));
+	return world;
 }
 
 size_t world_add(World *world, ArcadeObject object) {
