@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 ArcadeObject arcobj_new(Shape bounds, bool solid, void *data) {
-	return (ArcadeObject) { bounds, vec2_new(0, 0), vec2_new(0, 0), solid, data };
+	return (ArcadeObject) { bounds, vec2_new(0, 0), vec2_new(0, 0), vec2_new(0, 0), vec2_new(0, 0), solid, data };
 }
 
 static QuadNode *get_node(QuadNode *subtree, Rect bounds);

@@ -153,8 +153,8 @@ void qt_tests_collide() {
 	EntityData a, b;
 	a.id = 0;
 	b.id = 0;
-	size_t a_index = qt_add(&qt, (ArcadeObject) { shape_rect(rect_new(0, 0, 32, 32)), vec2_new(0, 0), vec2_new(0, 0), &a });
-	size_t b_index = qt_add(&qt, (ArcadeObject) { shape_rect(rect_new(16, 16, 16, 16)), vec2_new(0, 0), vec2_new(0, 0), &b });
+	size_t a_index = qt_add(&qt, arcobj_new(shape_rect(rect_new(0, 0, 32, 32)), false, &a));
+	size_t b_index = qt_add(&qt, arcobj_new(shape_rect(rect_new(16, 16, 16, 16)), false, &b));
 	exit(-1);
 	assert_collided(qt, a_index, b_index);
 	qt_collisions(qt, &do_collision);

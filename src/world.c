@@ -1,3 +1,4 @@
+#include <math.h>
 #include <stdio.h>
 #include "world.h"
 
@@ -72,6 +73,21 @@ static inline Vector2 try_move(World world, ArcadeObject *obj, Vector2 velocity)
 	}
 }
 
+static inline float clamp(float value, float max) {
+	if(value > max) return max;
+	else if(value < -max) return -max;
+	else return value;
+}
+
+static inline float oppose(float value, float factor) {
+	if(fabs(value) < factor) 
+		return 0;
+	if(value > 0)
+		return value - factor;
+	else
+		return value + factor;
+}
+
 void world_update(World world, float milliseconds, void (*update)(ArcadeObject*), void (*collision_func)(ArcadeObject*, ArcadeObject*)) {
 	size_t length = qt_len(world.entities);
 	if(update != NULL) {
@@ -84,6 +100,12 @@ void world_update(World world, float milliseconds, void (*update)(ArcadeObject*)
 			//Accelerate the object
 			Vector2 acceleration = vec2_scl(obj->acceleration, milliseconds);
 			obj->velocity = vec2_add(acceleration, obj->velocity);
+			//Apply velocity maximums
+			obj->velocity.x = clamp(obj->velocity.x, obj->max_velocity.x);
+			obj->velocity.y = clamp(obj->velocity.y, obj->max_velocity.y);
+			//Apply drag to the velocity
+			obj->velocity.x = oppose(obj->velocity.x, obj->drag.x);
+			obj->velocity.y = oppose(obj->velocity.y, obj->drag.y);
 			//Determine the velocity of the object
 			Vector2 velocity = vec2_scl(obj->velocity, milliseconds);
 			//Move the object to a free space
