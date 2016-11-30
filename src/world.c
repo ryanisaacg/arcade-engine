@@ -51,6 +51,27 @@ bool world_region_free(World world, Shape region, ArcadeObject *ignore) {
 	return query == NULL || query == ignore;
 }
 
+static inline Vector2 try_move(World world, ArcadeObject *obj, Vector2 velocity) {
+	Vector2 pos = shape_get_position(obj->bounds);
+	Vector2 attempt = vec2_add(pos, velocity);
+	shape_set_position(&obj->bounds, attempt);
+	if(world_region_free(world, obj->bounds, obj)) {
+		return velocity;
+	}
+	Vector2 unit = vec2_nor(attempt);
+	while(!world_region_free(world, obj->bounds, obj) && vec2_len2(attempt) > 1) {
+		velocity = vec2_scl(velocity, 0.5);
+		attempt = vec2_add(pos, velocity);
+		shape_set_position(&obj->bounds, attempt);
+	}
+	if(!world_region_free(world, obj->bounds, obj)) {
+		shape_set_position(&obj->bounds, pos);
+		return vec2_new(0, 0);
+	} else {
+		return velocity;
+	}
+}
+
 void world_update(World world, float milliseconds, void (*update)(ArcadeObject*), void (*collision_func)(ArcadeObject*, ArcadeObject*)) {
 	size_t length = qt_len(world.entities);
 	if(update != NULL) {
@@ -65,17 +86,12 @@ void world_update(World world, float milliseconds, void (*update)(ArcadeObject*)
 			obj->velocity = vec2_add(acceleration, obj->velocity);
 			//Determine the velocity of the object
 			Vector2 velocity = vec2_scl(obj->velocity, milliseconds);
-			Vector2 pos = shape_get_position(obj->bounds);
 			//Move the object to a free space
-			Vector2 attempt = vec2_add(pos, velocity);
-			Vector2 unit = vec2_nor(attempt);
-			shape_set_position(&obj->bounds, attempt);
-			while(!world_region_free(world, obj->bounds, obj) && vec2_len2(attempt) > 1) {
-				attempt = vec2_sub(attempt, unit);
-				shape_set_position(&obj->bounds, attempt);
-			}
-			if(!world_region_free(world, obj->bounds, obj)) 
-				shape_set_position(&obj->bounds, pos);
+			Vector2 x = vec2_new(velocity.x, 0);
+			Vector2 y = vec2_new(0, velocity.y);
+			velocity.x = try_move(world, obj, x).x;
+			velocity.y = try_move(world, obj, y).y;
+			obj->velocity = vec2_scl(velocity, 1 / milliseconds);
 		}
 	}
 	if(collision_func != NULL) {
