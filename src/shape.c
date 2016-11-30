@@ -23,11 +23,14 @@ void shape_set_position(Shape *s, Vector2 position) {
 		case SHAPE_IS_RECT:
 			s->data.r.x = position.x;
 			s->data.r.y = position.y;
+			break;
 		case SHAPE_IS_CIRC: 
 			s->data.c.x = position.x;
 			s->data.c.y = position.y;
+			break;
 		case SHAPE_IS_POLY:
 			s->data.p.pos = position;
+			break;
 	}
 }
 Vector2 shape_get_position(Shape s) {
