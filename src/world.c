@@ -93,6 +93,7 @@ void world_update(World world, float milliseconds, void (*update)(World,ArcadeOb
 	if(update != NULL) {
 		for(size_t i = 0; i < length; i++) {
 			ArcadeObject *obj = qt_get(world.entities, i);
+			if(!obj->alive) continue;
 			//Apply the custom update
 			update(world, qt_get(world.entities, i));
 			//If this object is already entangled with another, skip the physics

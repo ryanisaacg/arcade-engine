@@ -23,7 +23,7 @@ struct QuadNode {
 typedef struct {
 	Shape bounds;
 	Vector2 velocity, acceleration, max_velocity, drag;
-	bool solid;
+	bool solid, alive;
 	void *data;
 } ArcadeObject;
 

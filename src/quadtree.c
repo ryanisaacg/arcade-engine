@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 ArcadeObject arcobj_new(Shape bounds, bool solid, void *data) {
-	return (ArcadeObject) { bounds, vec2_new(0, 0), vec2_new(0, 0), vec2_new(0, 0), vec2_new(0, 0), solid, data };
+	return (ArcadeObject) { bounds, vec2_new(0, 0), vec2_new(0, 0), vec2_new(0, 0), vec2_new(0, 0), solid, true, data };
 }
 
 static QuadNode *get_node(QuadNode *subtree, Rect bounds);
@@ -104,7 +104,10 @@ static void node_clear(QuadNode *subtree) {
 static void node_all_collisions(QuadNode *subtree, ArrayList objects, void (*collide)(ArcadeObject*, ArcadeObject*)) {
 	for(size_t i = 0; i < subtree->contains.length; i++) {
 		size_t *value = al_get(subtree->contains, i);
-		node_collide(subtree, objects, *value, collide);
+		ArcadeObject *obj = al_get(objects, *value);
+		if(obj->alive) {
+			node_collide(subtree, objects, *value, collide);
+		}
 	}
 	for(size_t i = 0; i < 4; i++) {
 		if(subtree->children[i] != NULL) {
@@ -120,7 +123,7 @@ static void node_collide(QuadNode *subtree, ArrayList objects, size_t current, v
 		if(current != other) {
 			ArcadeObject *a = al_get(objects, current);
 			ArcadeObject *b = al_get(objects, other);
-			if(overlaps_shape(a->bounds, b->bounds)) {
+			if(a->alive && b->alive && overlaps_shape(a->bounds, b->bounds)) {
 				collide(a, b);
 			}
 		}
@@ -136,7 +139,7 @@ static ArcadeObject *node_point_query(QuadNode *subtree, ArrayList objects, Vect
 	for(size_t i = 0; i < subtree->contains.length; i++) {
 		size_t *index = al_get(subtree->contains, i);
 		ArcadeObject *obj = al_get(objects, *index);
-		if(obj->solid && shape_contains(obj->bounds, point)) {
+		if(obj->alive && obj->solid && shape_contains(obj->bounds, point)) {
 			return obj;
 		}
 	}
@@ -155,7 +158,7 @@ static ArcadeObject *node_region_query(QuadNode *subtree, ArrayList objects, Sha
 	for(size_t i = 0; i < subtree->contains.length; i++) {
 		size_t *index = al_get(subtree->contains, i);
 		ArcadeObject *obj = al_get(objects, *index);
-		if(obj->solid && overlaps_shape(obj->bounds, region)) {
+		if(obj->alive && obj->solid && overlaps_shape(obj->bounds, region)) {
 			return obj;
 		}
 	}
