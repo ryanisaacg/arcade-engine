@@ -13,6 +13,7 @@ typedef struct {
 World world_new(float width, float height, float qt_buckets_size);
 size_t world_add(World *world, ArcadeObject object);
 size_t world_add_tilemap(World *world, TileMap map);
+Group *world_add_group(World *world, Group group);
 bool world_point_free(World world, Vector2 point, ArcadeObject *ignore);
 bool world_region_free(World world, Shape region, ArcadeObject *ignore);
 ArcadeObject *world_get(World world, size_t index);

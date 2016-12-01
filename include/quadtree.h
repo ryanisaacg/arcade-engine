@@ -1,5 +1,6 @@
 #pragma once
 
+#include "arcobj.h"
 #include "array_list.h"
 #include "lines.h"
 #include "rect.h"
@@ -11,7 +12,7 @@ typedef struct QuadNode QuadNode;
 
 typedef struct {
 	QuadNode *root;
-	ArrayList entities;
+	ArrayList entities, groups;
 } QuadTree;
 
 struct QuadNode {
@@ -20,16 +21,9 @@ struct QuadNode {
 	ArrayList contains;
 };
 
-typedef struct {
-	Shape bounds;
-	Vector2 velocity, acceleration, max_velocity, drag;
-	bool solid, alive;
-	void *data;
-} ArcadeObject;
-
-ArcadeObject arcobj_new(Shape bounds, bool solid, void *data);
 QuadTree qt_new(float width, float height, float min_width, float min_height);
 size_t qt_add(QuadTree *tree, ArcadeObject obj);
+Group *qt_add_group(QuadTree *tree, Group group);
 ArcadeObject *qt_get(QuadTree tree, size_t index);
 ArcadeObject *qt_point_query(QuadTree tree, Vector2 point);
 ArcadeObject *qt_region_query(QuadTree tree, Shape region);

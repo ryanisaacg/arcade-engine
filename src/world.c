@@ -23,6 +23,10 @@ size_t world_add_tilemap(World *world, TileMap map) {
 	return index;
 }
 
+Group *world_add_group(World *world, Group group) {
+	return qt_add_group(&world->entities, group);
+}
+
 TileMap *world_get_tilemap(World world, size_t index) {
 	return al_get(world.layers, index);
 }

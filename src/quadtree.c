@@ -2,10 +2,6 @@
 #include "quadtree.h"
 #include <stdio.h>
 
-ArcadeObject arcobj_new(Shape bounds, bool solid, void *data) {
-	return (ArcadeObject) { bounds, vec2_new(0, 0), vec2_new(0, 0), vec2_new(0, 0), vec2_new(0, 0), solid, true, data };
-}
-
 static QuadNode *get_node(QuadNode *subtree, Rect bounds);
 static QuadNode *node_new(Rect region, float min_width, float min_height);
 static ArcadeObject *node_point_query(QuadNode *subtree, ArrayList objects, Vector2 point);
@@ -18,6 +14,7 @@ QuadTree qt_new(float width, float height, float min_width, float min_height) {
 	QuadTree tree;
 	tree.root = node_new(rect_new(0.f, 0.f, width, height), min_width, min_height);
 	tree.entities = al_new(sizeof(ArcadeObject));
+	tree.groups = al_new(sizeof(Group));
 	return tree;
 }
 
@@ -28,6 +25,12 @@ size_t qt_add(QuadTree *tree, ArcadeObject obj) {
 	al_add(&node->contains, &index);
 	return index;
 }
+
+Group *qt_add_group(QuadTree *tree, Group group) {
+	al_add(&tree->groups, &group);
+	return al_get(tree->groups, tree->groups.length - 1);
+}
+
 ArcadeObject qt_remove(QuadTree *tree, size_t index) {
 	ArcadeObject *obj = al_get(tree->entities, index);
 	ArcadeObject value = *obj;
@@ -123,7 +126,8 @@ static void node_collide(QuadNode *subtree, ArrayList objects, size_t current, v
 		if(current != other) {
 			ArcadeObject *a = al_get(objects, current);
 			ArcadeObject *b = al_get(objects, other);
-			if(a->alive && b->alive && overlaps_shape(a->bounds, b->bounds)) {
+			if(a->alive && b->alive && overlaps_shape(a->bounds, b->bounds) 
+					&& (a->group == NULL || b->group == NULL || group_interacts(a->group, b->group))) {
 				collide(a, b);
 			}
 		}

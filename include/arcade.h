@@ -1,6 +1,8 @@
+#include "arcobj.h"
 #include "array_list.h" //from data-structures
 #include "circ.h"
 #include "collision.h"
+#include "groups.h"
 #include "lines.h"
 #include "poly.h"
 #include "quadtree.h"
