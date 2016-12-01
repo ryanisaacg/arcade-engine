@@ -4,18 +4,21 @@ Shape shape_rect(Rect r) {
 	Shape s;
 	s.data.r = r;
 	s.type = SHAPE_IS_RECT;
+	s.rot = 0;
 	return s;
 }
 Shape shape_circ(Circ c) {
 	Shape s;
 	s.data.c = c;
 	s.type = SHAPE_IS_CIRC;
+	s.rot = 0;
 	return s;
 }
 Shape shape_poly(Polygon p) {
 	Shape s;
 	s.data.p = p;
 	s.type = SHAPE_IS_POLY;
+	s.rot = p.rotation;
 	return s;
 }
 void shape_set_position(Shape *s, Vector2 position) {
@@ -75,4 +78,35 @@ Rect shape_bounding_box(Shape s) {
 			return poly_bounding_box(s.data.p);
 	}
 	return rect_new(0, 0, 0, 0);
+}
+float shape_get_rotation(Shape s) {
+	switch(s.type) {
+		case SHAPE_IS_RECT:
+			return 0;
+		case SHAPE_IS_CIRC:
+			return s.rot;
+		case SHAPE_IS_POLY:
+			return s.rot;
+	}
+	return 0;
+}
+void shape_set_rotation(Shape *s, float rotation) {
+	switch(s->type) {
+		case SHAPE_IS_RECT:
+			s->data.p = poly_from_rect(s->data.r);
+			s->type = SHAPE_IS_POLY;
+			shape_set_rotation(s, rotation);
+			break;
+		case SHAPE_IS_CIRC:
+			s->rot = rotation;
+			break;
+		case SHAPE_IS_POLY:
+			s->data.p.rotation = rotation;
+			s->rot = rotation;
+			break;
+	}
+}
+void shape_rotate(Shape *s, float amount) {
+	float current = shape_get_rotation(*s);
+	shape_set_rotation(s, current + amount);
 }

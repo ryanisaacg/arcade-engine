@@ -12,6 +12,7 @@ typedef struct {
 		Polygon p;
 	} data;
 	enum { SHAPE_IS_RECT, SHAPE_IS_CIRC, SHAPE_IS_POLY} type;
+	float rot;
 } Shape;
 
 Shape shape_rect(Rect r);
@@ -22,3 +23,6 @@ Vector2 shape_get_position(Shape s);
 bool shape_contains(Shape s, Vector2 point);
 bool shape_intersects(Shape s, Line line);
 Rect shape_bounding_box(Shape s);
+float shape_get_rotation(Shape s);
+void shape_set_rotation(Shape *s, float rotation);
+void shape_rotate(Shape *s, float amount);
