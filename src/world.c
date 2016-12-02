@@ -106,8 +106,10 @@ void world_update(World world, float milliseconds, void (*update)(World,ArcadeOb
 			Vector2 acceleration = vec2_scl(obj->acceleration, milliseconds);
 			obj->velocity = vec2_add(acceleration, obj->velocity);
 			//Apply velocity maximums
-			obj->velocity.x = clamp(obj->velocity.x, obj->max_velocity.x);
-			obj->velocity.y = clamp(obj->velocity.y, obj->max_velocity.y);
+			if(obj->max_velocity.x >= 0)
+				obj->velocity.x = clamp(obj->velocity.x, obj->max_velocity.x);
+			if(obj->max_velocity.y >= 0)
+				obj->velocity.y = clamp(obj->velocity.y, obj->max_velocity.y);
 			//Apply drag to the velocity
 			obj->velocity.x = oppose(obj->velocity.x, obj->drag.x);
 			obj->velocity.y = oppose(obj->velocity.y, obj->drag.y);
