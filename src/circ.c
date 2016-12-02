@@ -29,5 +29,5 @@ bool circ_intersects(Circ c, Line l) {
 }
 //Get the rect bounding box of a circle
 Rect circ_bounding_box(Circ circ) {
-	return rect_new(circ.x - circ.radius, circ.y - circ.radius, circ.x + circ.radius, circ.y + circ.radius);
+	return rect_new(circ.x - circ.radius, circ.y - circ.radius, 2 * circ.radius, 2 * circ.radius);
 }
