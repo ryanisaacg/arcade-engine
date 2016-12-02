@@ -35,25 +35,25 @@ ArcadeObject world_remove(World *world, size_t index) {
 	return qt_remove(&world->entities, index);
 }
 
-bool world_point_free(World world, Vector2 point, ArcadeObject *ignore) {
+bool world_point_free(World world, Vector2 point, ArcadeObject *query_as) {
 	for(size_t i = 0; i < world.layers.length; i++) {
 		TileMap *map = al_get(world.layers, i);
 		if(!tl_free(*map, (int)point.x, (int)point.y))
 			return false;
 	}
-	ArcadeObject *query = qt_point_query(world.entities, point);
-	return query == NULL || query == ignore;
+	ArcadeObject *query = qt_point_query(world.entities, point, query_as->group);
+	return query == NULL || query == query_as;
 }
 
-bool world_region_free(World world, Shape region, ArcadeObject *ignore) {
+bool world_region_free(World world, Shape region, ArcadeObject *query_as) {
 	Rect bounds = shape_bounding_box(region);
 	for(size_t i = 0; i < world.layers.length; i++) {
 		TileMap *map = al_get(world.layers, i);
 		if(!tl_empty(*map, (int)bounds.x, (int)bounds.y, (int)bounds.width, (int)bounds.height))
 			return false;
 	}
-	ArcadeObject *query = qt_region_query(world.entities, region);
-	return query == NULL || query == ignore;
+	ArcadeObject *query = qt_region_query(world.entities, region, query_as->group);
+	return query == NULL || query == query_as;
 }
 
 static inline Vector2 try_move(World world, ArcadeObject *obj, Vector2 velocity) {
