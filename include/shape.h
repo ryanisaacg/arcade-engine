@@ -26,3 +26,4 @@ Rect shape_bounding_box(Shape s);
 float shape_get_rotation(Shape s);
 void shape_set_rotation(Shape *s, float rotation);
 void shape_rotate(Shape *s, float amount);
+Vector2 shape_get_center(Shape s);

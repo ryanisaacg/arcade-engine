@@ -110,3 +110,7 @@ void shape_rotate(Shape *s, float amount) {
 	float current = shape_get_rotation(*s);
 	shape_set_rotation(s, current + amount);
 }
+Vector2 shape_get_center(Shape s) {
+	Rect bounds = shape_bounding_box(s);
+	return vec2_new(bounds.x + bounds.width / 2, bounds.y + bounds.height / 2);
+}
