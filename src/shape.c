@@ -28,8 +28,8 @@ void shape_set_position(Shape *s, Vector2 position) {
 			s->data.r.y = position.y;
 			break;
 		case SHAPE_IS_CIRC: 
-			s->data.c.x = position.x;
-			s->data.c.y = position.y;
+			s->data.c.x = position.x + s->data.c.radius;
+			s->data.c.y = position.y + s->data.c.radius;
 			break;
 		case SHAPE_IS_POLY:
 			s->data.p.pos = position;
@@ -41,7 +41,7 @@ Vector2 shape_get_position(Shape s) {
 		case SHAPE_IS_RECT:
 			return vec2_new(s.data.r.x, s.data.r.y);
 		case SHAPE_IS_CIRC: 
-			return vec2_new(s.data.c.x, s.data.c.y);
+			return vec2_new(s.data.c.x - s.data.c.radius, s.data.c.y - s.data.c.radius);
 		case SHAPE_IS_POLY:
 			return s.data.p.pos;
 	}
