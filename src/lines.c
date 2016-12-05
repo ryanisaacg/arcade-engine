@@ -63,7 +63,7 @@ bool vec2_eql(Vector2 a, Vector2 b) {
 }
 //Finds the angle a vector forms
 float vec2_angle(Vector2 a) {
-	return atan2(a.y, a.x);
+	return atan2(a.y, a.x) * 180 / M_PI;
 }
 //Create a new line between two points
 Line line_new(Vector2 start, Vector2 end) {
