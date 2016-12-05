@@ -3,15 +3,15 @@
 
 //Create a new polygon from a list of vertices
 Polygon poly_new(Vector2 position, Vector2 *points, size_t num_points) {
-	return (Polygon) {position, vec2_new(0.f, 0.f), points, num_points, 0.f, 0.f};
+	return (Polygon) {position, vec2_new(0, 0), points, num_points, 0, 1};
 }
 //Create a new polygon from a rectangle
 Polygon poly_from_rect(Rect rect) {
 	Vector2 *points = malloc(sizeof(*points) * 4);
-	points[0] = vec2_new(0.f, 0.f);
-	points[1] = vec2_new(rect.width, 0.f);
+	points[0] = vec2_new(0, 0);
+	points[1] = vec2_new(rect.width, 0);
 	points[2] = vec2_new(rect.width, rect.height);
-	points[3] = vec2_new(0.f, rect.height);
+	points[3] = vec2_new(0, rect.height);
 	return poly_new(vec2_new(rect.x, rect.y), points, 4);
 }
 //Get a transformed vertex from a polygon
