@@ -61,6 +61,10 @@ Vector2 vec2_neg(Vector2 vec) {
 bool vec2_eql(Vector2 a, Vector2 b) {
 	return a.x == b.x && a.y == b.y;
 }
+//Finds the angle a vector forms
+float vec2_angle(Vector2 a) {
+	return atan2(a.y, a.x);
+}
 //Create a new line between two points
 Line line_new(Vector2 start, Vector2 end) {
 	return (Line){start, end};

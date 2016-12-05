@@ -32,6 +32,8 @@ Vector2 vec2_sub(Vector2 a, Vector2 b);
 Vector2 vec2_neg(Vector2 vec);
 //Check if two vectors are equal
 bool vec2_eql(Vector2 a, Vector2 b);
+//Get the angle a vector makes with the x-axis
+float vec2_angle(Vector2 a);
 typedef struct {
 	Vector2 start, end;
 } Line;
