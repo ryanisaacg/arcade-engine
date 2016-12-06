@@ -20,3 +20,4 @@ ArcadeObject *world_get(World world, size_t index);
 TileMap *world_get_tilemap(World world, size_t index);
 ArcadeObject world_remove(World *world, size_t index);
 void world_update(World world, float milliseconds, void (*update)(World,ArcadeObject*), void (*collision_func)(ArcadeObject*, ArcadeObject*));
+void world_destroy(World world);

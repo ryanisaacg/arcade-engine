@@ -127,3 +127,12 @@ void world_update(World world, float milliseconds, void (*update)(World,ArcadeOb
 		qt_collisions(world.entities, collision_func);
 	}
 }
+void world_destroy(World world) {
+	qt_destroy(world.entities);
+	for(size_t i = 0; i < world.layers.length; i++) {
+		TileMap *map = al_get(world.layers, i);
+		tl_destroy(*map);
+	}
+	al_destroy(world.layers);
+}
+

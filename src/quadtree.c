@@ -9,6 +9,7 @@ static ArcadeObject *node_region_query(QuadNode *subtree, ArrayList objects, Sha
 static void node_clear(QuadNode *subtree);
 static void node_all_collisions(QuadNode *subtree, ArrayList objects, void (*collide)(ArcadeObject*, ArcadeObject*));
 static void node_collide(QuadNode *subtree, ArrayList objects, size_t current, void (*collide)(ArcadeObject*, ArcadeObject*));
+static void node_destroy(QuadNode *subtree);
 
 QuadTree qt_new(float width, float height, float min_width, float min_height) {
 	QuadTree tree;
@@ -63,6 +64,12 @@ ArcadeObject *qt_region_query(QuadTree tree, Shape region, Group *query_as) {
 
 void qt_collisions(QuadTree tree, void (*collide)(ArcadeObject*, ArcadeObject*)) {
 	node_all_collisions(tree.root, tree.entities, collide);
+}
+
+void qt_destroy(QuadTree tree) {
+	al_destroy(tree.entities);
+	al_destroy(tree.groups);
+	node_destroy(tree.root);
 }
 
 static QuadNode *get_node(QuadNode *subtree, Rect bounds) {
@@ -176,4 +183,14 @@ static ArcadeObject *node_region_query(QuadNode *subtree, ArrayList objects, Sha
 		}
 	}
 	return NULL;
+}
+
+static void node_destroy(QuadNode *subtree) {
+	for(size_t i = 0; i < 4; i++) {
+		if(subtree->children[i] != NULL) 
+			node_destroy(subtree->children[i]);
+	}
+	if(subtree != NULL) {
+		free(subtree);
+	}
 }
