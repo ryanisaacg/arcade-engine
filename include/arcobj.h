@@ -7,7 +7,7 @@
 typedef struct {
 	Shape bounds;
 	Vector2 velocity, acceleration, max_velocity, drag;
-	bool solid, alive;
+	bool solid, alive, bounce;
 	Group *group;
 	size_t index;
 } ArcadeObject;

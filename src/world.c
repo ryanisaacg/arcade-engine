@@ -126,8 +126,21 @@ void world_update(World world, float milliseconds, WorldUpdate update, WorldColl
 			//Move the object to a free space
 			Vector2 x = vec2_new(velocity.x, 0);
 			Vector2 y = vec2_new(0, velocity.y);
-			velocity.x = try_move(world, obj, x).x;
-			velocity.y = try_move(world, obj, y).y;
+			if(obj->bounce) {
+				Vector2 oldX = x;
+				Vector2 oldY = y;
+				x = try_move(world, obj, x);
+				y = try_move(world, obj, y);
+				if(oldX.x != x.x) {
+					velocity.x *= -1;
+				}
+				if(oldY.y != y.y) {
+					velocity.y *= -1;
+				}
+			} else {
+				velocity.x = try_move(world, obj, x).x;
+				velocity.y = try_move(world, obj, y).y;
+			}
 			obj->velocity = vec2_scl(velocity, 1 / milliseconds);
 		}
 	}
