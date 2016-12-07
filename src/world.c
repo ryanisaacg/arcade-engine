@@ -2,19 +2,25 @@
 #include <stdio.h>
 #include "world.h"
 
-World world_new(float width, float height, float qt_buckets_size) {
+World world_new(float width, float height, float qt_buckets_size, size_t data_size) {
 	World world;
 	world.entities = qt_new(width, height, qt_buckets_size, qt_buckets_size);
+	world.items = al_new(data_size);
 	world.layers = al_new(sizeof(TileMap));
 	return world;
 }
 
-size_t world_add(World *world, ArcadeObject object) {
+size_t world_add(World *world, ArcadeObject object, void *data_object) {
+	al_add(&world->items, data_object);
 	return qt_add(&world->entities, object);
 }
 
 ArcadeObject *world_get(World world, size_t index) {
 	return qt_get(world.entities, index);
+}
+
+void *world_get_data(World world, size_t index) {
+	return al_get(world.items, index);
 }
 
 size_t world_add_tilemap(World *world, TileMap map) {

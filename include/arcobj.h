@@ -9,8 +9,7 @@ typedef struct {
 	Vector2 velocity, acceleration, max_velocity, drag;
 	bool solid, alive;
 	Group *group;
-	void *data;
 } ArcadeObject;
 
-ArcadeObject arcobj_new(Shape bounds, bool solid, void *data);
+ArcadeObject arcobj_new(Shape bounds, bool solid);
 bool arcobj_interacts(ArcadeObject *a, ArcadeObject *b);
