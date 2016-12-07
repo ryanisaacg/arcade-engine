@@ -7,8 +7,8 @@ static QuadNode *node_new(Rect region, float min_width, float min_height);
 static ArcadeObject *node_point_query(QuadNode *subtree, ArrayList objects, Vector2 point, Group *query_as);
 static ArcadeObject *node_region_query(QuadNode *subtree, ArrayList objects, Shape region, Group *query_as);
 static void node_clear(QuadNode *subtree);
-static void node_all_collisions(QuadNode *subtree, ArrayList objects, void (*collide)(ArcadeObject*, ArcadeObject*));
-static void node_collide(QuadNode *subtree, ArrayList objects, size_t current, void (*collide)(ArcadeObject*, ArcadeObject*));
+static void node_all_collisions(QuadNode *subtree, ArrayList objects, ArrayList items, void (*collide)(ArcadeObject*, void*, ArcadeObject*, void*));
+static void node_collide(QuadNode *subtree, ArrayList objects, ArrayList items, size_t current, void (*collide)(ArcadeObject*, void*, ArcadeObject*, void*));
 static void node_destroy(QuadNode *subtree);
 
 QuadTree qt_new(float width, float height, float min_width, float min_height) {
@@ -62,8 +62,8 @@ ArcadeObject *qt_region_query(QuadTree tree, Shape region, Group *query_as) {
 	return node_region_query(tree.root, tree.entities, region, query_as);
 }
 
-void qt_collisions(QuadTree tree, void (*collide)(ArcadeObject*, ArcadeObject*)) {
-	node_all_collisions(tree.root, tree.entities, collide);
+void qt_collisions(QuadTree tree, ArrayList items, void (*collide)(ArcadeObject*, void*, ArcadeObject*, void*)) {
+	node_all_collisions(tree.root, tree.entities, items, collide);
 }
 
 void qt_destroy(QuadTree tree) {
@@ -111,22 +111,22 @@ static void node_clear(QuadNode *subtree) {
 			node_clear(subtree->children[i]);
 }
 
-static void node_all_collisions(QuadNode *subtree, ArrayList objects, void (*collide)(ArcadeObject*, ArcadeObject*)) {
+static void node_all_collisions(QuadNode *subtree, ArrayList objects, ArrayList items, void (*collide)(ArcadeObject*, void*, ArcadeObject*, void*)) {
 	for(size_t i = 0; i < subtree->contains.length; i++) {
 		size_t *value = al_get(subtree->contains, i);
 		ArcadeObject *obj = al_get(objects, *value);
 		if(obj->alive) {
-			node_collide(subtree, objects, *value, collide);
+			node_collide(subtree, objects, items, *value, collide);
 		}
 	}
 	for(size_t i = 0; i < 4; i++) {
 		if(subtree->children[i] != NULL) {
-			node_all_collisions(subtree->children[i], objects, collide);
+			node_all_collisions(subtree->children[i], objects, items, collide);
 		}
 	}
 }
 
-static void node_collide(QuadNode *subtree, ArrayList objects, size_t current, void (*collide)(ArcadeObject*, ArcadeObject*)) {
+static void node_collide(QuadNode *subtree, ArrayList objects, ArrayList items, size_t current, void (*collide)(ArcadeObject*, void*, ArcadeObject*, void*)) {
 	for(size_t i = 0; i < subtree->contains.length; i++) {
 		size_t *value = al_get(subtree->contains, i);
 		size_t other = *value;
@@ -135,13 +135,15 @@ static void node_collide(QuadNode *subtree, ArrayList objects, size_t current, v
 			ArcadeObject *b = al_get(objects, other);
 			if(a->alive && b->alive && overlaps_shape(a->bounds, b->bounds) 
 					&& (a->group == NULL || b->group == NULL || group_interacts(a->group, b->group))) {
-				collide(a, b);
+				void *a_data = al_get(items, current);
+				void *b_data = al_get(items, other);
+				collide(a, a_data, b, b_data);
 			}
 		}
 	}
 	for(size_t i = 0; i < 4; i++) {
 		if(subtree->children[i] != NULL) {
-			node_collide(subtree->children[i], objects, current, collide);
+			node_collide(subtree->children[i], objects, items, current, collide);
 		}
 	}
 }

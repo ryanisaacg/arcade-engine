@@ -31,5 +31,5 @@ ArcadeObject qt_remove(QuadTree *tree, size_t index);
 void qt_clear(QuadTree *tree);
 size_t qt_len(QuadTree tree);
 ArcadeObject *qt_get(QuadTree tree, size_t index);
-void qt_collisions(QuadTree tree, void (*collide)(ArcadeObject*, ArcadeObject*));
+void qt_collisions(QuadTree tree, ArrayList items, void (*collide)(ArcadeObject*, void*, ArcadeObject*, void*));
 void qt_destroy(QuadTree tree);

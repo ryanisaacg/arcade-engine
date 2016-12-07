@@ -98,14 +98,14 @@ static inline float oppose(float value, float factor) {
 		return value + factor;
 }
 
-void world_update(World world, float milliseconds, void (*update)(World,ArcadeObject*), void (*collision_func)(ArcadeObject*, ArcadeObject*)) {
+void world_update(World world, float milliseconds, void (*update)(World,ArcadeObject*,void*), void (*collision_func)(ArcadeObject*, void*, ArcadeObject*, void*)) {
 	size_t length = qt_len(world.entities);
 	if(update != NULL) {
 		for(size_t i = 0; i < length; i++) {
 			ArcadeObject *obj = qt_get(world.entities, i);
 			if(!obj->alive) continue;
 			//Apply the custom update
-			update(world, qt_get(world.entities, i));
+			update(world, qt_get(world.entities, i), al_get(world.items, i));
 			//If this object is already entangled with another, skip the physics
 			if(!world_region_free(world, obj->bounds, obj)) continue;
 			//Accelerate the object
@@ -130,7 +130,7 @@ void world_update(World world, float milliseconds, void (*update)(World,ArcadeOb
 		}
 	}
 	if(collision_func != NULL) {
-		qt_collisions(world.entities, collision_func);
+		qt_collisions(world.entities, world.items, collision_func);
 	}
 }
 void world_destroy(World world) {
