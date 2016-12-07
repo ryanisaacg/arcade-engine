@@ -7,6 +7,8 @@
 #include "shape.h"
 #include <stdbool.h>
 
+struct World;
+
 struct QuadNode;
 typedef struct QuadNode QuadNode;
 
@@ -21,6 +23,8 @@ struct QuadNode {
 	ArrayList contains;
 };
 
+typedef void (*WorldCollide)(struct World, ArcadeObject*, void*, ArcadeObject*, void*);
+
 QuadTree qt_new(float width, float height, float min_width, float min_height);
 size_t qt_add(QuadTree *tree, ArcadeObject obj);
 Group *qt_add_group(QuadTree *tree, Group group);
@@ -31,5 +35,5 @@ ArcadeObject qt_remove(QuadTree *tree, size_t index);
 void qt_clear(QuadTree *tree);
 size_t qt_len(QuadTree tree);
 ArcadeObject *qt_get(QuadTree tree, size_t index);
-void qt_collisions(QuadTree tree, ArrayList items, void (*collide)(ArcadeObject*, void*, ArcadeObject*, void*));
+void qt_collisions(QuadTree tree, struct World world, WorldCollide collide);
 void qt_destroy(QuadTree tree);

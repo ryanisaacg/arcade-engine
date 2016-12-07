@@ -12,7 +12,9 @@ World world_new(float width, float height, float qt_buckets_size, size_t data_si
 
 size_t world_add(World *world, ArcadeObject object, void *data_object) {
 	al_add(&world->items, data_object);
-	return qt_add(&world->entities, object);
+	size_t index = qt_add(&world->entities, object);
+	world_get(*world, index)->index = index;
+	return index;
 }
 
 ArcadeObject *world_get(World world, size_t index) {
@@ -98,7 +100,7 @@ static inline float oppose(float value, float factor) {
 		return value + factor;
 }
 
-void world_update(World world, float milliseconds, void (*update)(World,ArcadeObject*,void*), void (*collision_func)(ArcadeObject*, void*, ArcadeObject*, void*)) {
+void world_update(World world, float milliseconds, WorldUpdate update, WorldCollide collide) {
 	size_t length = qt_len(world.entities);
 	if(update != NULL) {
 		for(size_t i = 0; i < length; i++) {
@@ -129,8 +131,8 @@ void world_update(World world, float milliseconds, void (*update)(World,ArcadeOb
 			obj->velocity = vec2_scl(velocity, 1 / milliseconds);
 		}
 	}
-	if(collision_func != NULL) {
-		qt_collisions(world.entities, world.items, collision_func);
+	if(collide != NULL) {
+		qt_collisions(world.entities, world, collide);
 	}
 }
 void world_destroy(World world) {

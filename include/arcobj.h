@@ -9,6 +9,7 @@ typedef struct {
 	Vector2 velocity, acceleration, max_velocity, drag;
 	bool solid, alive;
 	Group *group;
+	size_t index;
 } ArcadeObject;
 
 ArcadeObject arcobj_new(Shape bounds, bool solid);
