@@ -7,6 +7,6 @@
 #include "poly.h"
 #include "quadtree.h"
 #include "rect.h"
+#include "spatial_map.h"
 #include "shape.h"
-#include "tilemap.h" //from data-structures
 #include "world.h"
