@@ -1,12 +1,14 @@
-#include <math.h>
-#include <stdio.h>
 #include "world.h"
+
+#include <math.h>
+#include "spatial_map.h"
+#include <stdio.h>
 
 World world_new(float width, float height, float qt_buckets_size, size_t data_size) {
 	World world;
 	world.entities = qt_new(width, height, qt_buckets_size, qt_buckets_size);
 	world.items = al_new(data_size);
-	world.layers = al_new(sizeof(TileMap));
+	world.layers = al_new(sizeof(SpatialMap));
 	return world;
 }
 
@@ -25,7 +27,7 @@ void *world_get_data(World world, size_t index) {
 	return al_get(world.items, index);
 }
 
-size_t world_add_tilemap(World *world, TileMap map) {
+size_t world_add_map(World *world, SpatialMap map) {
 	size_t index = world->layers.length;
 	al_add(&world->layers, &map);
 	return index;
@@ -35,7 +37,7 @@ Group *world_add_group(World *world, Group group) {
 	return qt_add_group(&world->entities, group);
 }
 
-TileMap *world_get_tilemap(World world, size_t index) {
+SpatialMap *world_get_map(World world, size_t index) {
 	return al_get(world.layers, index);
 }
 
@@ -45,8 +47,8 @@ ArcadeObject world_remove(World *world, size_t index) {
 
 bool world_point_free(World world, Vector2 point, ArcadeObject *query_as) {
 	for(size_t i = 0; i < world.layers.length; i++) {
-		TileMap *map = al_get(world.layers, i);
-		if(!tl_free(*map, (int)point.x, (int)point.y))
+		SpatialMap *map = al_get(world.layers, i);
+		if(sm_has(*map, point.x, point.y))
 			return false;
 	}
 	ArcadeObject *query = qt_point_query(world.entities, point, query_as->group);
@@ -54,11 +56,11 @@ bool world_point_free(World world, Vector2 point, ArcadeObject *query_as) {
 }
 
 bool world_region_free(World world, Shape region, ArcadeObject *query_as) {
-	Rect bounds = shape_bounding_box(region);
 	for(size_t i = 0; i < world.layers.length; i++) {
-		TileMap *map = al_get(world.layers, i);
-		if(!tl_empty(*map, (int)bounds.x, (int)bounds.y, (int)bounds.width, (int)bounds.height))
+		SpatialMap *map = al_get(world.layers, i);
+		if(!sm_free(*map, region)) {
 			return false;
+		}
 	}
 	ArcadeObject *query = qt_region_query(world.entities, region, query_as->group);
 	return query == NULL || query == query_as;
@@ -151,8 +153,8 @@ void world_update(World world, float milliseconds, WorldUpdate update, WorldColl
 void world_destroy(World world) {
 	qt_destroy(world.entities);
 	for(size_t i = 0; i < world.layers.length; i++) {
-		TileMap *map = al_get(world.layers, i);
-		tl_destroy(*map);
+		SpatialMap *map = al_get(world.layers, i);
+		sm_destroy(*map);
 	}
 	al_destroy(world.layers);
 }
