@@ -16,3 +16,4 @@ void sm_remove(SpatialMap *map, float x, float y);
 void *sm_get(SpatialMap map, float x, float y);
 bool sm_has(SpatialMap map, float x, float y);
 bool sm_free(SpatialMap map, Shape region);
+void sm_destroy(SpatialMap map);

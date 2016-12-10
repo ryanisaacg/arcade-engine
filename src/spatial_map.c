@@ -62,3 +62,8 @@ bool sm_free(SpatialMap map, Shape shape) {
 	}
 	return true;
 }
+
+void sm_destroy(SpatialMap map) {
+	al_destroy(map.items);
+	al_destroy(map.has);
+}
