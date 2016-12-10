@@ -68,7 +68,7 @@ bool sm_free(SpatialMap map, Shape shape) {
 		return false;
 	for(float x = region.x; x < region.x + region.width; x++) {
 		for(float y = region.y; y < region.y + region.height; y++) {
-			if(sm_has(map, x, y) && overlaps_shape(shape, shape_rect(get_region(map, x, y)))) {
+			if(sm_has(map, x, y)) {
 				return false;
 			}
 		}
