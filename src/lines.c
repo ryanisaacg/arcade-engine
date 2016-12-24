@@ -1,5 +1,6 @@
 #include "lines.h"
-#include "math.h"
+
+#include <math.h>
 
 //Create a new vector with an x and a y 
 Vector2 vec2_new(float x, float y) {
@@ -86,7 +87,8 @@ bool line_intersects(Line a, Line b) {
 			return false;
 		float t0 = vec2_dot(vec2_sub(q, p), r) / vec2_dot(r, r);
 		float t1 = t0 + vec2_dot(s, r) / vec2_dot(r, r);
-		return t0 >= 0.f && t0 <= 1.f || t1 >= 0.f && t1 <= 1.f || copysign(1.f, t0) != copysign(1.f, t1);
+		return (t0 >= 0.f && t0 <= 1.f) || (t1 >= 0.f && t1 <= 1.f) || 
+			(copysign(1.f, t0) != copysign(1.f, t1));
 	} else {
 		float u = u_numerator / denominator;
 		float t = t_numerator / denominator;
