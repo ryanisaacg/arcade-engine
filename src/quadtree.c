@@ -1,8 +1,9 @@
-#include "collision.h"
 #include "quadtree.h"
-#include "world.h"
+
 #include <stdio.h>
 
+#include "collision.h"
+#include "world.h"
 
 static QuadNode *get_node(QuadNode *subtree, Rect bounds);
 static QuadNode *node_new(Rect region, float min_width, float min_height);
@@ -94,7 +95,6 @@ static QuadNode *node_new(Rect region, float min_width, float min_height) {
 	node->contains = al_new(sizeof(size_t));
 	float child_width = region.width / 2.f;
 	float child_height = region.height / 2.f;
-	Rect smaller = rect_new(region.x, region.y, child_width, child_height);
 	int i = 0;
 	for(int x = 0; x <= 1; x++) {
 		for(int y = 0; y <= 1; y++) {
