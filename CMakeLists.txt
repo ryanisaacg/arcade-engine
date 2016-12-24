@@ -13,7 +13,7 @@ if(MSVC)
   endif()
 elseif(CMAKE_COMPILER_IS_GNUCC)
   # Update if necessary
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Werror -Wfatal-errors -pedantic -std=c99")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror -Wfatal-errors -pedantic -std=c99")
 endif()
 
 #DEPENDENCIES
