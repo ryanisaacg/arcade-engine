@@ -9,13 +9,8 @@ static size_t get_index(SpatialMap *map, float x, float y) {
 	return posX * gridHeight + posY;
 }
 
-static Rect get_region(SpatialMap map, float x, float y) {
-	int gridX = (int)(x * map.tile_width) / (int)map.tile_width;
-	int gridY = (int)(y * map.tile_height) / (int)map.tile_height;
-	return rect_new(gridX, gridY, map.tile_width, map.tile_height);
-}
-
-SpatialMap sm_new(size_t item_size, float width, float height, float tile_width, float tile_height) {
+SpatialMap sm_new(size_t item_size, float width, float height, 
+									float tile_width, float tile_height) {
 	SpatialMap map;
 	map.width 		= width;
 	map.height		= height;
