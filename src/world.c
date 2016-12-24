@@ -1,8 +1,9 @@
 #include "world.h"
 
 #include <math.h>
-#include "spatial_map.h"
 #include <stdio.h>
+
+#include "spatial_map.h"
 
 World world_new(float width, float height, float qt_buckets_size, size_t data_size) {
 	World world;
@@ -73,7 +74,6 @@ static inline Vector2 try_move(World world, ArcadeObject *obj, Vector2 velocity)
 	if(world_region_free(world, obj->bounds, obj)) {
 		return velocity;
 	}
-	Vector2 unit = vec2_nor(attempt);
 	while(!world_region_free(world, obj->bounds, obj) && vec2_len2(attempt) > 1) {
 		velocity = vec2_scl(velocity, 0.5);
 		attempt = vec2_add(pos, velocity);
