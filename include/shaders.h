@@ -1,6 +1,6 @@
 #pragma once
 
-#include <GL/GLEW.h>
+#include <GL/glew.h>
 
 typedef GLuint Shader;
 
