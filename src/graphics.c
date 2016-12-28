@@ -21,13 +21,6 @@ const GLchar const *fragment_source =
 "uniform sampler2D atlas;"
 "void main() { out_color = texture(atlas, Tex_coord); }";
 
-static GLuint compile_shader(const GLchar const *source, GLenum type) {
-	GLuint shader = glCreateShader(type);
-	glShaderSource(shader, 1, &source, NULL);
-	glCompileShader(shader);
-	print_gl_error("Shader compilation");
-	return shader;
-}
 
 static GLuint compile_program(	const GLchar const *vertex_source, 
 								const GLchar const *fragment_source) {
