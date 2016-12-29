@@ -13,5 +13,14 @@ typedef struct {
 
 Shader shader_vertex_new(const GLchar const *data);
 Shader shader_fragment_new(const GLchar const *data);
-Shader shader_program_new(Shader vertex, Shader fragment);
-void shader_add_attribute(const GLchar const *name, int members, int distance_between, int start_offset);
+void shader_destroy(Shader shader);
+
+typedef struct {
+	GLuint id;
+	Shader vertex, fragment;
+} Program;
+
+Program program_new(Shader vertex, Shader fragment, char *out_color_name);
+void program_add_attribute(	Program shader, const GLchar const *name, int members, 
+							int distance_between, int start_offset);
+void program_destroy(Program program);
