@@ -1,9 +1,10 @@
 #pragma once
 
+#include <stdbool.h>
+
 #include "lines.h"
 #include "quadtree.h"
 #include "spatial_map.h"
-#include <stdbool.h>
 
 typedef struct World {
 	QuadTree entities;

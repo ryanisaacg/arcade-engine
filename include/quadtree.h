@@ -1,11 +1,13 @@
 #pragma once
 
-#include "arcobj.h"
+#include <stdbool.h>
+
 #include "array_list.h"
+
+#include "arcobj.h"
 #include "lines.h"
 #include "rect.h"
 #include "shape.h"
-#include <stdbool.h>
 
 struct World;
 

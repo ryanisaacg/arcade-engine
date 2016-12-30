@@ -2,7 +2,15 @@
 #include <stddef.h>
 
 ArcadeObject arcobj_new(Shape bounds, bool solid) {
-	return (ArcadeObject) { bounds, vec2_new(0, 0), vec2_new(0, 0), vec2_new(-1, -1), vec2_new(0, 0), solid, true, false, NULL };
+	return (ArcadeObject) { .bounds = bounds, 
+							.velocity = vec2_new(0, 0), 
+							.acceleration = vec2_new(0, 0), 
+							.max_velocity = vec2_new(-1, -1), 
+							.drag = vec2_new(0, 0), 
+							.solid = solid, 
+							.alive = true, 
+							.bounce = false, 
+							.group = NULL };
 }
 
 bool arcobj_interacts(ArcadeObject *a, ArcadeObject *b) {

@@ -1,5 +1,8 @@
 #include "shape.h"
 
+#include <stdio.h>
+#include <stdlib.h>
+
 Shape shape_rect(Rect r) {
 	Shape s;
 	s.data.r = r;
@@ -45,6 +48,8 @@ Vector2 shape_get_position(Shape s) {
 		case SHAPE_IS_POLY:
 			return s.data.p.pos;
 	}
+	fprintf(stderr, "shape_get_position called with an invalid type");
+	exit(-1);
 }
 bool shape_contains(Shape s, Vector2 point) {
 	switch(s.type) { 
