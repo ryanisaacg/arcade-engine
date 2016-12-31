@@ -16,7 +16,16 @@ void dc_clear(DrawCall *call) {
 
 void dc_add_manual(DrawCall *call, GLfloat *vertices, size_t vertex_size, 
 									GLuint *elements, size_t num_elements) {
-
+	while(vertex_size > 0) {
+		al_add(&call->vertex_buffer, vertices);
+		vertices++;
+		vertex_size--;
+	}
+	while(num_elements > 0) {
+		al_add(&call->element_buffer, elements);
+		elements++;
+		num_elements--;
+	}
 }
 
 void dc_add(DrawCall *call, Rect area, Transform transform) {
