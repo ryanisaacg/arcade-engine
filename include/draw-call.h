@@ -1,6 +1,8 @@
 #pragma once
 
+#include "array_list.h"
 #include "rect.h"
+#include "transform.h"
 
 typedef struct {
 	ArrayList vertex_buffer, element_buffer;
