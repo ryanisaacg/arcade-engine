@@ -7,7 +7,6 @@
 typedef struct {
 	Texture source;
 	Rect region;
-	Transform transform;
 } TextureRegion;
 
 TextureRegion texregion_new(Texture source);
