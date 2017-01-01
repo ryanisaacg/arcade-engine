@@ -18,6 +18,10 @@ Texture texture_new(char *texture_path) {
 	return tex;
 }
 
+void texture_bind(Texture tex, Program prog, char *name) {
+	glUniform1i(glGetUniformLocation(prog.id, name), tex.id);
+}
+
 void texture_destroy(Texture tex) {
 	glDeleteTextures(1, &tex.id);
 }
