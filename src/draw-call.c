@@ -34,17 +34,17 @@ void dc_add(DrawCall *call, Rect texture_source, Rect area, Transform transform)
 	GLfloat vertex_items[16];//2 floats for world position, 2 floats for texture position
 							 //4 vertices
 	GLuint elements[6] = { 0, 1, 2, 2, 3, 0 };
-	size_t i = 0;
+	size_t index = 0;
 	for(int i = 0; i <= 1; i++) {
 		for(int j = 0; j <= 1; j++) {
 			Vector2 point = trans_apply(transform, 
 					vec2_new(area.x + area.width * i, area.y + area.height * j));
 			Vector2 texture_point = vec2_new(texture_source.x + texture_source.width * i,
 					texture_source.y + texture_source.height * j);
-			vertex_items[i++] = point.x;
-			vertex_items[i++] = point.y;
-			vertex_items[i++] = texture_point.x;
-			vertex_items[i++] = texture_point.y;
+			vertex_items[index++] = point.x;
+			vertex_items[index++] = point.y;
+			vertex_items[index++] = texture_point.x;
+			vertex_items[index++] = texture_point.y;
 		}
 	}
 	dc_add_manual(call, 
