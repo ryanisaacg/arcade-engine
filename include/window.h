@@ -1,13 +1,14 @@
 #pragma once
 
+#include <GL/glew.h>
 #include <GLFW/glfw3.h>
 
 #include "batch.h"
 #include "lines.h"
 
 typedef struct {
-	bool resizable, fullscreen;
-	int monitor, width, height;
+	bool resizable;
+	int fullscreen_monitor, width, height;
 	const char *title;
 } WindowConfig;
 
