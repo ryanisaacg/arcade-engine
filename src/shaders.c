@@ -30,7 +30,7 @@ Program program_new(Shader vertex, Shader fragment, char *out_color_name) {
 	print_gl_error("Link shader program");
 	glUseProgram(shader_program);
 	print_gl_error("Use shader program");
-	Program program = { shader_program };
+	Program program = { shader_program, vertex, fragment };
 	return program;
 }
 
