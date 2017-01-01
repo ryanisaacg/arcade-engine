@@ -15,5 +15,5 @@ DrawCall dc_new();
 void dc_clear(DrawCall *call);
 void dc_add_manual(DrawCall *call, GLfloat *vertices, size_t vertex_size, 
 									GLuint *elements, size_t num_elements);
-void dc_add(DrawCall *call, Rect area, Transform transform);
+void dc_add(DrawCall *call, Rect texture_source, Rect area, Transform transform);
 void dc_draw(DrawCall call);
