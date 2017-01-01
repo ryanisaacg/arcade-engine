@@ -8,7 +8,7 @@
 
 typedef struct {
 	ArrayList vertex_buffer, element_buffer;
-	GLuint elements;
+	GLuint elements, vbo_id, ebo_id;
 } DrawCall;
 
 DrawCall dc_new();

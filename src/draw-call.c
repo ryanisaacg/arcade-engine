@@ -5,6 +5,8 @@ DrawCall dc_new() {
 	call.vertex_buffer = al_new(sizeof(GLfloat));
 	call.element_buffer = al_new(sizeof(GLuint));
 	call.elements = 0;
+	glGenBuffers(1, &call.vbo_id);
+	glGenBuffers(1, &call.ebo_id);
 	return call;
 }
 
@@ -51,6 +53,12 @@ void dc_add(DrawCall *call, Rect texture_source, Rect area, Transform transform)
 }
 
 void dc_draw(DrawCall call) {
-
+	glBindBuffer(GL_ARRAY_BUFFER, call.vbo_id);
+	glBufferData(GL_ARRAY_BUFFER, call.vertex_buffer.length * sizeof(GLfloat),
+			al_get(call.vertex_buffer, 0), GL_STATIC_DRAW);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, call.ebo_id);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, call.element_buffer.length * sizeof(GLuint),
+			al_get(call.element_buffer, 0), GL_STATIC_DRAW);
+	glDrawElements(GL_TRIANGLES, call.element_buffer.length, GL_UNSIGNED_INT, 0);
 }
 
