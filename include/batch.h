@@ -5,16 +5,17 @@
 #include "texture-region.h"
 
 struct Batch;
+typedef struct Batch Batch;
 
-typedef void (*BatchFunction)(struct Batch);
+typedef void (*BatchFunction)(Batch);
 
-typedef struct Batch {
+struct Batch {
 	ArrayList textures;
 	BatchFunction function;
 	HashMap *call_lists;
 	DrawCall call;
 	Program program;
-} Batch;
+};
 
 
 Batch batch_new(Program program);

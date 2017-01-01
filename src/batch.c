@@ -46,12 +46,20 @@ void batch_add(Batch *batch, TextureRegion region, Rect target, Transform transf
 
 void batch_end(Batch *batch) {
 	if(batch->function != NULL) {
-		(batch->function)(batch->textures, batch->call_lists, &batch->call);
+		batch->function(*batch);
 		return;
 	}
 	for(size_t i = 0; i < batch->textures.length; i++) {
 		dc_clear(&batch->call);
-
+		Texture *tex = al_get(batch->textures, i);
+		ArrayList *draws_ptr = hm_get(batch->call_lists, tex->id, tex);
+		ArrayList draws = *draws_ptr;
+		for(size_t j = 0; j < draws.length; j++) {
+			BatchEntry *entry = al_get(draws, j);
+			dc_add(&batch->call, entry->texture_area, entry->area, entry->transform);
+		}
+		texture_bind(*tex, batch->program, "image");
+		dc_draw(batch->call);
 	}
 }
 
