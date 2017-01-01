@@ -16,8 +16,8 @@ typedef struct {
 
 Batch batch_new();
 Batch batch_new_custom(BatchFunction func);
-TextureRegion *batch_register(Batch *batch, TextureRegion region);
+Texture *batch_register(Batch *batch, Texture region);
 void batch_begin(Batch *batch);
-void batch_add(Batch *batch, TextureRegion *texture, Rect target, Transform transform);
+void batch_add(Batch *batch, TextureRegion texture, Rect target, Transform transform);
 void batch_end(Batch *batch);
 
