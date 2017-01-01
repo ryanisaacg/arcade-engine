@@ -7,16 +7,17 @@ typedef struct {
 	Transform transform;
 } BatchEntry;
 
-Batch batch_new() {
-	return batch_new_custom(NULL);
+Batch batch_new(Program program) {
+	return batch_new_custom(program, NULL);
 }
 
-Batch batch_new_custom(BatchFunction func) {
+Batch batch_new_custom(Program program, BatchFunction func) {
 	Batch batch;
 	batch.textures = al_new(sizeof(Texture));
 	batch.call_lists = hm_new();
 	batch.function = func;
 	batch.call = dc_new();
+	batch.program = program;
 	return batch;
 }
 

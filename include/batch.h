@@ -4,18 +4,21 @@
 #include "hashmap.h"
 #include "texture-region.h"
 
-typedef void (*BatchFunction)(ArrayList, HashMap*, DrawCall*);
+struct Batch;
 
-typedef struct {
+typedef void (*BatchFunction)(struct Batch);
+
+typedef struct Batch {
 	ArrayList textures;
 	BatchFunction function;
 	HashMap *call_lists;
 	DrawCall call;
+	Program program;
 } Batch;
 
 
-Batch batch_new();
-Batch batch_new_custom(BatchFunction func);
+Batch batch_new(Program program);
+Batch batch_new_custom(Program program, BatchFunction func);
 Texture *batch_register(Batch *batch, Texture region);
 void batch_begin(Batch *batch);
 void batch_add(Batch *batch, TextureRegion texture, Rect target, Transform transform);
