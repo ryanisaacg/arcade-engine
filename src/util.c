@@ -4,7 +4,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <GL/GLEW.h>
+#include <GL/glew.h>
 
 void print_gl_error(char *label) {
 	GLenum glenum = glGetError();
