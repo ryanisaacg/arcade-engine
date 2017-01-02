@@ -22,6 +22,7 @@ Window window_new_batch(WindowConfig config, Batch batch) {
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	}
+	window_refcount++;
 	glfwWindowHint(GLFW_RESIZABLE, config.resizable);
 	GLFWmonitor *monitor;
 	if(config.fullscreen_monitor != -1) {
