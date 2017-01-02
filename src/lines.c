@@ -2,6 +2,8 @@
 
 #include <math.h>
 
+#include "util.h"
+
 //Create a new vector with an x and a y 
 Vector2 vec2_new(float x, float y) {
 	return (Vector2){x, y};
@@ -60,7 +62,7 @@ Vector2 vec2_neg(Vector2 vec) {
 }
 //Check if two vectors are equal
 bool vec2_eql(Vector2 a, Vector2 b) {
-	return a.x == b.x && a.y == b.y;
+	return equal_float(a.x, b.x) && equal_float(a.y, b.y);
 }
 //Finds the angle a vector forms
 float vec2_angle(Vector2 a) {
