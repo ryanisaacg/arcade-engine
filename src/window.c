@@ -72,4 +72,11 @@ void window_set_mouse_pos(Window window, Vector2 pos) {
 	glfwSetCursorPos(window.window, pos.x, pos.y);
 }
 
-void window_destroy(Window window);
+void window_destroy(Window window) {
+	glfwDestroyWindow(window.window);
+	batch_destroy(window.batch);
+	window_refcount--;
+	if(window_refcount == 0) {
+		glfwTerminate();
+	}
+}
