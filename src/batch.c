@@ -57,6 +57,7 @@ Texture *batch_register(Batch *batch, Texture region) {
 	ArrayList *list = malloc(sizeof(ArrayList));
 	*list = al_new(sizeof(BatchEntry));
 	hm_put(batch->call_lists, region.id, texture, list);
+	return texture;
 }
 
 void batch_begin(Batch *batch) {
