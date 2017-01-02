@@ -62,3 +62,9 @@ void dc_draw(DrawCall call) {
 	glDrawElements(GL_TRIANGLES, call.element_buffer.length, GL_UNSIGNED_INT, 0);
 }
 
+void dc_destroy(DrawCall call) {
+	glDeleteBuffers(1, &call.vbo_id);
+	glDeleteBuffers(1, &call.ebo_id);
+	al_destroy(call.vertex_buffer);
+	al_destroy(call.element_buffer);
+}
