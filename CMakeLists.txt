@@ -1,7 +1,8 @@
 cmake_minimum_required(VERSION 2.4.0)
-project (arcade-physics)
+project (arcade-engine)
 set(CMAKE_BUILD_TYPE Debug)
 cmake_policy(SET CMP0003 NEW)
+cmake_policy(SET CMP0015 NEW)
 
 #SET WARNINGS
 if(MSVC)
@@ -26,16 +27,20 @@ file(GLOB SOURCES src/*.c)
 file(GLOB INCLUDES include/*.h)
 
 #LINK LIBRARY
-add_library(arcade-physics STATIC ${SOURCES} ${INCLUDES})
-set_property(TARGET arcade-physics PROPERTY C_STANDARD 99)
-set_target_properties(arcade-physics PROPERTIES LINKER_LANGUAGE C)
-target_link_libraries(arcade-physics m)
-target_link_libraries(arcade-physics data-structures)
+add_library(arcade-engine STATIC ${SOURCES} ${INCLUDES})
+set_property(TARGET arcade-engine PROPERTY C_STANDARD 99)
+set_target_properties(arcade-engine PROPERTIES LINKER_LANGUAGE C)
+target_link_libraries(arcade-graphics m data-structures arcade-physics SOIL glfw3)
+if(WIN32)
+	target_link_libraries(arcade-graphics glew32 opengl32)
+else()
+	target_link_libraries(arcade-graphics GLEW GLU m GL m pthread dl drm Xdamage X11-xcb xcb-glx xcb-dri2 xcb-dri3 xcb-present xcb-randr xcb-xfixes xcb-render xcb-shape xcb-sync xshmfence glfw3 rt m dl Xrandr Xinerama Xxf86vm Xext Xcursor Xrender Xfixes X11 pthread xcb Xau)
+endif()
 
 #CREATE TESTS
 add_executable(tests tests/tests.c)
 set_property(TARGET tests PROPERTY C_STANDARD 99)
-target_link_libraries(tests arcade-physics)
+target_link_libraries(tests arcade-engine)
 
 #EXECUTE TESTS
 enable_testing()
