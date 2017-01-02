@@ -24,4 +24,4 @@ Texture *batch_register(Batch *batch, Texture region);
 void batch_begin(Batch *batch);
 void batch_add(Batch *batch, TextureRegion texture, Rect target, Transform transform);
 void batch_end(Batch *batch);
-
+void batch_destroy(Batch batch);

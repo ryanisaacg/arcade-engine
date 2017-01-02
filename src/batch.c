@@ -93,3 +93,9 @@ void batch_end(Batch *batch) {
 	}
 }
 
+void batch_destroy(Batch batch) {
+	al_destroy(batch.textures);
+	hm_destroy(batch.call_lists);
+	dc_destroy(batch.call);
+	program_destroy(batch.program);
+}
