@@ -2,10 +2,6 @@
 
 #include <GL/glew.h>
 
-/*
- * Shader programs should accept two 2d vectors: position and texture position, and a texture
- * They should be called 'position', 'tex_position', and 'texture'
- */
 
 typedef struct {
 	GLuint id;
