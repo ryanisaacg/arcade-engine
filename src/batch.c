@@ -7,6 +7,36 @@ typedef struct {
 	Transform transform;
 } BatchEntry;
 
+const GLchar const *default_vertex = "#version 150 core\n"
+	"in vec2 position;"
+	"in vec2 tex_position;"
+	"out vec2 Tex_position;"
+	"void main() {"
+	"	Tex_position = tex_position;"
+	"	gl_Position = vec4(position, 0.0, 1.0);"
+	"}";
+
+const GLchar const *default_fragment = "#version 150 core\n"
+	"in vec2 Tex_position;"
+	"out vec4 out_color;"
+	"uniform sampler2D image;"
+	"void main() {"
+	"	out_color = texture(image, Tex_position);"
+	"}";
+
+Batch batch_new_default() {
+	Shader vertex = shader_vertex_new(default_vertex);
+	Shader fragment = shader_fragment_new(default_fragment);
+	Program default_program = program_new(vertex, fragment, "out_color");
+	program_add_attribute(default_program, "position", 2, 4, 0);
+	program_add_attribute(default_program, "tex_position", 2, 4, 2);
+	return batch_new(default_program);
+}
+
+/*
+ * Shader programs should accept two 2d vectors: position and texture position; and a texture
+ * They should be called 'position', 'tex_position', and 'image'
+ */
 Batch batch_new(Program program) {
 	return batch_new_custom(program, NULL);
 }

@@ -17,7 +17,7 @@ struct Batch {
 	Program program;
 };
 
-
+Batch batch_new_default();
 Batch batch_new(Program program);
 Batch batch_new_custom(Program program, BatchFunction func);
 Texture *batch_register(Batch *batch, Texture region);
