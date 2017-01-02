@@ -1,40 +1,40 @@
-#Arcade Physics
-An arcade physics library
+#Arcade Engine
+A 2D game engine written in pure C for writing arcade-style games. Arcade-style games feature things like pixel-based physics rather than a unit-based physics engine, pixel-perfect cameras, and pixel-based scaling techniques. 
 
-##Why Arcade Physics?
-If you want an accurate physics simulation, Box2D and Chipmunk already exist. This project uses pixels as a distance unit and milliseconds as a time unit, making integration with pixel-perfect 2D games relatively painless.
+##Current Featurelist
+- Simulation
+	- Basic vector and line math for 2D
+	- Basic matrix manipulation for a 3x3 matrix
+	- Basic shapes such as Axis-Aligned Bounding Boxes (Rects), circles, and polygons
+	- A single interface to the three shape types (Shape)
+	- Collision and intersection
+	- A QuadTree to store dynamic physical entities
+	- A TileMap to store static physical entities
+	- A World to combine the QuadTree and TileMap and make geometric queries to both
+	- Object groups that govern which objects interact
+- Graphics
+	- A windowing module backed by GLFW
+	- OpenGL texture loading backed by SOIL
+	- Batched OpenGL drawing using the shader pipeline
+	- Support for custom shaders and custom batches
+	- Support for drawing only part of a single texture image
 
-##State of the Project
-The project is currently in its infancy.
+##Roadmap
+- [ ] Make `ArcadeObject`s drawable
+- [ ] Integrate Window and World into a single Game struct that makes creation easier
+- [ ] Add functions to load "Tiled" files into the TileMap
+- [ ] Add the notion of a discrete level
+- [ ] Add level restart and switch functions
+- [ ] Add the ability to restart, save, load, or close the game
+- [ ] Add window scaling
+- [ ] Define or research a texture atlas format
+	- [ ] Create a texture atlas packaging tool
+	- [ ] Implement loading this texture atlas
+- [ ] Basic animation support
+- [ ] Previous-frame input checking
+- [ ] Doxygen or equivalent documentation
+- [ ] Test coverage of existing modules
+- [ ] Simple HTML5 game build support
 
-##Roadmap to 1.0
-I want to release a 1.0 version as soon as possible to begin providing a stable API, but a few things need to happen first. First, I want to complete the items on this ToDo list:
-
-Version 0.1: 
-
-- [x] Basic vector and line math
-- [x] Implementation of basic shapes such as AABB, circles, and polygons
-- [ ] A universal shape handle
-- [x] Rotated polygons
-- [x] Simple rectangle polygon constructors
-
-Version 0.2:
-
-- [ ] An object structure that stores a collision shape and arbitrary data
-- [ ] A tilemap to store static objects
-- [ ] A quadtree to store dynamic objects
-
-Version 0.3:
-
-- [ ] A world to integrate quadtree(s) and tilemap(s)
-- [ ] Object groups that allow simple definitions of interaction behavior
-
-Version 1.0:
-
-- [ ] Test coverage on large majority of code paths
-- [ ] In-depth documentation
-
-Second, I want to use the project in production to see the sticking points in the API and smoothe it over before freezing it.
-
-##Branch Structure
-Each new feature or modification should be in its own branch. Non-master branches are free to fail tests or fail to compile entirely. The master branch must pass all tests and must compile with no warnings or error in the latest version of Rust. Tags are to be used for releases only, and as such should be treated with the same level of care as the master branch.
+##Why C?
+Adequate solutions to the problems solved by this library exist in other language or are trivial to implement, and I've found most other languages unsuitable for game development. Stack allocation is a must, which rules out many higher-level languages. Additionally, distribution without requiring the end user install a Virtual Machine or Runtime.
