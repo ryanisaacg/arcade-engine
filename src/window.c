@@ -11,7 +11,7 @@ WindowConfig window_config_new(int width, int height, const char *title) {
 int window_refcount = 0;
 
 Window window_new(WindowConfig config) {
-	
+	return window_new_batch(config, batch_new_default());
 }
 
 Window window_new_batch(WindowConfig config, Batch batch) {
@@ -36,11 +36,23 @@ Window window_new_batch(WindowConfig config, Batch batch) {
 							monitor, NULL), batch };
 }
 
-void window_begin(Window *window);
-void window_end(Window *window);
-bool window_should_contine(Window window);
+void window_begin(Window *window) {
+	glfwPollEvents();
+	batch_begin(&window->batch);
+}
+
+void window_end(Window *window) {
+	batch_end(&window->batch);
+	glfwSwapBuffers(window->window);
+}
+
+bool window_should_contine(Window window) {
+	return glfwWindowShouldClose(window.window);
+}
+
 bool window_key_pressed(Window window, int key_code);
 bool window_mouse_pressed(Window window, int button);
 Vector2 window_get_mouse_pos(Window window);
 void window_set_mouse_pos(Window window, Vector2 pos);
+
 void window_destroy(Window window);
