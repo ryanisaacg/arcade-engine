@@ -23,6 +23,7 @@ Window window_new_batch(WindowConfig config, Batch batch);
 void window_begin(Window *window);
 void window_end(Window *window);
 bool window_should_contine(Window window);
+void window_close(Window window);
 bool window_key_pressed(Window window, int key_code);
 bool window_mouse_pressed(Window window, int button);
 Vector2 window_get_mouse_pos(Window window);

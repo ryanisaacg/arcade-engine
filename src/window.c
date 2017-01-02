@@ -50,9 +50,26 @@ bool window_should_contine(Window window) {
 	return glfwWindowShouldClose(window.window);
 }
 
-bool window_key_pressed(Window window, int key_code);
-bool window_mouse_pressed(Window window, int button);
-Vector2 window_get_mouse_pos(Window window);
-void window_set_mouse_pos(Window window, Vector2 pos);
+void window_close(Window window) {
+	glfwSetWindowShouldClose(window.window, GL_TRUE);
+}
+
+bool window_key_pressed(Window window, int key_code) {
+	return glfwGetKey(window.window, key_code) == GLFW_PRESS;
+}
+
+bool window_mouse_pressed(Window window, int button) {
+	return glfwGetMouseButton(window.window, button) == GLFW_PRESS;
+}
+
+Vector2 window_get_mouse_pos(Window window) {
+	double x, y;
+	glfwGetCursorPos(window.window, &x, &y);
+	return vec2_new((float)x, (float)y);
+}
+
+void window_set_mouse_pos(Window window, Vector2 pos) {
+	glfwSetCursorPos(window.window, pos.x, pos.y);
+}
 
 void window_destroy(Window window);
