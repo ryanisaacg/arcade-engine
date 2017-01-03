@@ -134,27 +134,27 @@ int main(int argc, char *argv[]) {
 		puts("Enter a test name.");
 		return 2;
 	}
-	if(strcmp(argv[1], "veclen"))
+	if(strcmp(argv[1], "veclen") == 0) {
 		vector_length();
-	else if(strcmp(argv[1], "vecscl"))
+	} else if(strcmp(argv[1], "vecscl") == 0) {
 		vector_scale();
-	else if(strcmp(argv[1], "vecari"))
+	} else if(strcmp(argv[1], "vecari") == 0) {
 		vector_arithmetic();
-	else if(strcmp(argv[1], "vecrot"))
+	} else if(strcmp(argv[1], "vecrot") == 0) {
 		vector_rotation();
-	else if(strcmp(argv[1], "lineint"))
+	} else if(strcmp(argv[1], "lineint") == 0) {
 		line_intersect();
-	else if(strcmp(argv[1], "rectint"))
+	} else if(strcmp(argv[1], "rectint") == 0) {
 		rect_intersect();
-	else if(strcmp(argv[1], "recteng"))
+	} else if(strcmp(argv[1], "recteng") == 0) {
 		rect_engulf_test();
-	else if(strcmp(argv[1], "rectovr"))
+	} else if(strcmp(argv[1], "rectovr") == 0) {
 		rect_overlaps_test();
-	else if(strcmp(argv[1], "circovr"))
+	} else if(strcmp(argv[1], "circovr") == 0) {
 		circle_overlaps_test();
-	else if(strcmp(argv[1], "rectcirc"))
+	} else if(strcmp(argv[1], "rectcirc") == 0) {
 		rect_circ_overlaps_test();
-	else {
+	} else {
 		return 1;
 		puts("No such test.\n");
 	}

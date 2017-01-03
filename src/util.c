@@ -1,10 +1,15 @@
 #include "util.h"
 
+#include <math.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
 
 #include <GL/glew.h>
+
+bool equal_float(float a, float b) {
+	return fabs(a - b) < 0.00001f;
+}
 
 void print_gl_error(char *label) {
 	GLenum glenum = glGetError();
