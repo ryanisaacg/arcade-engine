@@ -18,6 +18,7 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- Batched OpenGL drawing using the shader pipeline
 	- Support for custom shaders and custom batches
 	- Support for drawing only part of a single texture image
+	- Support for basic animations
 
 ##Roadmap
 - [ ] Make `ArcadeObject`s drawable
@@ -30,7 +31,7 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 - [ ] Define or research a texture atlas format
 	- [ ] Create a texture atlas packaging tool
 	- [ ] Implement loading this texture atlas
-- [ ] Basic animation support
+- [x] Basic animation support
 - [ ] Previous-frame input checking
 - [ ] Doxygen or equivalent documentation
 - [ ] Test coverage of existing modules
