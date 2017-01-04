@@ -1,8 +1,9 @@
 #include "arcobj.h"
 #include <stddef.h>
 
-ArcadeObject arcobj_new(Shape bounds, bool solid) {
-	return (ArcadeObject) { .bounds = bounds, 
+ArcadeObject arcobj_new(Shape bounds, bool solid, Animation anim) {
+	return (ArcadeObject) { .animation = anim,
+							.bounds = bounds, 
 							.velocity = vec2_new(0, 0), 
 							.acceleration = vec2_new(0, 0), 
 							.max_velocity = vec2_new(-1, -1), 
