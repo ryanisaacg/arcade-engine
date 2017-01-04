@@ -150,6 +150,21 @@ void world_update(World world, float milliseconds, WorldUpdate update, WorldColl
 		qt_collisions(world.entities, world, collide);
 	}
 }
+
+static void draw_obj(Batch batch, ArcadeObject *obj, void *data) {
+	batch_add_animation(&batch, obj->animation, shape_bounding_box(obj->bounds));
+}
+
+void world_draw(World world, Batch batch) {
+	world_draw_custom(world, draw_obj, batch);
+}
+
+void world_draw_custom(World world, WorldDraw draw, Batch batch) {
+	for(size_t i = 0; i < world.entities.entities.length; i++) {
+		draw(batch, world_get(world, i), world_get_data(world, i));
+	}
+}
+
 void world_destroy(World world) {
 	qt_destroy(world.entities);
 	for(size_t i = 0; i < world.layers.length; i++) {
