@@ -14,7 +14,7 @@ if(MSVC)
   endif()
 elseif(CMAKE_COMPILER_IS_GNUCC)
   # Update if necessary
-  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror -Wfatal-errors -pedantic -std=c99")
+  set(CMAKE_C_FLAGS "${CMAKE_C_FLAGS} -Wall -Wextra -Werror -Wfatal-errors -pedantic -std=c99 -Wno-unused-parameter")
 endif()
 
 #DEPENDENCIES
@@ -55,3 +55,8 @@ add_test(NAME RectOverlaps COMMAND tests rectovr)
 add_test(NAME CircOverlaps COMMAND tests circovr)
 add_test(NAME RectCirOverlaps COMMAND tests rectcirc)
 add_test(NAME QuadTrees COMMAND tests quadtree)
+
+#CREATE EXAMPLE
+add_executable(example example.c)
+set_property(TARGET example PROPERTY C_STANDARD 99)
+target_link_libraries(example arcade-engine)
