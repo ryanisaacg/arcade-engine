@@ -1,5 +1,6 @@
 #pragma once
 
+#include "animation.h"
 #include "draw-call.h"
 #include "hashmap.h"
 #include "texture-region.h"
@@ -23,5 +24,6 @@ Batch batch_new_custom(Program program, BatchFunction func);
 Texture *batch_register(Batch *batch, Texture region);
 void batch_begin(Batch *batch);
 void batch_add(Batch *batch, TextureRegion texture, Rect target, Transform transform);
+void batch_add_animation(Batch *batch, Animation animation, Rect target);
 void batch_end(Batch *batch);
 void batch_destroy(Batch batch);

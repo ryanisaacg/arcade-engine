@@ -5,7 +5,7 @@ Animation anim_new(size_t steps) {
 }
 
 Animation anim_new_al(ArrayList frames, size_t steps) {
-	return (Animation) { frames, 0, steps, 0 };
+	return (Animation) { frames, 0, steps, 0, trans_new_identity() };
 }
 
 Animation anim_new_buffer(TextureRegion *frames, size_t num_frames, size_t steps) {
