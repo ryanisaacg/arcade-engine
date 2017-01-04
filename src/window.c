@@ -21,6 +21,8 @@ Window window_new_batch(WindowConfig config, Batch batch) {
 		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
+		glewExperimental = GL_TRUE;
+		glewInit();
 	}
 	window_refcount++;
 	glfwWindowHint(GLFW_RESIZABLE, config.resizable);

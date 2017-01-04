@@ -1,5 +1,7 @@
+#define GLEW_STATIC
 #include "arcobj.h"
 #include "array_list.h" //from data-structures
+#include "batch.h"
 #include "circ.h"
 #include "collision.h"
 #include "groups.h"
@@ -11,4 +13,5 @@
 #include "spatial_map.h"
 #include "shape.h"
 #include "transform.h"
+#include "window.h"
 #include "world.h"
