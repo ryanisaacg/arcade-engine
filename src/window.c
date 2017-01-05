@@ -10,15 +10,12 @@ WindowConfig window_config_new(int width, int height, const char *title) {
 							.title = title };
 }
 
-int window_refcount = 0;
-
 Window window_new(WindowConfig config) {
 	glfwInit();	
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	window_refcount++;
 	glfwWindowHint(GLFW_RESIZABLE, config.resizable);
 	GLFWmonitor *monitor;
 	if(config.fullscreen_monitor != -1) {
@@ -83,8 +80,5 @@ void window_set_mouse_pos(Window window, Vector2 pos) {
 void window_destroy(Window window) {
 	glfwDestroyWindow(window.window);
 	batch_destroy(window.batch);
-	window_refcount--;
-	if(window_refcount == 0) {
-		glfwTerminate();
-	}
+	glfwTerminate();
 }
