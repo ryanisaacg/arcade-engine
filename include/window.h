@@ -19,7 +19,6 @@ typedef struct {
 
 WindowConfig window_config_new(int width, int height, const char *title);
 Window window_new(WindowConfig config);
-Window window_new_batch(WindowConfig config, Batch batch);
 void window_begin(Window *window);
 void window_end(Window *window);
 bool window_should_contine(Window window);

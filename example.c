@@ -8,6 +8,7 @@ void collision(World world, ArcadeObject *a, void *adata, ArcadeObject *b, void 
 
 int main() {
 	Window window = window_new(window_config_new(640, 480, "Example")); // segfaults here
+	window.batch = batch_new_default();
 	World world = world_new(640, 480, 32, 0);
 	Texture tex = texture_new("img.png");
 	TextureRegion region = texregion_new(tex);
