@@ -1,4 +1,3 @@
-#define GLEW_STATIC
 #include "arcobj.h"
 #include "array_list.h" //from data-structures
 #include "batch.h"

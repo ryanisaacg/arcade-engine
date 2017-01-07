@@ -1,5 +1,7 @@
 #include "window.h"
 
+#include <stdio.h>
+
 WindowConfig window_config_new(int width, int height, const char *title) {
 	return (WindowConfig) { .resizable = false, 
 							.fullscreen_monitor = -1,
@@ -8,23 +10,12 @@ WindowConfig window_config_new(int width, int height, const char *title) {
 							.title = title };
 }
 
-int window_refcount = 0;
-
 Window window_new(WindowConfig config) {
-	return window_new_batch(config, batch_new_default());
-}
-
-Window window_new_batch(WindowConfig config, Batch batch) {
-	if(window_refcount == 0) { //initialize GLEW and GLFW
-		glfwInit();	
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-		glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-		glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-		glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-		glewExperimental = GL_TRUE;
-		glewInit();
-	}
-	window_refcount++;
+	glfwInit();	
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
+	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_RESIZABLE, config.resizable);
 	GLFWmonitor *monitor;
 	if(config.fullscreen_monitor != -1) {
@@ -34,8 +25,20 @@ Window window_new_batch(WindowConfig config, Batch batch) {
 	} else {
 		monitor = NULL;
 	}
-	return (Window) { glfwCreateWindow(config.width, config.height, config.title, 
-							monitor, NULL), batch };
+	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	GLFWwindow *window = glfwCreateWindow(config.width, config.height, config.title, monitor, NULL);
+	glfwMakeContextCurrent(window);
+	glewExperimental = GL_TRUE;
+	if(glewInit() != GLEW_OK) {
+		fputs("GLEW failed to init.", stderr);
+	}
+	glewExperimental = GL_TRUE;
+	if(glewInit() != GLEW_OK) {
+		fputs("GLEW failed to init.", stderr);
+	}
+	Window win;
+	win.window = window;
+	return win;
 }
 
 void window_begin(Window *window) {
@@ -77,8 +80,5 @@ void window_set_mouse_pos(Window window, Vector2 pos) {
 void window_destroy(Window window) {
 	glfwDestroyWindow(window.window);
 	batch_destroy(window.batch);
-	window_refcount--;
-	if(window_refcount == 0) {
-		glfwTerminate();
-	}
+	glfwTerminate();
 }

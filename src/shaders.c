@@ -2,16 +2,20 @@
 
 #include "util.h"
 
-static GLuint compile_shader(const GLchar const *source, GLenum type);
-
 Shader shader_vertex_new(const GLchar const *data) {
-	Shader shade = { compile_shader(data, GL_VERTEX_SHADER) };
-	return shade;
+	GLuint shader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(shader, 1, &data, NULL);
+	glCompileShader(shader);
+	print_gl_error("Shader compilation");
+	return (Shader) { shader };
 }
 
 Shader shader_fragment_new(const GLchar const *data) {
-	Shader shade = { compile_shader(data, GL_FRAGMENT_SHADER) };
-	return shade;
+	GLuint shader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(shader, 1, &data, NULL);
+	glCompileShader(shader);
+	print_gl_error("Shader compilation");
+	return (Shader) { shader };
 }
 
 void shader_destroy(Shader shader) {
@@ -50,10 +54,3 @@ void program_destroy(Program program) {
 	glDeleteProgram(program.id);
 }
 
-static GLuint compile_shader(const GLchar const *source, GLenum type) {
-	GLuint shader = glCreateShader(type);
-	glShaderSource(shader, 1, &source, NULL);
-	glCompileShader(shader);
-	print_gl_error("Shader compilation");
-	return shader;
-}
