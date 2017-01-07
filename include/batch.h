@@ -1,29 +1,25 @@
 #pragma once
 
+#include <GL/glew.h>
+
+#include "shaders.h"
 #include "sprite.h"
-#include "draw-call.h"
-#include "hashmap.h"
-#include "texture-region.h"
 
-struct Batch;
-typedef struct Batch Batch;
 
-typedef void (*BatchFunction)(Batch);
-
-struct Batch {
-	ArrayList textures;
-	BatchFunction function;
-	HashMap *call_lists;
-	DrawCall call;
+typedef struct {
+	GLfloat *vbo; //vertex buffer object, a way to draw the vertices with OpenGL
+	size_t vbo_size;
+	GLuint *ebo; //element buffer object, a way to re-use vertices with OpenGL
+	size_t ebo_size;
+	size_t num_sprites;
+	GLuint vbo_id, ebo_id;
 	Program program;
-};
+} Batch;
 
-Batch batch_new_default();
-Batch batch_new(Program program);
-Batch batch_new_custom(Program program, BatchFunction func);
-Texture *batch_register(Batch *batch, Texture region);
-void batch_begin(Batch *batch);
-void batch_add(Batch *batch, TextureRegion texture, Rect target, Transform transform);
-void batch_add_sprite(Batch *batch, Sprite spr, Rect target);
-void batch_end(Batch *batch);
+Batch batch_new();
+void batch_bind(Texture atlas);
+size_t batch_add(Batch *batch, Sprite sprite);
+void batch_update(Batch *batch, Sprite sprite, size_t index);
+void batch_draw(Batch batch);
+void batch_clear(Batch *batch);
 void batch_destroy(Batch batch);
