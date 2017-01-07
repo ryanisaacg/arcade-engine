@@ -1,33 +1,21 @@
 #include "animation.h"
 
-Sprite spr_new(size_t steps) {
-	return spr_new_al(al_new(sizeof(TextureRegion)), steps);
+Animation anim_new(TextureRegion *frames, size_t num_frames, size_t steps_per_frame) {
+	return (Animation) {
+		.frames = al_prealloc(sizeof(TextureRegion), frames, num_frames),
+		.current_steps = 0,
+		.steps_per_frame = steps_per_frame,
+		.current_frame = 0 
+	};
 }
 
-Sprite spr_new_al(ArrayList frames, size_t steps) {
-	return (Sprite) { frames, 0, steps, 0, trans_new_identity() };
-}
-
-Sprite spr_new_buffer(TextureRegion *frames, size_t num_frames, size_t steps) {
-	return spr_new_al(al_prealloc(sizeof(TextureRegion), frames, num_frames), steps);
-}
-
-void spr_add_frame(Sprite *spr, TextureRegion texture) {
-	al_add(&spr->frames, &texture);
-}
-
-TextureRegion spr_current_frame(Sprite spr) {
-	TextureRegion *current = al_get(spr.frames, spr.current_frame);
-	return *current;
-}
-
-void spr_step(Sprite spr) {
-	spr.current_steps++;
-	if(spr.current_steps >= spr.steps_per_frame) {
-		spr.current_steps = 0; 
-		spr.current_frame++;
-		if(spr.current_frame >= spr.frames.length) {
-			spr.current_frame = 0;
-		}
+TextureRegion anim_step(Animation *anim) {
+	//Advance a step (and a frame if necessary)
+	anim->current_steps++;
+	if(anim->current_steps >= anim->steps_per_frame) {
+		anim->current_steps = 0;
+		anim->current_frame = (anim->current_frame + 1) % anim->frames.length;
 	}
+	TextureRegion *current = al_get(anim->frames, anim->current_frame);
+	return *current;
 }
