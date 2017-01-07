@@ -75,7 +75,7 @@ void batch_add(Batch *batch, TextureRegion region, Rect target, Transform transf
 	al_add(list, &entry);
 }
 
-void batch_add_animation(Batch *batch, Animation animation, Rect target) {
+void batch_add_animation(Batch *batch, Sprite animation, Rect target) {
 	batch_add(batch, anim_current_frame(animation), target, animation.transform);
 }
 

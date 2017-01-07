@@ -11,7 +11,7 @@ int main() {
 	World world = world_new(640, 480, 32, 0);
 	Texture tex = texture_new("img.png");
 	TextureRegion region = texregion_new(tex);
-	Animation anim = anim_new(1);
+	Sprite anim = anim_new(1);
 	anim_add_frame(&anim, region);
 	ArcadeObject obj = arcobj_new(shape_rect(rect_new(0, 0, 32, 32)), false, anim);
 	world_add(&world, obj, NULL);
