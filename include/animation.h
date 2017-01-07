@@ -9,4 +9,5 @@ typedef struct {
 } Animation;
 
 Animation anim_new(TextureRegion *frames, size_t num_frames, size_t steps_per_frame);
+TextureRegion anim_get_current(Animation anim);
 TextureRegion anim_step(Animation *anim);
