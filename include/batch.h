@@ -24,6 +24,6 @@ Batch batch_new_custom(Program program, BatchFunction func);
 Texture *batch_register(Batch *batch, Texture region);
 void batch_begin(Batch *batch);
 void batch_add(Batch *batch, TextureRegion texture, Rect target, Transform transform);
-void batch_add_animation(Batch *batch, Sprite animation, Rect target);
+void batch_add_sprite(Batch *batch, Sprite spr, Rect target);
 void batch_end(Batch *batch);
 void batch_destroy(Batch batch);
