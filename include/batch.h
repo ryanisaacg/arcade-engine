@@ -1,6 +1,6 @@
 #pragma once
 
-#include "animation.h"
+#include "sprite.h"
 #include "draw-call.h"
 #include "hashmap.h"
 #include "texture-region.h"

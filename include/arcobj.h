@@ -1,6 +1,6 @@
 #pragma once
 
-#include "animation.h"
+#include "sprite.h"
 #include "groups.h"
 #include "lines.h"
 #include "shape.h"

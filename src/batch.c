@@ -76,7 +76,7 @@ void batch_add(Batch *batch, TextureRegion region, Rect target, Transform transf
 }
 
 void batch_add_sprite(Batch *batch, Sprite sprite, Rect target) {
-	batch_add(batch, spr_current_frame(sprite), target, sprite.transform);
+	batch_add(batch, spr_image(sprite), target, sprite.transform);
 }
 
 void batch_end(Batch *batch) {
