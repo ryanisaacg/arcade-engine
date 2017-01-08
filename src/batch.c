@@ -1,6 +1,7 @@
 #include "batch.h"
 
 #include <stdlib.h>
+#include <string.h>
 
 const size_t sprite_vbo_size = 16; //2 floats per vertex for position, 2 for texture position (2 * 2 * 4)
 const size_t sprite_ebo_size = 6; //2 triangles with 3 vertices each
@@ -45,14 +46,39 @@ Batch batch_new() {
 }
 
 size_t batch_add(Batch *batch, Sprite sprite) {
-
+	//Expand buffers if necessary
+	if((batch->num_sprites + 1) * sprite_vbo_size < batch->vbo_size) {
+		batch->vbo_size *= 2;
+		batch->ebo_size *= 2;
+		batch->vbo = realloc(batch->vbo, batch->vbo_size);
+		batch->ebo = realloc(batch->ebo, batch->ebo_size);
+	}
+	batch_update(batch, sprite, batch->num_sprites);
+	batch->num_sprites += 1;
+	return batch->num_sprites;
 }
-void batch_update(Batch *batch, Sprite sprite, size_t index) {
 
+void batch_update(Batch *batch, Sprite sprite, size_t index) {
+	//Get the insertion points of the data
+	GLfloat *current_vbo = batch->vbo + index * sprite_vbo_size;
+	GLuint *current_ebo = batch->ebo + index * sprite_ebo_size;
+	//Add the data to the vbo
+	for(int i = 0; i <= 1; i++) {
+		for(int j = 0; j <= 1; j++) {
+			*(current_vbo++) = sprite.bounds.x + sprite.bounds.width * i;
+			*(current_vbo++) = sprite.bounds.y + sprite.bounds.height * j;
+			TextureRegion tex = spr_image(sprite);
+			*(current_vbo++) = tex.region.x + tex.region.width * i;
+			*(current_vbo++) = tex.region.y + tex.region.height * j;
+		}
+	}
+	GLuint num = index * 4;
+	GLuint ebo_data[] = { num, num + 1, num + 2, num + 2, num + 3, num };
+	memcpy(current_ebo, ebo_data, sprite_ebo_size);
 }
 
 void batch_clear(Batch *batch) {
-
+	batch->num_sprites = 0;
 }
 
 void batch_destroy(Batch batch) {
