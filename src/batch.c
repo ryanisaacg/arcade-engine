@@ -85,6 +85,7 @@ void batch_draw(Batch batch) {
 	glDrawElements(GL_TRIANGLES, batch.num_sprites, GL_UNSIGNED_INT, 0);
 }
 
+
 void batch_clear(Batch *batch) {
 	batch->num_sprites = 0;
 }
