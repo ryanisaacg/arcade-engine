@@ -11,8 +11,7 @@ typedef struct {
 	size_t vbo_size;
 	GLuint *ebo; //element buffer object, a way to re-use vertices with OpenGL
 	size_t ebo_size;
-	size_t num_sprites;
-	GLuint vbo_id, ebo_id;
+	GLuint num_sprites, vbo_id, ebo_id;
 	Program program;
 } Batch;
 
