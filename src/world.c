@@ -5,12 +5,13 @@
 
 #include "spatial_map.h"
 
-World world_new(float width, float height, float qt_buckets_size, size_t data_size) {
-	World world;
-	world.entities = qt_new(width, height, qt_buckets_size, qt_buckets_size);
-	world.items = al_new(data_size);
-	world.layers = al_new(sizeof(SpatialMap));
-	return world;
+World world_new(Batch *batch, float width, float height, float qt_buckets_size, size_t data_size) {
+	return (World) {
+		.batch = batch,
+		.entities = qt_new(width, height, qt_buckets_size, qt_buckets_size),
+		.items = al_new(data_size),
+		.layers = al_new(sizeof(SpatialMap))
+	};
 }
 
 size_t world_add(World *world, ArcadeObject object, void *data_object) {
@@ -148,20 +149,6 @@ void world_update(World world, float milliseconds, WorldUpdate update, WorldColl
 	}
 	if(collide != NULL) {
 		qt_collisions(world.entities, world, collide);
-	}
-}
-
-static void draw_obj(Batch batch, ArcadeObject *obj, void *data) {
-	batch_add_sprite(&batch, obj->sprite, shape_bounding_box(obj->bounds));
-}
-
-void world_draw(World world, Batch batch) {
-	world_draw_custom(world, draw_obj, batch);
-}
-
-void world_draw_custom(World world, WorldDraw draw, Batch batch) {
-	for(size_t i = 0; i < world.entities.entities.length; i++) {
-		draw(batch, world_get(world, i), world_get_data(world, i));
 	}
 }
 

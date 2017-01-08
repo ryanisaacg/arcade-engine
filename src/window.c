@@ -2,6 +2,8 @@
 
 #include <stdio.h>
 
+#include "util.h"
+
 WindowConfig window_config_new(int width, int height, const char *title) {
 	return (WindowConfig) { .resizable = false, 
 							.fullscreen_monitor = -1,
@@ -17,6 +19,7 @@ Window window_new(WindowConfig config) {
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
 	glfwWindowHint(GLFW_RESIZABLE, config.resizable);
+	print_gl_error("GLFW window hints");
 	GLFWmonitor *monitor;
 	if(config.fullscreen_monitor != -1) {
 		int number_monitors;
@@ -26,16 +29,15 @@ Window window_new(WindowConfig config) {
 		monitor = NULL;
 	}
 	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
+	print_gl_error("Resizable window hint");
 	GLFWwindow *window = glfwCreateWindow(config.width, config.height, config.title, monitor, NULL);
 	glfwMakeContextCurrent(window);
+	print_gl_error("Make OpenGL context");
 	glewExperimental = GL_TRUE;
 	if(glewInit() != GLEW_OK) {
 		fputs("GLEW failed to init.", stderr);
 	}
-	glewExperimental = GL_TRUE;
-	if(glewInit() != GLEW_OK) {
-		fputs("GLEW failed to init.", stderr);
-	}
+	print_gl_error("GLEW initialization");
 	Window win;
 	win.window = window;
 	return win;
@@ -51,7 +53,7 @@ void window_draw(Window window) {
 }
 
 bool window_should_contine(Window window) {
-	return glfwWindowShouldClose(window.window);
+	return !glfwWindowShouldClose(window.window);
 }
 
 void window_close(Window window) {
