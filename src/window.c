@@ -43,6 +43,9 @@ Window window_new(WindowConfig config) {
 
 void window_update(Window window) {
 	glfwPollEvents();
+}
+
+void window_draw(Window window) {
 	batch_draw(window.batch);
 	glfwSwapBuffers(window.window);
 }
