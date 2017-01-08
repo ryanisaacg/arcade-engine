@@ -35,6 +35,9 @@ Batch batch_new() {
 	batch.ebo = malloc(sizeof(GLuint) * batch.ebo_size);
 	batch.num_sprites = 0;
 	//Generate and bind buffers
+	GLuint vao;
+    glGenVertexArrays(1, &vao);
+	glBindVertexArray(vao);
 	glGenBuffers(1, &batch.vbo_id);
 	print_gl_error("Batch VBO generation");
 	glGenBuffers(1, &batch.ebo_id);
