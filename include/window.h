@@ -19,8 +19,7 @@ typedef struct {
 
 WindowConfig window_config_new(int width, int height, const char *title);
 Window window_new(WindowConfig config);
-void window_begin(Window *window);
-void window_end(Window *window);
+void window_update(Window window);
 bool window_should_contine(Window window);
 void window_close(Window window);
 bool window_key_pressed(Window window, int key_code);

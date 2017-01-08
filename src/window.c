@@ -41,14 +41,9 @@ Window window_new(WindowConfig config) {
 	return win;
 }
 
-void window_begin(Window *window) {
+void window_update(Window window) {
 	glfwPollEvents();
-	batch_begin(&window->batch);
-}
-
-void window_end(Window *window) {
-	batch_end(&window->batch);
-	glfwSwapBuffers(window->window);
+	batch_draw(window.batch);
 }
 
 bool window_should_contine(Window window) {
