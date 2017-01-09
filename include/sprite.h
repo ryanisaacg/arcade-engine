@@ -16,7 +16,9 @@ typedef struct {
 	} src;
 	bool dynamic;
 	Rect bounds;
-	Transform transform;
+	float angle;
+	bool flip_x, flip_y;
+	Vector2 origin;
 } Sprite;
 
 Sprite spr_new_static(TextureRegion region, Rect bounds);

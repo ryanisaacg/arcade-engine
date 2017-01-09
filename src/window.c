@@ -1,85 +1,51 @@
 #include "window.h"
 
-#include <stdio.h>
-
 #include "util.h"
 
 WindowConfig window_config_new(int width, int height, const char *title) {
-	return (WindowConfig) { .resizable = false, 
-							.fullscreen_monitor = -1,
-							.width = width,
-							.height = height,
-							.title = title };
+	return (WindowConfig) { 
+		.resizable = false, 
+		.fullscreen = false,
+		.borderless = false,
+		.width = width,
+		.height = height,
+		.title = title 
+	};
 }
 
 Window window_new(WindowConfig config) {
-	glfwInit();	
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
-	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
-	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
-	glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);
-	glfwWindowHint(GLFW_RESIZABLE, config.resizable);
-	print_gl_error("GLFW window hints");
-	GLFWmonitor *monitor;
-	if(config.fullscreen_monitor != -1) {
-		int number_monitors;
-		GLFWmonitor **monitors = glfwGetMonitors(&number_monitors);
-		monitor = monitors[config.fullscreen_monitor];
-	} else {
-		monitor = NULL;
-	}
-	glfwWindowHint(GLFW_RESIZABLE, GL_FALSE);
-	print_gl_error("Resizable window hint");
-	GLFWwindow *window = glfwCreateWindow(config.width, config.height, config.title, monitor, NULL);
-	glfwMakeContextCurrent(window);
-	print_gl_error("Make OpenGL context");
-	glewExperimental = GL_TRUE;
-	if(glewInit() != GLEW_OK) {
-		fputs("GLEW failed to init.", stderr);
-	}
-	print_gl_error("GLEW initialization");
-	Window win;
-	win.window = window;
-	return win;
+	SDL_Window *window = SDL_CreateWindow(config.title, 
+			SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, config.width, config.height, 
+			(SDL_WINDOW_FULLSCREEN_DESKTOP & config.fullscreen) |
+			(SDL_WINDOW_BORDERLESS & config.borderless));
+	SDL_Renderer *rend = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
+	return (Window) {
+		.window = window,
+		.rend = rend,
+		.stay_open = true
+	};
 }
 
-void window_update(Window window) {
-	glfwPollEvents();
-}
+void window_update(Window window);
+void window_start_draw(Window window, int r, int g, int a);
+void window_end_draw(Window window);
+bool window_should_contine(Window window);
+void window_close(Window window);
+bool window_key_pressed(Window window, int key_code);
+bool window_mouse_pressed(Window window, int button);
+Vector2 window_get_mouse_pos(Window window);
+void window_set_mouse_pos(Window window, Vector2 pos);
 
-void window_draw(Window window) {
-	batch_draw(window.batch);
-	glfwSwapBuffers(window.window);
-}
-
-bool window_should_contine(Window window) {
-	return !glfwWindowShouldClose(window.window);
-}
-
-void window_close(Window window) {
-	glfwSetWindowShouldClose(window.window, GL_TRUE);
-}
-
-bool window_key_pressed(Window window, int key_code) {
-	return glfwGetKey(window.window, key_code) == GLFW_PRESS;
-}
-
-bool window_mouse_pressed(Window window, int button) {
-	return glfwGetMouseButton(window.window, button) == GLFW_PRESS;
-}
-
-Vector2 window_get_mouse_pos(Window window) {
-	double x, y;
-	glfwGetCursorPos(window.window, &x, &y);
-	return vec2_new((float)x, (float)y);
-}
-
-void window_set_mouse_pos(Window window, Vector2 pos) {
-	glfwSetCursorPos(window.window, pos.x, pos.y);
+void window_draw(Window window, Sprite sprite) {
+	TextureRegion region = spr_image(sprite);
+	SDL_RendererFlip flip = SDL_FLIP_NONE | (SDL_FLIP_HORIZONTAL & sprite.flip_x) | (SDL_FLIP_VERTICAL & sprite.flip_y);
+	SDL_Point point = { (int) sprite.origin.x, (int) sprite.origin.y };
+	SDL_Rect src = rect_conv(region.region);
+	SDL_Rect dest = rect_conv(sprite.bounds);
+	SDL_RenderCopyEx(window.rend, region.source.texture, &src, &dest, sprite.angle, &point, flip);
 }
 
 void window_destroy(Window window) {
-	glfwDestroyWindow(window.window);
-	batch_destroy(window.batch);
-	glfwTerminate();
+	SDL_DestroyRenderer(window.rend);
+	SDL_DestroyWindow(window.window);
 }
