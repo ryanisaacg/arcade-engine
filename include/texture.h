@@ -1,14 +1,13 @@
 #pragma once
 
-#include <GL/glew.h>
-
-#include "shaders.h"
+#include <SDL.h>
 
 typedef struct {
 	int width, height;
-	GLuint id;
+	SDL_Texture *texture;
 } Texture;
 
-Texture texture_new(char *texture_path);
-void texture_bind(Texture tex, Program prog, char *name);
+#include "window.h"
+
+Texture texture_new(Window window, char *texture_path);
 void texture_destroy(Texture tex);

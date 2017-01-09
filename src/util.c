@@ -68,3 +68,11 @@ char* read_file(char *filename) {
 	fclose(in);
 	return data;
 }
+
+Rect sdl_rect_conv(SDL_Rect rect) {
+	return (Rect) { rect.x, rect.y, rect.w, rect.h };
+}
+
+SDL_Rect rect_conv(Rect rect) {
+	return (SDL_Rect){ (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height };
+}

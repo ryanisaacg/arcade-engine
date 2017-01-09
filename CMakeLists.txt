@@ -21,21 +21,20 @@ endif()
 add_subdirectory(data-structures)
 
 #INCLUDES
-include_directories(include)
-include_directories(data-structures/include)
+include_directories(include data-structures/include)
 file(GLOB SOURCES src/*.c)
 file(GLOB INCLUDES include/*.h)
+
+if(WIN32) 
+	include_directories(sdl2/include sdl2_image/include)
+	link_directories(sdl2/lib sdl2_image/lib)
+endif()
 
 #LINK LIBRARY
 add_library(arcade-engine STATIC ${SOURCES} ${INCLUDES})
 set_property(TARGET arcade-engine PROPERTY C_STANDARD 99)
 set_target_properties(arcade-engine PROPERTIES LINKER_LANGUAGE C)
-target_link_libraries(arcade-engine m data-structures SOIL glfw3)
-if(WIN32)
-	target_link_libraries(arcade-engine glew32 opengl32)
-else()
-	target_link_libraries(arcade-engine GLEW GLU m GL m pthread dl drm Xdamage X11-xcb xcb-glx xcb-dri2 xcb-dri3 xcb-present xcb-randr xcb-xfixes xcb-render xcb-shape xcb-sync xshmfence glfw3 rt m dl Xrandr Xinerama Xxf86vm Xext Xcursor Xrender Xfixes X11 pthread xcb Xau)
-endif()
+target_link_libraries(arcade-engine m data-structures SDL2 SDL2_image)
 
 #CREATE TESTS
 add_executable(tests tests/tests.c)
@@ -60,8 +59,3 @@ add_test(NAME QuadTrees COMMAND tests quadtree)
 add_executable(example example.c)
 set_property(TARGET example PROPERTY C_STANDARD 99)
 target_link_libraries(example arcade-engine)
-if(WIN32)
-	target_link_libraries(example glew32 opengl32)
-else()
-	target_link_libraries(example GLEW GLU m GL m pthread dl drm Xdamage X11-xcb xcb-glx xcb-dri2 xcb-dri3 xcb-present xcb-randr xcb-xfixes xcb-render xcb-shape xcb-sync xshmfence glfw3 rt m dl Xrandr Xinerama Xxf86vm Xext Xcursor Xrender Xfixes X11 pthread xcb Xau)
-endif()

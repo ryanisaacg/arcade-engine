@@ -1,7 +1,11 @@
 #pragma once
 
+#include <SDL.h>
 #include <stdbool.h>
 
+#include "rect.h"
+
 bool equal_float(float a, float b);
-void print_gl_error(char *label);
 char *read_file(char *filename);
+Rect sdl_rect_conv(SDL_Rect rect);
+SDL_Rect rect_conv(Rect rect);
