@@ -3,6 +3,7 @@
 #include <SDL.h>
 
 #include "lines.h"
+#include "sprite.h"
 
 typedef struct {
 	bool resizable, fullscreen;
