@@ -5,34 +5,10 @@
 #include <stdlib.h>
 #include <string.h>
 
-#include <GL/glew.h>
-
 bool equal_float(float a, float b) {
 	return fabs(a - b) < 0.00001f;
 }
 
-void print_gl_error(char *label) {
-	GLenum glenum = glGetError();
-	switch(glenum) {
-	case GL_NO_ERROR:
-		break;
-	case GL_INVALID_ENUM:
-		printf("%s:%s", label, "GL Error: Invalid enum\n");
-		break;
-	case GL_INVALID_VALUE:
-		printf("%s:%s", label, "GL Error: Invalid value\n");
-		break;
-	case GL_INVALID_OPERATION:
-		printf("%s:%s", label, "GL Error: Invalid operation\n");
-		break;
-	case GL_INVALID_FRAMEBUFFER_OPERATION:
-		printf("%s:%s", label, "GL Error: Invalid framebuffer operation");
-		break;
-	case GL_OUT_OF_MEMORY:
-		printf("%s:%s", label, "GL Error: Out of memory");
-		break;
-	}
-}
 
 /*
 Reads a file in its entirety

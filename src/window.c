@@ -1,5 +1,6 @@
 #include "window.h"
 
+#include "sprite.h"
 #include "util.h"
 
 WindowConfig window_config_new(int width, int height, const char *title) {
@@ -22,19 +23,87 @@ Window window_new(WindowConfig config) {
 	return (Window) {
 		.window = window,
 		.rend = rend,
-		.stay_open = true
+		.stay_open = true,
+		.keys = malloc(sizeof(bool) * 284),
+		.left = false,
+		.right = false,
+		.middle = false,
+		.x1 = false,
+		.x2 = false,
+		.wheel_up = false,
+		.wheel_down = false
 	};
 }
 
-void window_update(Window window);
-void window_start_draw(Window window, int r, int g, int a);
-void window_end_draw(Window window);
-bool window_should_contine(Window window);
-void window_close(Window window);
-bool window_key_pressed(Window window, int key_code);
-bool window_mouse_pressed(Window window, int button);
-Vector2 window_get_mouse_pos(Window window);
-void window_set_mouse_pos(Window window, Vector2 pos);
+void window_events(Window *window) {
+	window->wheel_up = window->wheel_down = false;
+	SDL_Event e;
+	while(SDL_PollEvent(&e)) {
+		switch(e.type) {
+		case SDL_QUIT:
+			window->stay_open = false;
+			break;
+		case SDL_KEYDOWN:
+			window->keys[e.key.keysym.scancode] = true;
+			break;
+		case SDL_KEYUP:
+			window->keys[e.key.keysym.scancode] = false;
+			break;
+		case SDL_MOUSEWHEEL:
+			if(e.wheel.y > 0) {
+				window->wheel_up = true;
+			} else if(e.wheel.y < 0) {
+				window->wheel_down = true;
+			}
+			break;
+		}
+	}
+	Uint32 state = SDL_GetMouseState(NULL, NULL);
+	window->left = state & SDL_BUTTON_LEFT;
+	window->right = state & SDL_BUTTON_RIGHT;
+	window->middle = state & SDL_BUTTON_MIDDLE;
+	window->x1 = state & SDL_BUTTON_X1;
+	window->x2 = state & SDL_BUTTON_X2;
+}
+
+void window_start_draw(Window window, int r, int g, int b) {
+	SDL_SetRenderDrawColor(window.rend, r, g, b, 255);
+	SDL_RenderClear(window.rend);
+}
+
+void window_end_draw(Window window) {
+	SDL_RenderPresent(window.rend);
+}
+
+bool window_should_contine(Window window) {
+	return window.stay_open;
+}
+
+bool window_key_pressed(Window window, int key_code) {
+	return window.keys[key_code];
+}
+
+bool window_mouse_pressed(Window window, int button) {
+	switch(button) {
+	case SDL_BUTTON_LEFT:
+		return window.left;
+	case SDL_BUTTON_RIGHT:
+		return window.right;
+	case SDL_BUTTON_MIDDLE:
+		return window.middle;
+	case SDL_BUTTON_X1:
+		return window.x1;
+	case SDL_BUTTON_X2:
+		return window.x2;
+	}
+	return false;
+}
+
+Vector2 window_get_mouse_pos(Window window) {
+	int x, y;
+	SDL_GetMouseState(&x, &y);
+	return vec2_new(x, y);
+}
 
 void window_draw(Window window, Sprite sprite) {
 	TextureRegion region = spr_image(sprite);

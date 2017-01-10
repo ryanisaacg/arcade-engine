@@ -5,7 +5,6 @@ Sprite spr_new_static(TextureRegion region, Rect bounds) {
 		.src = { .tex = region},
 		.dynamic = false,
 		.bounds = bounds,
-		.transform = trans_new_identity()
 	};
 }
 
@@ -14,7 +13,6 @@ Sprite spr_new_animated(Animation anim, Rect bounds) {
 		.src = {.anim = anim},
 		.dynamic = true,
 		.bounds = bounds,
-		.transform = trans_new_identity()
 	};
 }
 

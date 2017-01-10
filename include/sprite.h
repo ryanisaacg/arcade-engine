@@ -9,7 +9,7 @@
 #include "texture-region.h"
 #include "transform.h"
 
-typedef struct {
+typedef struct Sprite {
 	union {
 		Animation anim;
 		TextureRegion tex;

@@ -25,10 +25,8 @@ include_directories(include data-structures/include)
 file(GLOB SOURCES src/*.c)
 file(GLOB INCLUDES include/*.h)
 
-if(WIN32) 
-	include_directories(sdl2/include sdl2_image/include)
-	link_directories(sdl2/lib sdl2_image/lib)
-endif()
+include_directories(sdl2/include sdl2_image/include)
+link_directories(sdl2/lib sdl2_image/lib)
 
 #LINK LIBRARY
 add_library(arcade-engine STATIC ${SOURCES} ${INCLUDES})

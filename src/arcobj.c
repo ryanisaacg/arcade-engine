@@ -1,8 +1,7 @@
 #include "arcobj.h"
 #include <stddef.h>
 
-ArcadeObject arcobj_new(Shape bounds, bool solid, Sprite spr, Batch *batch) {
-	size_t sprite_index = batch_add(batch, spr);
+ArcadeObject arcobj_new(Shape bounds, bool solid, Sprite spr) {
 	return (ArcadeObject) { 
 		.sprite = spr,
 		.bounds = bounds, 
@@ -14,7 +13,6 @@ ArcadeObject arcobj_new(Shape bounds, bool solid, Sprite spr, Batch *batch) {
 		.alive = true, 
 		.bounce = false, 
 		.group = NULL,
-		.sprite_index = sprite_index
 	};
 }
 

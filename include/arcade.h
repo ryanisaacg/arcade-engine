@@ -1,6 +1,5 @@
 #include "arcobj.h"
 #include "array_list.h" //from data-structures
-#include "batch.h"
 #include "circ.h"
 #include "collision.h"
 #include "groups.h"

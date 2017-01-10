@@ -5,9 +5,9 @@
 
 #include "spatial_map.h"
 
-World world_new(Batch *batch, float width, float height, float qt_buckets_size, size_t data_size) {
+World world_new(Window *window, float width, float height, float qt_buckets_size, size_t data_size) {
 	return (World) {
-		.batch = batch,
+		.window = window,
 		.entities = qt_new(width, height, qt_buckets_size, qt_buckets_size),
 		.items = al_new(data_size),
 		.layers = al_new(sizeof(SpatialMap))
@@ -150,6 +150,23 @@ void world_update(World world, float milliseconds, WorldUpdate update, WorldColl
 	if(collide != NULL) {
 		qt_collisions(world.entities, world, collide);
 	}
+}
+
+void world_foreach(World world, WorldUpdate update) {
+	size_t length = qt_len(world.entities);
+	for(size_t i = 0; i < length; i++) {
+		ArcadeObject *obj = qt_get(world.entities, i);
+		if(!obj->alive) continue;
+		update(world, obj, al_get(world.items, i));
+	}
+}
+
+static void entity_draw(World world, ArcadeObject *obj, void *data) {
+	window_draw(*(world.window), obj->sprite);
+}
+
+void world_draw(World world) {
+	world_foreach(world, entity_draw);
 }
 
 void world_destroy(World world) {

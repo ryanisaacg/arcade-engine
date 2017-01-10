@@ -23,3 +23,7 @@ Texture texture_new(Window window, char *texture_path) {
 	fprintf(stderr, "Unable to load image %s. \n\tSDL Error: %s\n\tSDL_Image Error: %s", texture_path, SDL_GetError(), IMG_GetError());
 	exit(-1);
 }
+
+void texture_destroy(Texture tex) {
+	SDL_DestroyTexture(tex.texture);
+}
