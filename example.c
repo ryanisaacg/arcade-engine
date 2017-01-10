@@ -1,7 +1,6 @@
 #include <stdio.h>
 
 #include "arcade.h"
-#include "util.h"
 
 void update(World world, ArcadeObject *obj, void *data) {}
 
