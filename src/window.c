@@ -79,13 +79,20 @@ void window_events(Window *window) {
 	window->x2 = state & SDL_BUTTON_X2;
 }
 
-void window_start_draw(Window window, int r, int g, int b) {
-	SDL_SetRenderDrawColor(window.rend, r, g, b, 255);
-	SDL_RenderClear(window.rend);
+void window_start_draw(Window *window, int r, int g, int b) {
+	SDL_SetRenderDrawColor(window->rend, r, g, b, 255);
+	SDL_RenderClear(window->rend);
+	window->frame_start = SDL_GetTicks();
+
 }
 
 void window_end_draw(Window window) {
 	SDL_RenderPresent(window.rend);
+	Uint32 current = SDL_GetTicks();
+	Uint32 delay = 16 - (current - window.frame_start);
+	if(16 > current - window.frame_start) {
+		SDL_Delay(delay);
+	}
 }
 
 bool window_should_contine(Window window) {

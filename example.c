@@ -20,10 +20,9 @@ int main() {
 	while(window_should_contine(window)) {
 		window_events(&window);
 		world_update(world, 1, update, collision);
-		window_start_draw(window, 0, 0, 0);
+		window_start_draw(&window, 0, 0, 0);
 		world_draw(world);
 		window_end_draw(window);
-		SDL_Delay(10);
 	}
 	texture_destroy(tex);
 	world_destroy(world);

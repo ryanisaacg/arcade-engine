@@ -14,6 +14,7 @@ typedef struct {
 	SDL_Renderer *rend;
 	bool stay_open, left, right, middle, x1, x2, wheel_up, wheel_down;
 	bool *keys;
+	Uint32 frame_start;
 } Window;
 
 #include "lines.h"
@@ -23,7 +24,7 @@ struct Sprite;
 WindowConfig window_config_new(int width, int height, const char *title);
 Window window_new(WindowConfig config);
 void window_events(Window *window);
-void window_start_draw(Window window, int r, int g, int b);
+void window_start_draw(Window *window, int r, int g, int b);
 void window_end_draw(Window window);
 bool window_should_contine(Window window);
 bool window_key_pressed(Window window, int key_code);
