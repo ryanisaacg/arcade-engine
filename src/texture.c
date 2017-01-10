@@ -2,6 +2,7 @@
 
 #include <SDL_image.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 Texture texture_new(Window window, char *texture_path) {
 	SDL_Texture *tex = NULL;
