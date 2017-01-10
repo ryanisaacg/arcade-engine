@@ -3,7 +3,11 @@
 #include "arcade.h"
 #include "util.h"
 
-void update(World world, ArcadeObject *obj, void *data) {}
+void update(World world, ArcadeObject *obj, void *data) {
+	obj->sprite.bounds = shape_bounding_box(obj->bounds);
+	Vector2 pos = shape_get_position(obj->bounds);
+	printf("%f\n", pos.y);
+}
 
 void collision(World world, ArcadeObject *a, void *adata, ArcadeObject *b, void *bdata) {}
 
@@ -14,12 +18,15 @@ int main() {
 	TextureRegion region = texregion_new(tex);
 	Sprite spr = spr_new_static(region, rect_new(0, 0, 32, 32));
 	ArcadeObject obj = arcobj_new(shape_rect(rect_new(0, 0, 32, 32)), false, spr);
+	obj.acceleration.y = 0.01;
 	world_add(&world, obj, NULL);
 	while(window_should_contine(window)) {
 		window_events(&window);
-		world_update(world, 10, update, collision);
+		//world_update(world, 1, update, collision);
+		spr.bounds.y += 1;
 		window_start_draw(window, 0, 0, 0);
-		world_draw(world);
+		window_draw(window, spr);
+		//world_draw(world);
 		window_end_draw(window);
 	}
 	texture_destroy(tex);
