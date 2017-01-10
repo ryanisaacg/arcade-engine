@@ -1,5 +1,9 @@
 #include "window.h"
 
+#include <SDL.h>
+#include <SDL_image.h>
+#include <stdio.h>
+
 #include "sprite.h"
 #include "util.h"
 
@@ -15,6 +19,15 @@ WindowConfig window_config_new(int width, int height, const char *title) {
 }
 
 Window window_new(WindowConfig config) {
+	if(SDL_Init(SDL_INIT_VIDEO) < 0) {
+		fprintf(stderr, "SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+		exit(-1);
+	}
+	int flags = IMG_INIT_JPG | IMG_INIT_PNG;
+	if(IMG_Init(flags) != flags) {
+		fprintf(stderr, "SDL_Image could not initialize. IMG Error: %s\n", IMG_GetError());
+		exit(-1);
+	}
 	SDL_Window *window = SDL_CreateWindow(config.title, 
 			SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, config.width, config.height, 
 			(SDL_WINDOW_FULLSCREEN_DESKTOP & config.fullscreen) |
@@ -117,4 +130,6 @@ void window_draw(Window window, Sprite sprite) {
 void window_destroy(Window window) {
 	SDL_DestroyRenderer(window.rend);
 	SDL_DestroyWindow(window.window);
+	SDL_Quit();
+	IMG_Quit();
 }
