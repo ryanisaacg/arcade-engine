@@ -20,6 +20,16 @@ Animation anim_new_spritesheet(TextureRegion source, int tile_width, int tile_he
 	return anim_new(frame_buffer, frames, steps);
 }
 
+Animation anim_new_linear_sheet(TextureRegion source, int tile_width, size_t steps_per_frame) {
+	size_t frames = (int)source.region.width / tile_width;
+	int frame_order[frames][2];
+	for(size_t i = 0; i < frames; i++) {
+		frame_order[i][0] = i;
+		frame_order[i][1] = 0;
+	}
+	return anim_new_spritesheet(source, tile_width, (int)source.region.height, frame_order, frames, steps_per_frame);
+}
+
 TextureRegion anim_get_current(Animation anim) {
 	TextureRegion *current = al_get(anim.frames, anim.current_frame);
 	return *current;
