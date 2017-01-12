@@ -1,8 +1,10 @@
 #include "animation.h"
 
 Animation anim_new(TextureRegion *frames, size_t num_frames, size_t steps_per_frame) {
+	ArrayList list = al_prealloc(sizeof(TextureRegion), frames, num_frames);
+	list.length = num_frames;
 	return (Animation) {
-		.frames = al_prealloc(sizeof(TextureRegion), frames, num_frames),
+		.frames = list,
 		.current_steps = 0,
 		.steps_per_frame = steps_per_frame,
 		.current_frame = 0 
