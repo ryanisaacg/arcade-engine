@@ -25,3 +25,4 @@ Sprite spr_new_static(TextureRegion region, Rect bounds);
 Sprite spr_new_animated(Animation anim, Rect bounds);
 TextureRegion spr_image(Sprite spr);
 void spr_step(Sprite *spr);
+void spr_center_origin(Sprite *spr);

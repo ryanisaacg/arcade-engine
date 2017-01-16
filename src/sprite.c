@@ -30,3 +30,7 @@ void spr_step(Sprite *spr) {
 	}
 }
 
+void spr_center_origin(Sprite *spr) {
+	TextureRegion region = spr_image(*spr);
+	spr->origin = vec2_new(region.region.width / 2, region.region.height / 2);
+}
