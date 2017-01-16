@@ -3,7 +3,7 @@
 #include "arcade.h"
 
 void update(World world, ArcadeObject *obj, void *data) {
-	obj->sprite.bounds = shape_bounding_box(obj->bounds);
+	obj->sprite.position = shape_get_position(obj->bounds);
 }
 
 void collision(World world, ArcadeObject *a, void *adata, ArcadeObject *b, void *bdata) {}
@@ -13,7 +13,7 @@ int main() {
 	World world = world_new(&window, 640, 480, 32, 0);
 	Texture tex = texture_new(window, "img.png");
 	TextureRegion region = texregion_new(tex);
-	Sprite spr = spr_new_static(region, rect_new(0, 0, 32, 32));
+	Sprite spr = spr_new_static(region, vec2_new(0, 0));
 	ArcadeObject obj = arcobj_new(shape_rect(rect_new(0, 0, 32, 32)), false, spr);
 	obj.velocity.y = 1;
 	world_add(&world, obj, NULL);

@@ -15,14 +15,13 @@ typedef struct Sprite {
 		TextureRegion tex;
 	} src;
 	bool dynamic;
-	Rect bounds;
+	Vector2 position, origin, scale;
 	float angle;
 	bool flip_x, flip_y;
-	Vector2 origin;
 } Sprite;
 
-Sprite spr_new_static(TextureRegion region, Rect bounds);
-Sprite spr_new_animated(Animation anim, Rect bounds);
+Sprite spr_new_static(TextureRegion region, Vector2 pos);
+Sprite spr_new_animated(Animation anim, Vector2 pos);
 TextureRegion spr_image(Sprite spr);
 void spr_step(Sprite *spr);
 void spr_center_origin(Sprite *spr);
