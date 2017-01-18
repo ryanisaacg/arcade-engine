@@ -21,7 +21,23 @@ bool overlaps_rect(Rect a, Rect b) {
 	return a.x < b.x + b.width && a.x + a.width > b.x && a.y < b.y + b.height && a.y + a.height > b.y;
 }
 bool overlaps_rect_circ(Rect r, Circ c) {
-	return circ_intersects(c, rect_left(r)) || circ_intersects(c, rect_right(r)) || circ_intersects(c, rect_top(r)) || circ_intersects(c, rect_bottom(r));
+	Vector2 closest;
+	if(c.x < r.x) {
+		closest.x = r.x;
+	} else if(c.x > r.x + r.width) {
+		closest.x = r.x + r.width;
+	} else {
+		closest.x = c.x;
+	}
+	if(c.y < r.y) {
+		closest.y = r.y;
+	} else if(c.y > r.y + r.height) {
+		closest.y = r.y + r.height;
+	} else {
+		closest.y = c.y;
+	}
+	closest = vec2_sub(closest, vec2_new(c.x, c.y));
+	return (closest.x * closest.x) + (closest.y * closest.y) < c.radius * c.radius;
 }
 #define POLY_OVERLAP(poly, other, check_line) \
 	for(size_t i = 0; i < poly.num_points; i++) { \

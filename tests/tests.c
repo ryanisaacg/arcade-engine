@@ -128,7 +128,7 @@ void rect_circ_overlaps_test() {
 	assert(!overlaps_rect_circ(c, b));
 }
 
-
+#undef main
 int main(int argc, char *argv[]) {
 	if(argc < 2) {
 		puts("Enter a test name.");

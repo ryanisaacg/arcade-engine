@@ -22,6 +22,8 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- Make `ArcadeObject`s drawable
 
 ##Roadmap
+<<<<<<< HEAD
+- [ ] Draw the spatial maps
 - [ ] Integrate Window and World into a single Game struct that makes creation easier
 - [ ] Add functions to load "Tiled" files into the TileMap
 - [ ] Add the notion of a discrete level
