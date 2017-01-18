@@ -1,3 +1,6 @@
 [submodule "data-structures"]
 	path = data-structures
 	url = https://github.com/ryanisaacg/data-structures
+[submodule "tmx"]
+	path = tmx
+	url = https://github.com/baylej/tmx
