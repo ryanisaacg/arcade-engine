@@ -61,8 +61,8 @@ bool sm_free(SpatialMap map, Shape shape) {
 	Rect region = shape_bounding_box(shape);
 	if(!sm_contains(map, region.x, region.y) || !sm_contains(map, region.x + region.width, region.y + region.height))
 		return false;
-	for(float x = region.x; x < region.x + region.width; x++) {
-		for(float y = region.y; y < region.y + region.height; y++) {
+	for(float x = region.x; x < region.x + region.width; x += map.tile_width) {
+		for(float y = region.y; y < region.y + region.height; y += map.tile_height) {
 			if(sm_has(map, x, y)) {
 				return false;
 			}

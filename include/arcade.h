@@ -11,5 +11,8 @@
 #include "spatial_map.h"
 #include "shape.h"
 #include "transform.h"
+#include "util.h"
 #include "window.h"
 #include "world.h"
+
+#undef main

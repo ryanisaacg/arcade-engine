@@ -9,5 +9,7 @@ typedef struct {
 } Animation;
 
 Animation anim_new(TextureRegion *frames, size_t num_frames, size_t steps_per_frame);
+Animation anim_new_spritesheet(TextureRegion source, int tile_width, int tile_height, int frame_order[][2], size_t frames, size_t steps_per_frame);
+Animation anim_new_linear_sheet(TextureRegion source, int tile_width, size_t steps_per_frame);
 TextureRegion anim_get_current(Animation anim);
 TextureRegion anim_step(Animation *anim);

@@ -9,7 +9,7 @@ TextureRegion texregion_new_sized(Texture source, Rect region) {
 }
 
 TextureRegion texregion_slice(TextureRegion region, Rect subregion) {
-	Rect sub = rect_new(region.region.x + subregion.y, region.region.y + subregion.x, 
+	Rect sub = rect_new(region.region.x + subregion.x, region.region.y + subregion.y, 
 			subregion.width, subregion.height);
 	return (TextureRegion) { region.source, sub };
 }
