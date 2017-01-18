@@ -11,6 +11,7 @@ typedef struct World {
 	QuadTree entities;
 	ArrayList items;
 	ArrayList layers;
+	int r, g, b; //background color, black by default
 } World;
 
 typedef void (*WorldUpdate)(World, ArcadeObject*, void*);

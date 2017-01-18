@@ -10,7 +10,10 @@ World world_new(Window *window, float width, float height, float qt_buckets_size
 		.window = window,
 		.entities = qt_new(width, height, qt_buckets_size, qt_buckets_size),
 		.items = al_new(data_size),
-		.layers = al_new(sizeof(SpatialMap))
+		.layers = al_new(sizeof(SpatialMap)),
+		.r = 0,
+		.g = 0,
+		.b = 0
 	};
 }
 
