@@ -10,10 +10,15 @@ typedef struct {
 } WindowConfig;
 
 typedef struct {
+	bool left, right, middle, x1, x2, wheel_up, wheel_down;
+} MouseState;
+
+typedef struct {
 	SDL_Window *window;
 	SDL_Renderer *rend;
-	bool stay_open, left, right, middle, x1, x2, wheel_up, wheel_down;
-	bool *keys;
+	bool stay_open; 
+	MouseState mouse, prev_mouse;
+	bool *keys, *prev_keys;
 	Uint32 frame_start;
 } Window;
 

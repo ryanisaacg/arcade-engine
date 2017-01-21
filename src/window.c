@@ -3,9 +3,12 @@
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "sprite.h"
 #include "util.h"
+
+#define SDL_NUM_KEYS 284
 
 WindowConfig window_config_new(int width, int height, const char *title) {
 	return (WindowConfig) { 
@@ -37,19 +40,17 @@ Window window_new(WindowConfig config) {
 		.window = window,
 		.rend = rend,
 		.stay_open = true,
-		.keys = malloc(sizeof(bool) * 284),
-		.left = false,
-		.right = false,
-		.middle = false,
-		.x1 = false,
-		.x2 = false,
-		.wheel_up = false,
-		.wheel_down = false
+		.keys = malloc(sizeof(bool) * SDL_NUM_KEYS),
+		.prev_keys = malloc(sizeof(bool) * SDL_NUM_KEYS),
+		.mouse = { 0 },
+		.prev_mouse = { 0 },
 	};
 }
 
 void window_events(Window *window) {
-	window->wheel_up = window->wheel_down = false;
+	window->prev_mouse = window->mouse;
+	window->mouse.wheel_up = window->mouse.wheel_down = false;
+	memcpy(window->prev_keys, window->keys, sizeof(bool) * SDL_NUM_KEYS);
 	SDL_Event e;
 	while(SDL_PollEvent(&e)) {
 		switch(e.type) {
@@ -64,19 +65,19 @@ void window_events(Window *window) {
 			break;
 		case SDL_MOUSEWHEEL:
 			if(e.wheel.y > 0) {
-				window->wheel_up = true;
+				window->mouse.wheel_up = true;
 			} else if(e.wheel.y < 0) {
-				window->wheel_down = true;
+				window->mouse.wheel_down = true;
 			}
 			break;
 		}
 	}
 	Uint32 state = SDL_GetMouseState(NULL, NULL);
-	window->left = state & SDL_BUTTON_LEFT;
-	window->right = state & SDL_BUTTON_RIGHT;
-	window->middle = state & SDL_BUTTON_MIDDLE;
-	window->x1 = state & SDL_BUTTON_X1;
-	window->x2 = state & SDL_BUTTON_X2;
+	window->mouse.left = state & SDL_BUTTON_LEFT;
+	window->mouse.right = state & SDL_BUTTON_RIGHT;
+	window->mouse.middle = state & SDL_BUTTON_MIDDLE;
+	window->mouse.x1 = state & SDL_BUTTON_X1;
+	window->mouse.x2 = state & SDL_BUTTON_X2;
 }
 
 void window_start_draw(Window *window, int r, int g, int b) {
@@ -106,15 +107,15 @@ bool window_key_pressed(Window window, int key_code) {
 bool window_mouse_pressed(Window window, int button) {
 	switch(button) {
 	case SDL_BUTTON_LEFT:
-		return window.left;
+		return window.mouse.left;
 	case SDL_BUTTON_RIGHT:
-		return window.right;
+		return window.mouse.right;
 	case SDL_BUTTON_MIDDLE:
-		return window.middle;
+		return window.mouse.middle;
 	case SDL_BUTTON_X1:
-		return window.x1;
+		return window.mouse.x1;
 	case SDL_BUTTON_X2:
-		return window.x2;
+		return window.mouse.x2;
 	}
 	return false;
 }
