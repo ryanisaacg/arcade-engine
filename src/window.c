@@ -104,20 +104,32 @@ bool window_key_pressed(Window window, int key_code) {
 	return window.keys[key_code];
 }
 
-bool window_mouse_pressed(Window window, int button) {
+static bool mouse_state_pressed(MouseState mouse, int button) {
 	switch(button) {
 	case SDL_BUTTON_LEFT:
-		return window.mouse.left;
+		return mouse.left;
 	case SDL_BUTTON_RIGHT:
-		return window.mouse.right;
+		return mouse.right;
 	case SDL_BUTTON_MIDDLE:
-		return window.mouse.middle;
+		return mouse.middle;
 	case SDL_BUTTON_X1:
-		return window.mouse.x1;
+		return mouse.x1;
 	case SDL_BUTTON_X2:
-		return window.mouse.x2;
+		return mouse.x2;
 	}
 	return false;
+}
+
+bool window_mouse_pressed(Window window, int button) {
+	return mouse_state_pressed(window.mouse, button);
+}
+
+bool window_key_was_pressed(Window window, int key_code) {
+	return window.prev_keys[key_code];
+}
+
+bool window_mouse_was_pressed(Window window, int button) {
+	return mouse_state_pressed(window.prev_mouse, button);
 }
 
 Vector2 window_get_mouse_pos(Window window) {
