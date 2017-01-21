@@ -13,13 +13,13 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- A World to combine the QuadTree and TileMap and make geometric queries to both
 	- Object groups that govern which objects interact
 - Graphics
-	- A windowing module backed by GLFW
-	- OpenGL texture loading backed by SOIL
-	- Batched OpenGL drawing using the shader pipeline
-	- Support for custom shaders and custom batches
+	- Use SDL2's Renderer API for hardware-accelerated graphics
 	- Support for drawing only part of a single texture image
 	- Support for basic animations
-	- Make `ArcadeObject`s drawable
+	- Automatically draw objects in the World struct
+- Input
+	- Keyboard and mouse support
+	- Previous-frame keyboard and mouse state polling
 
 ##Roadmap
 - [ ] Variable draw depths
@@ -33,7 +33,6 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 - [ ] Define or research a texture atlas format
 	- [ ] Create a texture atlas packaging tool
 	- [ ] Implement loading this texture atlas
-- [ ] Previous-frame input checking
 - [ ] Doxygen or equivalent documentation
 - [ ] Test coverage of existing modules
 - [ ] Simple HTML5 game build support
