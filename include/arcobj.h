@@ -14,5 +14,11 @@ typedef struct {
 	size_t index;
 } ArcadeObject;
 
+/*
+ * Create a new game object with a given world bound and sprite. Solid objects act like walls; other objects may not pass through them
+ */
 ArcadeObject arcobj_new(Shape bounds, bool solid, Sprite spr);
+/*
+ * Checks to see if two objects should interact, to allow things like bullets to ignore friendly units
+ */
 bool arcobj_interacts(ArcadeObject *a, ArcadeObject *b);
