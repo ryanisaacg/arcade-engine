@@ -138,12 +138,18 @@ Vector2 window_get_mouse_pos(Window window) {
 	return vec2_new(x, y);
 }
 
-void window_draw(Window window, Sprite sprite) {
+void window_draw(Window window, Camera *cam, Sprite sprite) {
 	TextureRegion region = spr_image(sprite);
 	SDL_RendererFlip flip = SDL_FLIP_NONE | (SDL_FLIP_HORIZONTAL & sprite.flip_x) | (SDL_FLIP_VERTICAL & sprite.flip_y);
 	SDL_Point point = { (int) sprite.origin.x, (int) sprite.origin.y };
 	SDL_Rect src = rect_conv(region.region);
-	SDL_Rect dest = { (int) sprite.position.x, (int) sprite.position.y, src.w * sprite.scale.x, src.h * sprite.scale.y };
+	Rect game_dest = rect_new(sprite.position.x, sprite.position.y, src.w * sprite.scale.x, src.h * sprite.scale.y);
+	SDL_Rect dest;
+	if(cam) {
+		dest = cam_project_rect(*cam, game_dest);
+	} else {
+		dest = (SDL_Rect) { (int) sprite.position.x, (int) sprite.position.y, src.w * sprite.scale.x, src.h * sprite.scale.y };
+	}
 	SDL_RenderCopyEx(window.rend, region.source.texture, &src, &dest, sprite.angle, &point, flip);
 }
 

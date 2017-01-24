@@ -3,9 +3,11 @@
 #include <inttypes.h>
 #include <stdbool.h>
 
-typedef struct {
+#include "forward-decl.h"
+
+struct Group {
 	uint64_t id, blacklist;
-} Group;
+};
 
 Group group_new();
 void group_blacklist(Group *group, Group *other);

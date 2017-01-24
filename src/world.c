@@ -4,6 +4,7 @@
 #include <stdio.h>
 
 #include "spatial_map.h"
+#include "quadtree.h"
 
 World world_new(Window *window, float width, float height, float qt_buckets_size, size_t data_size) {
 	return (World) {
@@ -11,6 +12,7 @@ World world_new(Window *window, float width, float height, float qt_buckets_size
 		.entities = qt_new(width, height, qt_buckets_size, qt_buckets_size),
 		.items = al_new(data_size),
 		.layers = al_new(sizeof(SpatialMap)),
+		.camera = cam_new(window, rect_new(0, 0, width, height)),
 		.r = 0,
 		.g = 0,
 		.b = 0
@@ -165,7 +167,7 @@ void world_foreach(World world, WorldUpdate update) {
 }
 
 static void entity_draw(World world, ArcadeObject *obj, void *data) {
-	window_draw(*(world.window), obj->sprite);
+	window_draw(*(world.window), &(world.camera), obj->sprite);
 }
 
 void world_draw(World world) {

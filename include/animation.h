@@ -3,10 +3,10 @@
 #include "array_list.h"
 #include "texture-region.h"
 
-typedef struct {
+struct Animation {
 	ArrayList frames;
 	size_t current_steps, steps_per_frame, current_frame;
-} Animation;
+};
 
 /*
  * Creates a new Animation from a buffer

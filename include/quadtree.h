@@ -14,10 +14,10 @@ struct World;
 struct QuadNode;
 typedef struct QuadNode QuadNode;
 
-typedef struct {
+struct QuadTree {
 	QuadNode *root;
 	ArrayList entities, groups;
-} QuadTree;
+};
 
 struct QuadNode {
 	QuadNode *children[4];

@@ -3,9 +3,9 @@
 #include <stdbool.h>
 
 //A 2D vector
-typedef struct {
+struct Vector2 {
 	float x, y;
-} Vector2;
+};
 //Create a new vector with an x and a y 
 Vector2 vec2_new(float x, float y);
 //Find the square of the length of a vector
@@ -34,9 +34,9 @@ Vector2 vec2_neg(Vector2 vec);
 bool vec2_eql(Vector2 a, Vector2 b);
 //Get the angle a vector makes with the x-axis
 float vec2_angle(Vector2 a);
-typedef struct {
+struct Line {
 	Vector2 start, end;
-} Line;
+};
 //Create a new line between two points
 Line line_new(Vector2 start, Vector2 end);
 //Check if two lines intersect

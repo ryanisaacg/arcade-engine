@@ -2,10 +2,10 @@
 
 #include <SDL.h>
 
-typedef struct {
+struct Texture {
 	int width, height;
 	SDL_Texture *texture;
-} Texture;
+};
 
 #include "window.h"
 

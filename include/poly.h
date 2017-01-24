@@ -5,12 +5,12 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-typedef struct {
+struct Polygon{
 	Vector2 pos, origin;
 	Vector2 *points;
 	size_t num_points;
 	float rotation, scale;
-} Polygon;
+};
 //Create a new polygon from a list of vertices
 Polygon poly_new(Vector2 position, Vector2 *points, size_t num_points);
 //Create a new polygon from a rectangle

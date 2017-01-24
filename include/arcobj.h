@@ -5,14 +5,14 @@
 #include "shape.h"
 #include "sprite.h"
 
-typedef struct {
+struct ArcadeObject {
 	Sprite sprite;
 	Shape bounds;
 	Vector2 velocity, acceleration, max_velocity, drag;
 	bool solid, alive, bounce;
 	Group *group;
 	size_t index;
-} ArcadeObject;
+};
 
 /*
  * Create a new game object with a given world bound and sprite. Solid objects act like walls; other objects may not pass through them

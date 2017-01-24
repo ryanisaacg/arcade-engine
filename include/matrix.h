@@ -9,9 +9,9 @@ typedef struct {
 Vector3 vec3_new(float x, float y, float z);
 float vec3_dot(Vector3 a, Vector3 b);
 
-typedef struct {
+struct Matrix3{
 	float data[3][3];
-} Matrix3;
+};
 
 Matrix3 mat3_new_identity();
 Matrix3 mat3_new(float data[3][3]);

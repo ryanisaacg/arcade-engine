@@ -4,10 +4,10 @@
 #include "texture.h"
 #include "transform.h"
 
-typedef struct {
+struct TextureRegion {
 	Texture source;
 	Rect region;
-} TextureRegion;
+};
 
 TextureRegion texregion_new(Texture source);
 TextureRegion texregion_new_sized(Texture source, Rect region);

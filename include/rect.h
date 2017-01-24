@@ -1,11 +1,12 @@
 #pragma once
 
+#include "forward-decl.h"
 #include "lines.h"
 #include <stdbool.h>
 
-typedef struct {
+struct Rect {
 	float x, y, width, height;
-} Rect;
+};
 //Create a new recangle
 Rect rect_new(float x, float y, float width, float height);
 //Get the left side of the rect

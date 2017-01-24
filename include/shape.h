@@ -5,7 +5,7 @@
 #include "poly.h"
 #include "rect.h"
 
-typedef struct {
+struct Shape {
 	union {
 		Rect r;
 		Circ c;
@@ -13,7 +13,7 @@ typedef struct {
 	} data;
 	enum { SHAPE_IS_RECT, SHAPE_IS_CIRC, SHAPE_IS_POLY} type;
 	float rot;
-} Shape;
+};
 
 Shape shape_rect(Rect r);
 Shape shape_circ(Circ c);

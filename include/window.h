@@ -13,15 +13,17 @@ typedef struct {
 	bool left, right, middle, x1, x2, wheel_up, wheel_down;
 } MouseState;
 
-typedef struct {
+struct Window {
 	SDL_Window *window;
 	SDL_Renderer *rend;
 	bool stay_open; 
 	MouseState mouse, prev_mouse;
 	bool *keys, *prev_keys;
 	Uint32 frame_start;
-} Window;
+	int width, height;
+};
 
+#include "camera.h"
 #include "lines.h"
 
 struct Sprite;
@@ -77,8 +79,9 @@ bool window_mouse_was_pressed(Window window, int button);
 Vector2 window_get_mouse_pos(Window window);
 /*
  * Draw a Sprite to the Window
+ * Camera is an optional camera argument (NULL = no camera)
  */
-void window_draw(Window window, struct Sprite sprite);
+void window_draw(Window window, Camera *cam, struct Sprite sprite);
 /*
  * Cleans up the Window and all multimedia libraries
  */

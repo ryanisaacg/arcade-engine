@@ -3,10 +3,10 @@
 #include "hashmap.h"
 #include "texture.h"
 
-typedef struct {
+struct AssetManager {
 	Window window;
 	HashMap *data;
-} AssetManager;
+};
 
 AssetManager asset_new(Window window);
 Texture asset_load(AssetManager assets, char *path);

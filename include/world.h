@@ -2,19 +2,22 @@
 
 #include <stdbool.h>
 
-#include "lines.h"
-#include "quadtree.h"
-#include "spatial_map.h"
+#include "array_list.h"
 
-typedef struct World {
+#include "forward-decl.h"
+#include "arcobj.h"
+#include "camera.h"
+#include "quadtree.h"
+#include "window.h"
+
+struct World {
 	Window *window;
+	Camera camera;
 	QuadTree entities;
 	ArrayList items;
 	ArrayList layers;
 	int r, g, b; //background color, black by default
-} World;
-
-typedef void (*WorldUpdate)(World, ArcadeObject*, void*);
+};
 
 World world_new(Window *window, float width, float height, float qt_buckets_size, size_t data_size);
 size_t world_add(World *world, ArcadeObject object, void *objects);

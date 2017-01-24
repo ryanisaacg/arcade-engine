@@ -2,11 +2,11 @@
 
 #include "matrix.h"
 
-typedef struct {
+struct Transform {
 	Matrix3 matrix;
 	float rotation;
 	Vector2 scale, position;
-} Transform;
+};
 
 Transform trans_new_identity();
 Transform trans_new(Vector2 position, float rotation, Vector2 scale);
