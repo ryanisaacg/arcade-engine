@@ -1,4 +1,4 @@
-#include "collision.h"
+#include "geom.h"
 
 bool engulfs_circ(Circ outer, Circ inner);
 bool engulfs_rect(Rect outer, Rect inner) {

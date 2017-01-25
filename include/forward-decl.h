@@ -12,6 +12,7 @@ DECL(Level);
 DECL(Line);
 DECL(Matrix3);
 DECL(Polygon);
+DECL(QuadNode);
 DECL(QuadTree);
 DECL(Rect);
 DECL(Shape);
@@ -25,3 +26,4 @@ DECL(World);
 DECL(Vector2);
 
 typedef void (*WorldUpdate)(World, ArcadeObject*, void*);
+typedef void (*WorldCollide)(World, ArcadeObject*, void*, ArcadeObject*, void*);

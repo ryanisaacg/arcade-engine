@@ -4,13 +4,15 @@
 
 #include "array_list.h"
 
-#include "shape.h"
+#include "forward-decl.h"
 
 struct SpatialMap {
 	float width, height, tile_width, tile_height;
 	ArrayList items;
 	ArrayList has;
 };
+
+#include "shape.h"
 
 SpatialMap sm_new(size_t item_size, float width, float height, 
 									float tile_width, float tile_height);

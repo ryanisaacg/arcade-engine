@@ -2,18 +2,19 @@
 
 #include "array_list.h"
 
-#include "manager.h"
-#include "level.h"
-#include "window.h"
-#include "world.h"
+#include "forward-decl.h"
 
-
-typedef struct {
+struct Game {
 	AssetManager assets;
 	World current;
 	Window *window;
 	Level *levels;
-} Game;
+};
+
+#include "manager.h"
+#include "level.h"
+#include "window.h"
+#include "world.h"
 
 Game game_new(WindowConfig config, char **level_names, size_t *indices, size_t num_levels);
 /*

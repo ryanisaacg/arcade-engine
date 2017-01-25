@@ -3,6 +3,8 @@
 #include <SDL.h>
 #include <stdbool.h>
 
+#include "forward-decl.h"
+
 typedef struct {
 	bool resizable, fullscreen, borderless;
 	int width, height;
@@ -26,7 +28,6 @@ struct Window {
 #include "camera.h"
 #include "lines.h"
 
-struct Sprite;
 /*
  * Pack attributes into a configuration struct
  */

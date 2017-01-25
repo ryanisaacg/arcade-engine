@@ -1,4 +1,5 @@
-#include "sprite.h"
+#include "geom.h"
+#include "graphics.h"
 
 Sprite spr_new_static(TextureRegion region, Vector2 pos) {
 	return (Sprite) {

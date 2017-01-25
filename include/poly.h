@@ -1,9 +1,9 @@
 #pragma once
 
-#include "lines.h"
-#include "rect.h"
 #include <stdbool.h>
 #include <stddef.h>
+
+#include "forward-decl.h"
 
 struct Polygon{
 	Vector2 pos, origin;
@@ -11,6 +11,10 @@ struct Polygon{
 	size_t num_points;
 	float rotation, scale;
 };
+
+#include "lines.h"
+#include "rect.h"
+
 //Create a new polygon from a list of vertices
 Polygon poly_new(Vector2 position, Vector2 *points, size_t num_points);
 //Create a new polygon from a rectangle

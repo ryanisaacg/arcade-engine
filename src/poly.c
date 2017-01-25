@@ -1,4 +1,4 @@
-#include "poly.h"
+#include "geom.h"
 #include <stdlib.h>
 
 //Create a new polygon from a list of vertices

@@ -1,9 +1,7 @@
-#include "quadtree.h"
+#include "geom.h"
+#include "simulation.h"
 
 #include <stdio.h>
-
-#include "collision.h"
-#include "world.h"
 
 static QuadNode *get_node(QuadNode *subtree, Rect bounds);
 static QuadNode *node_new(Rect region, float min_width, float min_height);

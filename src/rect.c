@@ -1,5 +1,4 @@
-#include "lines.h"
-#include "rect.h"
+#include "geom.h"
 
 //Create a new recangle
 Rect rect_new(float x, float y, float width, float height) {

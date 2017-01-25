@@ -1,6 +1,6 @@
-#include "spatial_map.h"
+#include "geom.h"
+#include "simulation.h"
 
-#include "collision.h"
 
 static size_t get_index(SpatialMap *map, float x, float y) {
 	int gridHeight = (int)(map->height / map->tile_height);

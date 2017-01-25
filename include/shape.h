@@ -1,9 +1,6 @@
 #pragma once
 
-#include "circ.h"
-#include "lines.h"
-#include "poly.h"
-#include "rect.h"
+#include "forward-decl.h"
 
 struct Shape {
 	union {
@@ -14,6 +11,11 @@ struct Shape {
 	enum { SHAPE_IS_RECT, SHAPE_IS_CIRC, SHAPE_IS_POLY} type;
 	float rot;
 };
+
+#include "circ.h"
+#include "lines.h"
+#include "poly.h"
+#include "rect.h"
 
 Shape shape_rect(Rect r);
 Shape shape_circ(Circ c);

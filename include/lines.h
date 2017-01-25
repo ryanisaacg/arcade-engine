@@ -2,6 +2,8 @@
 
 #include <stdbool.h>
 
+#include "forward-decl.h"
+
 //A 2D vector
 struct Vector2 {
 	float x, y;

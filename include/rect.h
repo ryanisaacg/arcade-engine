@@ -1,12 +1,15 @@
 #pragma once
 
-#include "forward-decl.h"
-#include "lines.h"
 #include <stdbool.h>
+
+#include "forward-decl.h"
 
 struct Rect {
 	float x, y, width, height;
 };
+
+#include "lines.h"
+
 //Create a new recangle
 Rect rect_new(float x, float y, float width, float height);
 //Get the left side of the rect

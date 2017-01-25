@@ -1,4 +1,4 @@
-#include "groups.h"
+#include "simulation.h"
 
 Group group_new() {
 	static uint64_t current = 0;

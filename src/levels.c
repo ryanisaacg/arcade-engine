@@ -1,4 +1,6 @@
-#include "levels.h"
+#include "geom.h"
+#include "graphics.h"
+#include "simulation.h"
 
 #include <stdio.h>
 #include <tmx.h>

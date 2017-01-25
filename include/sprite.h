@@ -3,13 +3,9 @@
 #include <stdbool.h>
 #include <stddef.h>
 
-#include "forward-decl.h"
-
-#include "animation.h"
 #include "array_list.h"
-#include "rect.h"
-#include "texture-region.h"
-#include "transform.h"
+
+#include "forward-decl.h"
 
 struct Sprite {
 	union {
@@ -21,6 +17,11 @@ struct Sprite {
 	float angle;
 	bool flip_x, flip_y;
 };
+
+#include "animation.h"
+#include "rect.h"
+#include "texture-region.h"
+#include "transform.h"
 
 Sprite spr_new_static(TextureRegion region, Vector2 pos);
 Sprite spr_new_animated(Animation anim, Vector2 pos);

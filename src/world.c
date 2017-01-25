@@ -1,10 +1,9 @@
-#include "world.h"
+#include "geom.h"
+#include "graphics.h"
+#include "simulation.h"
 
 #include <math.h>
 #include <stdio.h>
-
-#include "spatial_map.h"
-#include "quadtree.h"
 
 World world_new(Window *window, float width, float height, float qt_buckets_size, size_t data_size) {
 	return (World) {

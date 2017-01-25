@@ -1,4 +1,4 @@
-#include "texture.h"
+#include "graphics.h"
 
 #include <SDL_image.h>
 #include <stdio.h>

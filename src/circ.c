@@ -1,4 +1,5 @@
-#include "circ.h"
+#include "geom.h"
+
 //Create a new circle
 Circ circ_new(float x, float y, float radius) {
 	return (Circ) {x, y, radius};

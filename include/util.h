@@ -3,7 +3,7 @@
 #include <SDL.h>
 #include <stdbool.h>
 
-#include "rect.h"
+#include "types.h"
 
 bool equal_float(float a, float b);
 char *read_file(char *filename);

@@ -1,9 +1,6 @@
 #pragma once
 
-#include "groups.h"
-#include "lines.h"
-#include "shape.h"
-#include "sprite.h"
+#include "forward-decl.h"
 
 struct ArcadeObject {
 	Sprite sprite;
@@ -13,6 +10,11 @@ struct ArcadeObject {
 	Group *group;
 	size_t index;
 };
+
+#include "groups.h"
+#include "lines.h"
+#include "shape.h"
+#include "sprite.h"
 
 /*
  * Create a new game object with a given world bound and sprite. Solid objects act like walls; other objects may not pass through them

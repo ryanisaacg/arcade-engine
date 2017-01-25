@@ -4,15 +4,7 @@
 
 #include "array_list.h"
 
-#include "arcobj.h"
-#include "lines.h"
-#include "rect.h"
-#include "shape.h"
-
-struct World;
-
-struct QuadNode;
-typedef struct QuadNode QuadNode;
+#include "forward-decl.h"
 
 struct QuadTree {
 	QuadNode *root;
@@ -25,7 +17,10 @@ struct QuadNode {
 	ArrayList contains;
 };
 
-typedef void (*WorldCollide)(struct World, ArcadeObject*, void*, ArcadeObject*, void*);
+#include "arcobj.h"
+#include "lines.h"
+#include "rect.h"
+#include "shape.h"
 
 QuadTree qt_new(float width, float height, float min_width, float min_height);
 size_t qt_add(QuadTree *tree, ArcadeObject obj);

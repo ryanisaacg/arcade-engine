@@ -1,11 +1,11 @@
-#include "window.h"
+#include "geom.h"
+#include "graphics.h"
 
 #include <SDL.h>
 #include <SDL_image.h>
 #include <stdio.h>
 #include <string.h>
 
-#include "sprite.h"
 #include "util.h"
 
 #define SDL_NUM_KEYS 284

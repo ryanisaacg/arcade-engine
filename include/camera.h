@@ -1,15 +1,16 @@
 #pragma once
 
-#include "arcobj.h"
-#include "lines.h"
-#include "rect.h"
-struct Window;
+#include "forward-decl.h"
 
 struct Camera {
 	Rect game_area;
 	struct Window *window;
 	int follow_index;
 };
+
+#include "arcobj.h"
+#include "lines.h"
+#include "rect.h"
 
 Camera cam_new(struct Window *window, Rect viewport);
 SDL_Point cam_project_point(Camera cam, Vector2 point);

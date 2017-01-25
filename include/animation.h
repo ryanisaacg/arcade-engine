@@ -1,12 +1,14 @@
 #pragma once
 
 #include "array_list.h"
-#include "texture-region.h"
+#include "forward-decl.h"
 
 struct Animation {
 	ArrayList frames;
 	size_t current_steps, steps_per_frame, current_frame;
 };
+
+#include "texture-region.h"
 
 /*
  * Creates a new Animation from a buffer

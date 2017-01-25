@@ -1,4 +1,5 @@
-#include "animation.h"
+#include "geom.h"
+#include "graphics.h"
 
 Animation anim_new(TextureRegion *frames, size_t num_frames, size_t steps_per_frame) {
 	ArrayList list = al_prealloc(sizeof(TextureRegion), frames, num_frames);

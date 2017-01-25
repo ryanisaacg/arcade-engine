@@ -1,5 +1,5 @@
-#include "arcobj.h"
-#include <stddef.h>
+#include "geom.h"
+#include "simulation.h"
 
 ArcadeObject arcobj_new(Shape bounds, bool solid, Sprite spr) {
 	return (ArcadeObject) { 

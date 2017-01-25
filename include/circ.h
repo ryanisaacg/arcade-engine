@@ -1,12 +1,14 @@
 #pragma once
 
+#include <stdbool.h>
+#include "forward-decl.h"
+
+struct Circ {
+	float x, y, radius;
+};
+
 #include "lines.h"
 #include "rect.h"
-#include <stdbool.h>
-
-typedef struct {
-	float x, y, radius;
-} Circ;
 
 //Create a new circle
 Circ circ_new(float x, float y, float radius);

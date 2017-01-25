@@ -2,6 +2,8 @@
 
 #include <SDL.h>
 
+#include "forward-decl.h"
+
 struct Texture {
 	int width, height;
 	SDL_Texture *texture;

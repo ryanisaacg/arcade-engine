@@ -1,4 +1,4 @@
-#include "camera.h"
+#include "graphics.h"
 
 Camera cam_new(Window *window, Rect viewport) {
 	return (Camera) {

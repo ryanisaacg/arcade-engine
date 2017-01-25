@@ -1,4 +1,5 @@
-#include "texture-region.h"
+#include "geom.h"
+#include "graphics.h"
 
 TextureRegion texregion_new(Texture source) {
 	return (TextureRegion) { source, rect_new(0, 0, source.width, source.height) };
