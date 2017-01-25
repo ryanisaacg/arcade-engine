@@ -130,6 +130,8 @@ struct AssetManager {
 //Determine what is drawn to the screen
 struct Camera {
 	Rect game_area; //The area of the world to draw
+	Vector2 follow_padding; //The distance the object is kept from the edge of the screen
+	Vector2 follow_speed; // the speed at which the camera tracks the follow object
 	Window *window; //The Window that is being drawn to
 	int follow_index; //The object that the camera should follow, -1 to not follow
 };

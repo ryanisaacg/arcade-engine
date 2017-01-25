@@ -108,7 +108,13 @@ static inline float oppose(float value, float factor) {
 }
 
 void world_update(World world, float milliseconds, WorldUpdate update, WorldCollide collide) {
+	Camera camera = world.camera;
 	size_t length = qt_len(world.entities);
+	if(camera.follow_index != -1) {
+		ArcadeObject *obj = world_get(world, camera.follow_index);
+		Rect position = shape_bounding_box(obj->bounds);
+		//TODO: Have camera track object
+	}
 	if(update != NULL) {
 		for(size_t i = 0; i < length; i++) {
 			ArcadeObject *obj = qt_get(world.entities, i);
