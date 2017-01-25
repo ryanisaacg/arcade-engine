@@ -22,6 +22,8 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- Previous-frame keyboard and mouse state polling
 
 ##Roadmap
+- [ ] Cache the changes to the Polygon and Camera structs
+- [ ] Fix solid objects
 - [ ] Variable draw depths
 - [ ] Draw the spatial maps
 - [ ] Integrate Window and World into a single Game struct that makes creation easier
