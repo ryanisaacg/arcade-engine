@@ -1,5 +1,10 @@
 #pragma once
 
+#include <SDL.h>
+
+#include "array_list.h"
+#include "hashmap.h"
+
 #include "geom.h"
 //Represents a texture
 typedef struct Texture {
