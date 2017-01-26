@@ -1,6 +1,63 @@
 #pragma once
 
-#include "types.h"
+#include "geom.h"
+#include "graphics.h"
+
+// *** SIMULATION ***
+// A node in the quadtree
+typedef struct QuadNode {
+	QuadNode *children[4]; // The four children of the node that are the four quarters, NULL if this is a leaf
+	Rect region; // The region that this node contains
+	ArrayList contains; // The indices that this node has
+} QuadNode;
+//A structure that recursively divides game space into quarters to make collision efficient
+typedef struct QuadTree {
+	QuadNode *root; //The root node of the quadtree
+	ArrayList entities; //All of the entities stored in the quadtree (list of ArcadeObject)
+	ArrayList groups; //The different groups stored in the quadtree (list of Group)
+} QuadTree;
+//A structure that divides game space into tiles to allow static objects
+typedef struct SpatialMap {
+	float width, height, tile_width, tile_height; //physical properties
+	ArrayList items; //the buffer for the items in the map (list of user-defined items)
+	ArrayList has; //buffer of flags that determine if an item is present at that index (bool)
+} SpatialMap;
+//A struct that unifies various game properties and objects for easy manipulation
+typedef struct World {
+	Window *window; //pointer to the window for drawing
+	Camera camera; //the camera instance
+	QuadTree entities; //the game entities
+	ArrayList items; //a list of user-defined data
+	ArrayList layers; //a list of the maps (list of SpatialMap)
+	int r, g, b; //background color, black by default
+} World;
+//A group of entities
+typedef struct Group {
+	uint64_t id, blacklist;
+} Group;
+//A game object
+typedef struct ArcadeObject {
+	Sprite sprite; //The current game sprite
+	Shape bounds; //The physical, in-world hitbox
+	Vector2 velocity, acceleration, max_velocity, drag; //Physical properties
+	bool solid; //If other objects are stopped on collision (TODO: implement)
+	bool alive; //If the object should be considered in updateds
+	bool bounce; //Should the object bounce off obstacles elastically
+	Group *group; //The group that determines interactions between objects
+	size_t index; //The index of the object in the world (set automatically)
+} ArcadeObject;
+//A structure that holds data for a level
+typedef struct Level {
+	World data; //the interpreted world
+	bool persistent; //if the level should be the same if it is returned to
+} Level;
+//A structure that unifies all game items
+typedef struct Game {
+	AssetManager assets; //The game assets
+	World current; //the current world
+	Window *window; //the window (heap-allocated)
+	ArrayList levels; //the levels in the game (list of Game)
+} Game;
 
 // *** QUADTREES ***
 // Create a new quadtree where the leaf nodes will have at least min_width and min_height
