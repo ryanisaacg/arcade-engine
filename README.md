@@ -23,7 +23,7 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 
 ##Roadmap
 - [ ] Cache the changes to the Polygon and Camera structs
-- [ ] Fix solid objects
+- [ ] Fix solid objects	
 - [ ] Variable draw depths
 - [ ] Draw the spatial maps
 - [ ] Integrate Window and World into a single Game struct that makes creation easier
@@ -31,7 +31,8 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 - [ ] Add the notion of a discrete level
 - [ ] Add level restart and switch functions
 - [ ] Add the ability to restart, save, load, or close the game
-- [ ] Add window scaling
+- [x] Add window scaling
+	- [ ] Allow the user to configure window scaling to letterbox rather than stretch
 - [ ] Define or research a texture atlas format
 	- [ ] Create a texture atlas packaging tool
 	- [ ] Implement loading this texture atlas
