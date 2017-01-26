@@ -579,13 +579,6 @@ static inline void move_entity(World world, ArcadeObject *obj, void *data) {
 }
 
 void world_update(World world, WorldUpdate update, WorldCollide collide) {
-	Camera camera = world.camera;
-	size_t length = qt_len(world.entities);
-	if(camera.follow_index != -1) {
-		ArcadeObject *obj = world_get(world, camera.follow_index);
-		Rect position = shape_bounding_box(obj->bounds);
-		//TODO: Have camera track object
-	}
 	world_foreach(world, move_entity);
 	if(update != NULL) {
 		world_foreach(world, update);

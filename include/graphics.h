@@ -90,7 +90,3 @@ Vector2 cam_unproject_point(Camera cam, SDL_Point screen);
 SDL_Rect cam_project_rect(Camera cam, Rect game_area);
 //Unproject a rectangle from the screen to the game
 Rect cam_unproject_rect(Camera cam, SDL_Rect screen);
-//Follow a specific object
-void cam_set_follow(Camera *cam, ArcadeObject *obj);
-//Stop following the object
-void cam_clear_follow(Camera *cam);
