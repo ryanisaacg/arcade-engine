@@ -33,6 +33,8 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 - [ ] Add the ability to restart, save, load, or close the game
 - [ ] Add window scaling
 - [ ] Define or research a texture atlas format
+	- [ ] Implement render-to-texture features
+	- [ ] Implement screenshot saving
 	- [ ] Create a texture atlas packaging tool
 	- [ ] Implement loading this texture atlas
 - [ ] Doxygen or equivalent documentation
