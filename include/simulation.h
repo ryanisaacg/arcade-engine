@@ -6,7 +6,7 @@
 // *** SIMULATION ***
 // A node in the quadtree
 typedef struct QuadNode {
-	QuadNode *children[4]; // The four children of the node that are the four quarters, NULL if this is a leaf
+	struct QuadNode *children[4]; // The four children of the node that are the four quarters, NULL if this is a leaf
 	Rect region; // The region that this node contains
 	ArrayList contains; // The indices that this node has
 } QuadNode;
