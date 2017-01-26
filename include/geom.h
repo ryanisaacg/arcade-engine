@@ -97,6 +97,8 @@ bool poly_contains(Polygon poly, Vector2 point);
 bool poly_intersects(Polygon poly, Line line);
 //Find the bounds of a polygon as a rect
 Rect poly_bounding_box(Polygon poly);
+//Update the points of the polygon
+void poly_update(Polygon poly);
 void poly_destroy(Polygon poly);
 
 // *** SHAPES ***

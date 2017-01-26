@@ -58,6 +58,7 @@ struct Polygon {
 	Vector2 pos; //The displacement of the shape
 	Vector2 origin; //The rotational origin of the shape
 	Vector2 *points; //The buffer of the points in the polygon
+	Vector2 *transformed; //The cached version of the points
 	size_t num_points; //The number of points in the buffer
 	float rotation; //The degrees of rotation of the shape
 	float scale; //The scale factor of the shape

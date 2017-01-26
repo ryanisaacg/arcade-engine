@@ -6,6 +6,7 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- Basic vector and line math for 2D
 	- Basic matrix manipulation for a 3x3 matrix
 	- Basic shapes such as Axis-Aligned Bounding Boxes (Rects), circles, and polygons
+	- Changes to Polygons are cached to speed up usage
 	- A single interface to the three shape types (Shape)
 	- Collision and intersection
 	- A QuadTree to store dynamic physical entities
@@ -22,7 +23,6 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- Previous-frame keyboard and mouse state polling
 
 ##Roadmap
-- [ ] Cache the changes to the Polygon and Camera structs
 - [ ] Fix solid objects
 - [ ] Variable draw depths
 - [ ] Draw the spatial maps
