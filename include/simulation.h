@@ -68,10 +68,8 @@ void *world_get_data(World world, size_t index);
 SpatialMap *world_get_map(World world, size_t index);
 // Remove the arcade object at an index
 ArcadeObject world_remove(World *world, size_t index);
-// Run an update step, where milliseconds is the milliseconds that has passed since the last world_update, 
-// update is the function to apply to the game objects,
-// and collide is the function to handle collisions
-void world_update(World world, float milliseconds, WorldUpdate update, WorldCollide collide);
+// Run an update step, where update is the function to apply to the game objects and collide is the function to handle collisions
+void world_update(World world, WorldUpdate update, WorldCollide collide);
 // Apply a function to all arcade objects in the world
 void world_foreach(World world, WorldUpdate update);
 // Draw the world to the screeen

@@ -544,7 +544,41 @@ static inline float oppose(float value, float factor) {
 		return value + factor;
 }
 
-void world_update(World world, float milliseconds, WorldUpdate update, WorldCollide collide) {
+static inline void move_entity(World world, ArcadeObject *obj, void *data) {
+	if(!world_region_free(world, obj->bounds, obj)) return; //If this object is already entangled with another, skip the physics
+	//Accelerate the object
+	obj->velocity = vec2_add(obj->acceleration, obj->velocity);
+	//Apply velocity maximums
+	if(obj->max_velocity.x >= 0)
+		obj->velocity.x = clamp(obj->velocity.x, obj->max_velocity.x);
+	if(obj->max_velocity.y >= 0)
+		obj->velocity.y = clamp(obj->velocity.y, obj->max_velocity.y);
+	//Apply drag to the velocity
+	obj->velocity.x = oppose(obj->velocity.x, obj->drag.x);
+	obj->velocity.y = oppose(obj->velocity.y, obj->drag.y);
+	Vector2 velocity = obj->velocity;
+	//Move the object to a free space
+	Vector2 x = vec2_new(velocity.x, 0);
+	Vector2 y = vec2_new(0, velocity.y);
+	if(obj->bounce) {
+		Vector2 oldX = x;
+		Vector2 oldY = y;
+		x = try_move(world, obj, x);
+		y = try_move(world, obj, y);
+		if(oldX.x != x.x) {
+			velocity.x *= -1;
+		}
+		if(oldY.y != y.y) {
+			velocity.y *= -1;
+		}
+	} else {
+		velocity.x = try_move(world, obj, x).x;
+		velocity.y = try_move(world, obj, y).y;
+	}
+	obj->velocity = velocity;
+}
+
+void world_update(World world, WorldUpdate update, WorldCollide collide) {
 	Camera camera = world.camera;
 	size_t length = qt_len(world.entities);
 	if(camera.follow_index != -1) {
@@ -552,47 +586,9 @@ void world_update(World world, float milliseconds, WorldUpdate update, WorldColl
 		Rect position = shape_bounding_box(obj->bounds);
 		//TODO: Have camera track object
 	}
+	world_foreach(world, move_entity);
 	if(update != NULL) {
-		for(size_t i = 0; i < length; i++) {
-			ArcadeObject *obj = qt_get(world.entities, i);
-			if(!obj->alive) continue;
-			//Apply the custom update
-			update(world, qt_get(world.entities, i), al_get(world.items, i));
-			//If this object is already entangled with another, skip the physics
-			if(!world_region_free(world, obj->bounds, obj)) continue;
-			//Accelerate the object
-			Vector2 acceleration = vec2_scl(obj->acceleration, milliseconds);
-			obj->velocity = vec2_add(acceleration, obj->velocity);
-			//Apply velocity maximums
-			if(obj->max_velocity.x >= 0)
-				obj->velocity.x = clamp(obj->velocity.x, obj->max_velocity.x);
-			if(obj->max_velocity.y >= 0)
-				obj->velocity.y = clamp(obj->velocity.y, obj->max_velocity.y);
-			//Apply drag to the velocity
-			obj->velocity.x = oppose(obj->velocity.x, obj->drag.x);
-			obj->velocity.y = oppose(obj->velocity.y, obj->drag.y);
-			//Determine the velocity of the object
-			Vector2 velocity = vec2_scl(obj->velocity, milliseconds);
-			//Move the object to a free space
-			Vector2 x = vec2_new(velocity.x, 0);
-			Vector2 y = vec2_new(0, velocity.y);
-			if(obj->bounce) {
-				Vector2 oldX = x;
-				Vector2 oldY = y;
-				x = try_move(world, obj, x);
-				y = try_move(world, obj, y);
-				if(oldX.x != x.x) {
-					velocity.x *= -1;
-				}
-				if(oldY.y != y.y) {
-					velocity.y *= -1;
-				}
-			} else {
-				velocity.x = try_move(world, obj, x).x;
-				velocity.y = try_move(world, obj, y).y;
-			}
-			obj->velocity = vec2_scl(velocity, 1 / milliseconds);
-		}
+		world_foreach(world, update);
 	}
 	if(collide != NULL) {
 		qt_collisions(world.entities, world, collide);
