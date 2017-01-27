@@ -59,6 +59,9 @@ typedef struct Game {
 	ArrayList levels; //the levels in the game (list of Game)
 } Game;
 
+typedef void (*WorldUpdate)(World, ArcadeObject*, void*);
+typedef void (*WorldCollide)(World, ArcadeObject*, void*, ArcadeObject*, void*);
+
 // *** QUADTREES ***
 // Create a new quadtree where the leaf nodes will have at least min_width and min_height
 QuadTree qt_new(float width, float height, float min_width, float min_height);
