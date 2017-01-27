@@ -31,26 +31,53 @@ bool arcobj_interacts(ArcadeObject *a, ArcadeObject *b) {
 bool keep_going;
 Game game;
 
-Game game_new(WindowConfig config, char **level_names, size_t *indices, size_t num_levels) {
-	Game g = {
-		.window = malloc(sizeof(Window)),
-
-	};
+Game game_new(WindowConfig config, char **level_names, size_t *indices, size_t num_levels, size_t data_size) {
 	ArrayList levels = al_new_sized(sizeof(Level), num_levels);
+	Window window = window_new(config);
+	AssetManager assets = asset_new(window);
+	for(size_t i = 0; i < num_levels; i++) {
+		Level lvl = level_load(level_names[i], assets, data_size);
+		al_add(&levels, &lvl);
+	}
+	Window *win_alloced = malloc(sizeof(Window));
+	*win_alloced = window;
+	Level *first = al_get(levels, 0);
+	World current = level_get_world(*first);
+	current.window = win_alloced;
+	return (Game) {
+		.assets = assets,
+		.current = current,
+		.window = win_alloced,
+		.levels = levels,
+		.current_level_index = 0
+	};
 }
 
-/*
- * Takes control of execution and sets global data
- */
-void game_start(Game game);
-/*
- * Uses global state
- */
-void game_stop();
-/*
- * Sets global state
- */
-void game_restart();
+void game_start(Game g, WorldUpdate update, WorldCollide collide) {
+	game = g;
+	keep_going = true;
+	while(window_should_contine(*(g.window)) && keep_going) {
+		window_events(g.window);
+		world_update(g.current, 1, update, collide);
+		window_start_draw(g.window, 0, 0, 0);
+		world_draw(g.current);
+		window_end_draw(*(g.window));
+	}
+}
+void game_stop() {
+	keep_going = false;
+}
+void game_set_level(size_t index) {
+	game.current_level_index = index;
+	Level *level = al_get(game.levels, index);
+	game.current = level_get_world(*level);
+}
+void game_next_level() {
+	game_set_level(game.current_level_index + 1);
+}
+void game_prev_level() {
+	game_set_level(game.current_level_index - 1);
+}
 
 Group group_new() {
 	static uint64_t current = 0;

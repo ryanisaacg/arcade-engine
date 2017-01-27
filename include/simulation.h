@@ -57,6 +57,7 @@ typedef struct Game {
 	World current; //the current world
 	Window *window; //the window (heap-allocated)
 	ArrayList levels; //the levels in the game (list of Game)
+	size_t current_level_index; //The index of the current level
 } Game;
 
 typedef void (*WorldUpdate)(World, ArcadeObject*, void*);
@@ -169,10 +170,14 @@ void level_destroy(Level level);
 
 // *** GAME ***
 // Creates a new game instance, loading the levels defined in level_names in the order defined in indices
-Game game_new(WindowConfig config, char **level_names, size_t *indices, size_t num_levels);
+Game game_new(WindowConfig config, char **level_names, size_t *indices, size_t num_levels, size_t data_size);
 // Takes control of execution and sets global data
-void game_start(Game game);
+void game_start(Game game, WorldUpdate update, WorldCollide collide);
 // Uses global state
 void game_stop();
-// Sets global state
-void game_restart();
+// Move the game to the level at the given index (global state)
+void game_set_level(size_t index);
+// Advance the game to the next level (global state)
+void game_next_level();
+// Move the game back a level (global state)
+void game_prev_level();
