@@ -13,6 +13,7 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- A TileMap to store static physical entities
 	- A World to combine the QuadTree and TileMap and make geometric queries to both
 	- Object groups that govern which objects interact
+	- A Level object which manages loading and storing a game state
 	- A Game to combine Levels, a World, and a Window
 - Graphics
 	- Use SDL2's Renderer API for hardware-accelerated graphics
@@ -28,7 +29,6 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 - [ ] Variable draw depths
 - [ ] Draw the spatial maps
 - [ ] Add functions to load "Tiled" files into the TileMap
-- [ ] Add the notion of a discrete level
 - [ ] Add window scaling
 - [ ] Define or research a texture atlas format
 	- [ ] Implement render-to-texture features
