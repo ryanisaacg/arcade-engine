@@ -25,7 +25,6 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- Previous-frame keyboard and mouse state polling
 
 ##Roadmap
-- [ ] Fix solid objects
 - [ ] Variable draw depths
 - [ ] Draw the spatial maps
 - [ ] Add functions to load "Tiled" files into the TileMap

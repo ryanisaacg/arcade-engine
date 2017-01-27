@@ -78,8 +78,10 @@ ArcadeObject *qt_point_query(QuadTree tree, Vector2 point, Group *query_as);
 // Check for an arcade object at the given region. No particular order in returning
 // NULL indicates no object was found
 ArcadeObject *qt_region_query(QuadTree tree, Shape region, Group *query_as);
+//Checks if a point of the quadtree is empty of solid objects
+bool qt_point_free(QuadTree tree, Vector2 point, ArcadeObject *ignore);
 // Checks if a region of the quadtree is empty of solid objects
-bool qt_region_free(QuadTree tree, Shape region);
+bool qt_region_free(QuadTree tree, Shape region, ArcadeObject *ignore);
 // Remove an object from the quadtree and return it
 ArcadeObject qt_remove(QuadTree *tree, size_t index);
 // Clear all data from the quadtree but retain allocated memory
@@ -120,9 +122,9 @@ size_t world_add_map(World *world, SpatialMap map);
 // Add a group to the world and get its heap allocated location
 Group *world_add_group(World *world, Group group);
 // Check if a point is empty within the world
-bool world_point_free(World world, Vector2 point);
+bool world_point_free(World world, Vector2 point, ArcadeObject *ignore);
 // Check if a region is free within the world
-bool world_region_free(World world, Shape region);
+bool world_region_free(World world, Shape region, ArcadeObject *ignore);
 // Get the object of the specified index
 ArcadeObject *world_get(World world, size_t index);
 // Get the user-defined data of the specified index
