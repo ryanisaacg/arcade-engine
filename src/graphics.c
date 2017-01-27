@@ -114,13 +114,6 @@ Rect cam_unproject_rect(Camera cam, SDL_Rect screen) {
 	};
 }
 
-void cam_set_follow(Camera *cam, ArcadeObject *obj) {
-	cam->follow_index = obj->index;
-}
-
-void cam_clear_follow(Camera *cam) {
-	cam->follow_index = -1;
-}
 AssetManager asset_new(Window window) {
 	return (AssetManager) {
 		.window = window,
