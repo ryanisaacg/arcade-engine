@@ -1,6 +1,72 @@
 #pragma once
 
-#include "types.h"
+#include <SDL.h>
+
+#include "array_list.h"
+#include "hashmap.h"
+
+#include "geom.h"
+//Represents a texture
+typedef struct Texture {
+	int width, height; //the width and height of the texture
+	SDL_Texture *texture; //the SDL texture backing
+} Texture;
+//A piece of a texture, used for drawing
+typedef struct TextureRegion {
+	Texture source; //the source of the texture region
+	Rect region; //the part to draw
+} TextureRegion;
+//Store an animation that can be drawn to the screen
+typedef struct Animation {
+	ArrayList frames; //An ArrayList of TextureRegions
+	size_t current_steps; //The number of steps that have passed in the current 
+	size_t steps_per_frame; //The total number of steps until the frame moves on
+	size_t current_frame; //The index of the current frame
+} Animation;
+//A game sprite in the game world
+typedef struct Sprite {
+	union {
+		Animation anim;
+		TextureRegion tex;
+	} src; //Store the drawable backing as either animated or static
+	bool dynamic; //if the image is dynamic (animated) or static
+	Vector2 position, origin, scale; //the physical properties
+	float angle; //the rotation
+	bool flip_x, flip_y; //whether to flip the texture or animation
+} Sprite;
+//A set of configuration options for creating a window
+typedef struct WindowConfig {
+	bool resizable, fullscreen, borderless;
+	int width, height;
+	const char *title;
+} WindowConfig;
+//The state of the mouse buttons
+typedef struct MouseState {
+	bool left, right, middle, x1, x2, wheel_up, wheel_down;
+} MouseState;
+//Represent an sdl window and attached ancillary items
+typedef struct Window {
+	SDL_Window *window; //the backing window
+	SDL_Renderer *rend; //hardware renderer attached to window
+	bool stay_open; //if the window should remain open
+	MouseState mouse, prev_mouse; //mouse input state
+	bool *keys, *prev_keys; //keyboard input state
+	Uint32 frame_start; //the clock time at which the frame started
+	int width, height; //the width and height of the window
+} Window;
+//A struct to store loaded textures to allow simple memory management and disable texture duplication
+typedef struct AssetManager {
+	Window window; //The window to use to load textures
+	HashMap *data; //The hashmap to store the texture data in
+} AssetManager;
+//Determine what is drawn to the screen
+typedef struct Camera {
+	Rect game_area; //The area of the world to draw
+	Vector2 follow_padding; //The distance the object is kept from the edge of the screen
+	Vector2 follow_speed; // the speed at which the camera tracks the follow object
+	Window *window; //The Window that is being drawn to
+	int follow_index; //The object that the camera should follow, -1 to not follow
+} Camera;
 
 // *** TEXTURES ***
 Texture texture_new(Window window, char *texture_path);

@@ -1,6 +1,67 @@
 #pragma once
 
-#include "types.h"
+#include "geom.h"
+#include "graphics.h"
+
+// *** SIMULATION ***
+// A node in the quadtree
+typedef struct QuadNode {
+	struct QuadNode *children[4]; // The four children of the node that are the four quarters, NULL if this is a leaf
+	Rect region; // The region that this node contains
+	ArrayList contains; // The indices that this node has
+} QuadNode;
+//A structure that recursively divides game space into quarters to make collision efficient
+typedef struct QuadTree {
+	QuadNode *root; //The root node of the quadtree
+	ArrayList entities; //All of the entities stored in the quadtree (list of ArcadeObject)
+	ArrayList groups; //The different groups stored in the quadtree (list of Group)
+} QuadTree;
+//A structure that divides game space into tiles to allow static objects
+typedef struct SpatialMap {
+	float width, height, tile_width, tile_height; //physical properties
+	ArrayList items; //the buffer for the items in the map (list of user-defined items)
+	ArrayList has; //buffer of flags that determine if an item is present at that index (bool)
+} SpatialMap;
+//A struct that unifies various game properties and objects for easy manipulation
+typedef struct World {
+	Window *window; //pointer to the window for drawing
+	Camera camera; //the camera instance
+	QuadTree entities; //the game entities
+	ArrayList items; //a list of user-defined data
+	ArrayList layers; //a list of the maps (list of SpatialMap)
+	int r, g, b; //background color, black by default
+} World;
+//A group of entities
+typedef struct Group {
+	uint64_t id, blacklist;
+} Group;
+//A game object
+typedef struct ArcadeObject {
+	Sprite sprite; //The current game sprite
+	Shape bounds; //The physical, in-world hitbox
+	Vector2 velocity, acceleration, max_velocity, drag; //Physical properties
+	bool solid; //If other objects are stopped on collision (TODO: implement)
+	bool alive; //If the object should be considered in updateds
+	bool bounce; //Should the object bounce off obstacles elastically
+	Group *group; //The group that determines interactions between objects
+	size_t index; //The index of the object in the world (set automatically)
+} ArcadeObject;
+//A structure that holds data for a level
+typedef struct Level {
+	World data; //the interpreted world
+	bool persistent; //if the level should be the same if it is returned to
+} Level;
+//A structure that unifies all game items
+typedef struct Game {
+	AssetManager assets; //The game assets
+	World current; //the current world
+	Window *window; //the window (heap-allocated)
+	ArrayList levels; //the levels in the game (list of Game)
+	size_t current_level_index; //The index of the current level
+} Game;
+
+typedef void (*WorldUpdate)(World, ArcadeObject*, void*);
+typedef void (*WorldCollide)(World, ArcadeObject*, void*, ArcadeObject*, void*);
 
 // *** QUADTREES ***
 // Create a new quadtree where the leaf nodes will have at least min_width and min_height
@@ -17,6 +78,8 @@ ArcadeObject *qt_point_query(QuadTree tree, Vector2 point, Group *query_as);
 // Check for an arcade object at the given region. No particular order in returning
 // NULL indicates no object was found
 ArcadeObject *qt_region_query(QuadTree tree, Shape region, Group *query_as);
+// Checks if a region of the quadtree is empty of solid objects
+bool qt_region_free(QuadTree tree, Shape region);
 // Remove an object from the quadtree and return it
 ArcadeObject qt_remove(QuadTree *tree, size_t index);
 // Clear all data from the quadtree but retain allocated memory
@@ -57,9 +120,9 @@ size_t world_add_map(World *world, SpatialMap map);
 // Add a group to the world and get its heap allocated location
 Group *world_add_group(World *world, Group group);
 // Check if a point is empty within the world
-bool world_point_free(World world, Vector2 point, ArcadeObject *query_as);
+bool world_point_free(World world, Vector2 point);
 // Check if a region is free within the world
-bool world_region_free(World world, Shape region, ArcadeObject *query_as);
+bool world_region_free(World world, Shape region);
 // Get the object of the specified index
 ArcadeObject *world_get(World world, size_t index);
 // Get the user-defined data of the specified index
@@ -107,10 +170,14 @@ void level_destroy(Level level);
 
 // *** GAME ***
 // Creates a new game instance, loading the levels defined in level_names in the order defined in indices
-Game game_new(WindowConfig config, char **level_names, size_t *indices, size_t num_levels);
+Game game_new(WindowConfig config, char **level_names, size_t *indices, size_t num_levels, size_t data_size);
 // Takes control of execution and sets global data
-void game_start(Game game);
+void game_start(Game game, WorldUpdate update, WorldCollide collide);
 // Uses global state
 void game_stop();
-// Sets global state
-void game_restart();
+// Move the game to the level at the given index (global state)
+void game_set_level(size_t index);
+// Advance the game to the next level (global state)
+void game_next_level();
+// Move the game back a level (global state)
+void game_prev_level();

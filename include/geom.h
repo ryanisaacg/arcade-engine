@@ -1,6 +1,46 @@
 #pragma once
 
-#include "types.h"
+#include <stdbool.h>
+#include <stddef.h>
+
+// *** GEOMETRY / MATH ***
+
+//A circle
+typedef struct Circ {
+	float x, y, radius;
+} Circ;
+//A 2D Axis-Aligned Bounding Box
+typedef struct Rect {
+	float x, y, width, height;
+} Rect;
+//A 2D vector
+typedef struct Vector2 {
+	float x, y;
+} Vector2; 
+//A line segment
+typedef struct Line {
+	Vector2 start, end;
+} Line;
+//A 2D n-sided polygon
+typedef struct Polygon {
+	Vector2 pos; //The displacement of the shape
+	Vector2 origin; //The rotational origin of the shape
+	Vector2 *points; //The buffer of the points in the polygon
+	Vector2 *transformed; //The cached version of the points
+	size_t num_points; //The number of points in the buffer
+	float rotation; //The degrees of rotation of the shape
+	float scale; //The scale factor of the shape
+} Polygon;
+//A generic handle for a 2D shape
+typedef struct Shape {
+	union {
+		Rect r;
+		Circ c;
+		Polygon p;
+	} data; //Store the shape types in a union
+	enum { SHAPE_IS_RECT, SHAPE_IS_CIRC, SHAPE_IS_POLY} type; //The type of shape it's storing
+	float rot; //Store the rotation
+} Shape;
 
 // *** COLLISION FUNCTIONS ***
 // Engulf checks to see if all of the shape is inside the other
@@ -97,6 +137,8 @@ bool poly_contains(Polygon poly, Vector2 point);
 bool poly_intersects(Polygon poly, Line line);
 //Find the bounds of a polygon as a rect
 Rect poly_bounding_box(Polygon poly);
+//Update the points of the polygon
+void poly_update(Polygon poly);
 void poly_destroy(Polygon poly);
 
 // *** SHAPES ***

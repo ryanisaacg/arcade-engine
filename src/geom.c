@@ -138,7 +138,17 @@ Rect circ_bounding_box(Circ circ) {
 }
 //Create a new polygon from a list of vertices
 Polygon poly_new(Vector2 position, Vector2 *points, size_t num_points) {
-	return (Polygon) {position, vec2_new(0, 0), points, num_points, 0, 1};
+	Polygon poly = {
+		.pos = position, 
+		.origin = vec2_new(0, 0), 
+		.points = points, 
+		.transformed = malloc(sizeof(Vector2) * num_points), 
+		.num_points = num_points, 
+		.rotation = 0, 
+		.scale = 1
+	};
+	poly_update(poly);
+	return poly;
 }
 //Create a new polygon from a rectangle
 Polygon poly_from_rect(Rect rect) {
@@ -149,14 +159,20 @@ Polygon poly_from_rect(Rect rect) {
 	points[3] = vec2_new(0, rect.height);
 	return poly_new(vec2_new(rect.x, rect.y), points, 4);
 }
+//Update the points of the polygon
+void poly_update(Polygon poly) {
+	for(size_t i = 0; i < poly.num_points; i++) {
+		Vector2 original = poly.points[i];
+		Vector2 translated = vec2_sub(original, poly.origin);
+		translated = vec2_rotate(translated, poly.rotation);
+		translated = vec2_scl(translated, poly.scale);
+		translated = vec2_add(translated, poly.origin);
+		poly.transformed[i] = vec2_add(translated, poly.pos);
+	}
+}
 //Get a transformed vertex from a polygon
 Vector2 poly_get_vertex(Polygon poly, size_t index) {
-	Vector2 original = poly.points[index];
-	Vector2 translated = vec2_sub(original, poly.origin);
-	translated = vec2_rotate(translated, poly.rotation);
-	translated = vec2_scl(translated, poly.scale);
-	translated = vec2_add(translated, poly.origin);
-	return vec2_add(translated, poly.pos);
+	return poly.transformed[index];
 }
 //Find if a polygon contains a point
 bool poly_contains(Polygon poly, Vector2 point) {
@@ -273,6 +289,7 @@ void shape_set_position(Shape *s, Vector2 position) {
 			break;
 		case SHAPE_IS_POLY:
 			s->data.p.pos = position;
+			poly_update(s->data.p);
 			break;
 	}
 }
@@ -344,6 +361,7 @@ void shape_set_rotation(Shape *s, float rotation) {
 			break;
 		case SHAPE_IS_POLY:
 			s->data.p.rotation = rotation;
+			poly_update(s->data.p);
 			s->rot = rotation;
 			break;
 	}

@@ -6,12 +6,15 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- Basic vector and line math for 2D
 	- Basic matrix manipulation for a 3x3 matrix
 	- Basic shapes such as Axis-Aligned Bounding Boxes (Rects), circles, and polygons
+	- Changes to Polygons are cached to speed up usage
 	- A single interface to the three shape types (Shape)
 	- Collision and intersection
 	- A QuadTree to store dynamic physical entities
 	- A TileMap to store static physical entities
 	- A World to combine the QuadTree and TileMap and make geometric queries to both
 	- Object groups that govern which objects interact
+	- A Level object which manages loading and storing a game state
+	- A Game to combine Levels, a World, and a Window
 - Graphics
 	- Use SDL2's Renderer API for hardware-accelerated graphics
 	- Support for drawing only part of a single texture image
@@ -22,18 +25,14 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- Previous-frame keyboard and mouse state polling
 
 ##Roadmap
-- [ ] Cache the changes to the Polygon and Camera structs
-- [ ] Fix solid objects	
 - [ ] Variable draw depths
 - [ ] Draw the spatial maps
-- [ ] Integrate Window and World into a single Game struct that makes creation easier
 - [ ] Add functions to load "Tiled" files into the TileMap
-- [ ] Add the notion of a discrete level
-- [ ] Add level restart and switch functions
-- [ ] Add the ability to restart, save, load, or close the game
 - [x] Add window scaling
 	- [ ] Allow the user to configure window scaling to letterbox rather than stretch
 - [ ] Define or research a texture atlas format
+	- [ ] Implement render-to-texture features
+	- [ ] Implement screenshot saving
 	- [ ] Create a texture atlas packaging tool
 	- [ ] Implement loading this texture atlas
 - [ ] Doxygen or equivalent documentation
