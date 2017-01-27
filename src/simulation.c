@@ -206,6 +206,7 @@ static QuadNode *get_node(QuadNode *subtree, Rect bounds);
 static QuadNode *node_new(Rect region, float min_width, float min_height);
 static ArcadeObject *node_point_query(QuadNode *subtree, ArrayList objects, Vector2 point, Group *query_as);
 static ArcadeObject *node_region_query(QuadNode *subtree, ArrayList objects, Shape region, Group *query_as);
+static bool node_region_free(QuadNode *subtree, ArrayList objects, Shape region);
 static void node_clear(QuadNode *subtree);
 static void node_all_collisions(QuadNode *subtree, World world, WorldCollide collide);
 static void node_collide(QuadNode *subtree, World world, size_t current, WorldCollide collide);
@@ -260,6 +261,10 @@ ArcadeObject *qt_point_query(QuadTree tree, Vector2 point, Group *query_as) {
 
 ArcadeObject *qt_region_query(QuadTree tree, Shape region, Group *query_as) {
 	return node_region_query(tree.root, tree.entities, region, query_as);
+}
+
+bool qt_region_free(QuadTree tree, Shape region) {
+	return node_region_free(tree.root, tree.entities, region);
 }
 
 void qt_collisions(QuadTree tree, World world, WorldCollide collide) {
@@ -351,7 +356,7 @@ static ArcadeObject *node_point_query(QuadNode *subtree, ArrayList objects, Vect
 	for(size_t i = 0; i < subtree->contains.length; i++) {
 		size_t *index = al_get(subtree->contains, i);
 		ArcadeObject *obj = al_get(objects, *index);
-		if(obj->alive && (obj->group == NULL || group_interacts(obj->group, query_as)) && obj->solid && shape_contains(obj->bounds, point)) {
+		if(obj->alive && (obj->group == NULL || group_interacts(obj->group, query_as)) && shape_contains(obj->bounds, point)) {
 			return obj;
 		}
 	}
@@ -370,7 +375,7 @@ static ArcadeObject *node_region_query(QuadNode *subtree, ArrayList objects, Sha
 	for(size_t i = 0; i < subtree->contains.length; i++) {
 		size_t *index = al_get(subtree->contains, i);
 		ArcadeObject *obj = al_get(objects, *index);
-		if(obj->alive && (obj->group == NULL || group_interacts(obj->group, query_as)) && obj->solid && overlaps_shape(obj->bounds, region)) {
+		if(obj->alive && (obj->group == NULL || group_interacts(obj->group, query_as)) && overlaps_shape(obj->bounds, region)) {
 			return obj;
 		}
 	}
@@ -384,6 +389,26 @@ static ArcadeObject *node_region_query(QuadNode *subtree, ArrayList objects, Sha
 		}
 	}
 	return NULL;
+}
+
+static bool node_region_free(QuadNode *subtree, ArrayList objects, Shape region) {
+	for(size_t i = 0; i < subtree->contains.length; i++) {
+		size_t *index = al_get(subtree->contains, i);
+		ArcadeObject *obj = al_get(objects, *index);
+		if(obj->alive && obj->solid && overlaps_shape(obj->bounds, region)) {
+			return false;
+		}
+	}
+	for(size_t i = 0; i < 4; i++) {
+		QuadNode *child = subtree->children[i];
+		if(child != NULL && overlaps_shape(shape_rect(child->region), region)) {
+			bool free = node_region_free(child, objects, region);
+			if(!free) {
+				return false;
+			}
+		}
+	}
+	return true;
 }
 
 static void node_destroy(QuadNode *subtree) {
@@ -525,15 +550,14 @@ bool world_point_free(World world, Vector2 point, ArcadeObject *query_as) {
 	return query == NULL || query == query_as;
 }
 
-bool world_region_free(World world, Shape region, ArcadeObject *query_as) {
+bool world_region_free(World world, Shape region) {
 	for(size_t i = 0; i < world.layers.length; i++) {
 		SpatialMap *map = al_get(world.layers, i);
 		if(!sm_free(*map, region)) {
 			return false;
 		}
 	}
-	ArcadeObject *query = qt_region_query(world.entities, region, query_as->group);
-	return query == NULL || query == query_as;
+	return qt_region_free(world.entities, region);
 }
 
 static inline Vector2 try_move(World world, ArcadeObject *obj, Vector2 velocity) {
