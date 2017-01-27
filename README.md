@@ -29,8 +29,6 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 - [ ] Draw the spatial maps
 - [ ] Add functions to load "Tiled" files into the TileMap
 - [ ] Add the notion of a discrete level
-- [ ] Add level restart and switch functions
-- [ ] Add the ability to restart, save, load, or close the game
 - [ ] Add window scaling
 - [ ] Define or research a texture atlas format
 	- [ ] Implement render-to-texture features
