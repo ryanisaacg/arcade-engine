@@ -58,7 +58,7 @@ void game_start(Game g, WorldUpdate update, WorldCollide collide) {
 	keep_going = true;
 	while(window_should_contine(*(g.window)) && keep_going) {
 		window_events(g.window);
-		world_update(g.current, 1, update, collide);
+		world_update(g.current, update, collide);
 		window_start_draw(g.window, 0, 0, 0);
 		world_draw(g.current);
 		window_end_draw(*(g.window));
