@@ -21,6 +21,7 @@ typedef struct SpatialMap {
 	float width, height, tile_width, tile_height; //physical properties
 	ArrayList items; //the buffer for the items in the map (list of user-defined items)
 	ArrayList has; //buffer of flags that determine if an item is present at that index (bool)
+	bool drawable; //if the map is intended to be drawn (if so, the list of items should be TextureRegion s)
 } SpatialMap;
 //A struct that unifies various game properties and objects for easy manipulation
 typedef struct World {
@@ -120,9 +121,9 @@ size_t world_add_map(World *world, SpatialMap map);
 // Add a group to the world and get its heap allocated location
 Group *world_add_group(World *world, Group group);
 // Check if a point is empty within the world
-bool world_point_free(World world, Vector2 point);
+bool world_point_free(World world, Vector2 point, ArcadeObject *ignore);
 // Check if a region is free within the world
-bool world_region_free(World world, Shape region);
+bool world_region_free(World world, Shape region, ArcadeObject *ignore);
 // Get the object of the specified index
 ArcadeObject *world_get(World world, size_t index);
 // Get the user-defined data of the specified index
