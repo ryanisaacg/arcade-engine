@@ -1,5 +1,6 @@
 #include "graphics.h"
 #include "geom.h"
+#include "simulation.h"
 
 #include <SDL.h>
 #include <stdlib.h>
