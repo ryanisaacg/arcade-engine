@@ -19,10 +19,9 @@ endif()
 
 #DEPENDENCIES
 add_subdirectory(tmx)
-add_subdirectory(data-structures)
 
 #INCLUDES
-include_directories(include data-structures/include tmx/src)
+include_directories(include tmx/src)
 file(GLOB SOURCES src/*.c)
 file(GLOB INCLUDES include/*.h)
 
