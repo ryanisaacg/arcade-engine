@@ -453,7 +453,7 @@ static size_t get_index(SpatialMap *map, float x, float y) {
 }
 
 SpatialMap sm_new(size_t item_size, float width, float height, 
-									float tile_width, float tile_height) {
+									float tile_width, float tile_height, bool drawable) {
 	SpatialMap map;
 	map.width 		= width;
 	map.height		= height;
@@ -462,6 +462,7 @@ SpatialMap sm_new(size_t item_size, float width, float height,
 	size_t last 	= get_index(&map, width, height);
 	map.items 		= al_new_sized(item_size, last);
 	map.has 		= al_new_sized(item_size, last);
+	map.drawable	= drawable;
 	bool tmp = false;
 	for(size_t i = 0; i < last; i++) {
 		al_set(&map.has, i, &tmp);
@@ -677,6 +678,20 @@ static void entity_draw(World world, ArcadeObject *obj, void *data) {
 }
 
 void world_draw(World world) {
+	for(size_t i = 0; i < world.layers.length; i++) {
+		SpatialMap *map = al_get(world.layers, i);
+		if(!map->drawable) continue;
+		SpatialMap m = *map;
+		for(float x = 0; x < map->width; x += map->tile_width) {
+			for(float y = 0; y < map->height; y += map->tile_height) {
+				if(sm_has(m, x, y)) {
+					TextureRegion *region = sm_get(m, x, y);
+					Sprite spr = spr_new_static(*region, vec2_new(x, y));
+					window_draw(*(world.window), &(world.camera), spr);
+				}
+			}
+		}
+	}
 	world_foreach(world, entity_draw);
 }
 

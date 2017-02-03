@@ -97,7 +97,7 @@ void qt_destroy(QuadTree tree);
 
 // *** SPATIAL MAPS ***
 // Create a new spatial map of a user-specified type
-SpatialMap sm_new(size_t item_size, float width, float height, float tile_width, float tile_height);
+SpatialMap sm_new(size_t item_size, float width, float height, float tile_width, float tile_height, bool drawable);
 // Set the data at a given position
 void sm_set(SpatialMap *map, void *item, float x, float y);
 // Remove the data at a given position
