@@ -1,3 +1,1 @@
-let g:syntastic_c_include_dirs=['data-structures/include', 'tmx/src']
-linux:
-let g:syntastic_c_include_dirs=['data-structures/include', 'tmx/src', '/usr/include/SDL2']
+let g:syntastic_c_include_dirs=['tmx/src']
