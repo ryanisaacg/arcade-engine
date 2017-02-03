@@ -1,7 +1,9 @@
-#Arcade Engine
+# README
+
 A 2D game engine written in pure C for writing arcade-style games. Arcade-style games feature things like pixel-based physics rather than a unit-based physics engine, pixel-perfect cameras, and pixel-based scaling techniques. 
 
-##Current Featurelist
+## Current Featurelist
+
 - Simulation
 	- Basic vector and line math for 2D
 	- Basic matrix manipulation for a 3x3 matrix
