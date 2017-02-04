@@ -31,7 +31,6 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 ##Roadmap
 
 - [ ] Add functions to load "Tiled" files into the TileMap
-- [ ] Doxygen or equivalent documentation
 - [ ] Test coverage of existing modules
 - [ ] Simple HTML5 game build support
 
