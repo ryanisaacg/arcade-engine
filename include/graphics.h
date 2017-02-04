@@ -114,19 +114,35 @@ void spr_center_origin(Sprite *spr);
 WindowConfig window_config_new(int width, int height, const char *title);
 /// Spawn a window with the given configuration (Initializes multimedia libraries and spawns an SDL window)
 Window window_new(WindowConfig config);
-/// Runs the event loop and check for keyboard and mouse events
-/// Will update the current and previous input state
-/// Will also check to see if the Window should close
+/**
+ * \brief Runs the event loop and check for keyboard and mouse events
+ *
+ * Updates the current and previous input state
+ *
+ * Will also check to see if the Window should close
+ */
 void window_events(Window *window);
 /// Start drawing with a clear color given by r, g, b (bound from 0 to 255)
 void window_start_draw(Window *window, int r, int g, int b);
-/// Draw the sprites to the screen (Will sleep spare time to finish the frame to maintain 60 FPS)
+/**
+ * \brief Draw the sprites to the screen 
+ *
+ * To maintain 60 FPS, this function sleep until 1/60 seconds have passed since window_start_draw
+ */
 void window_end_draw(Window window);
 /// If the Window has received a close event
 bool window_should_contine(Window window);
-/// Checks to see if a given key is currently held down (Key constants given by SDL key constants)
+/**
+ * \brief Checks to see if a given key is currently held down 
+ *
+ * Key constants are given by SDL key constants. Specifically, the SDL_SCANCODE_XXX constant should be used.
+ */
 bool window_key_pressed(Window window, int key_code);
-/// Checks to see if a given mouse button is currently held down (Button constants given by SDL constants)
+/** 
+ * \brief Checks to see if a given mouse button is currently held down 
+ *
+ * Button constants are given by SDL button constants
+ */
 bool window_mouse_pressed(Window window, int button);
 /// Checks to see if a key was held last frame
 bool window_key_was_pressed(Window window, int key_code);
@@ -134,8 +150,11 @@ bool window_key_was_pressed(Window window, int key_code);
 bool window_mouse_was_pressed(Window window, int button);
 /// Gets the mouse position in screen coordinates
 Vector2 window_get_mouse_pos(Window window);
-/// Draw a Sprite to the Window
-/// Camera is an optional camera argument (NULL = no camera)
+/**
+ * \brief Draw a Sprite to the Window
+ *
+ * camera is an optional Camera argument (NULL = no camera)
+ */
 void window_draw(Window window, Camera *cam, struct Sprite sprite);
 /// Cleans up the Window and all multimedia libraries
 void window_destroy(Window window);
