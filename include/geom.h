@@ -5,7 +5,11 @@
 
 /**
  * \file geom.h
- * Defines basic math and geometry structures for collision and simulation.
+ * \brief Defines basic math and geometry structures for collision and simulation
+ *
+ * geom.h contains definitions for Circ, Rect, and Polygon shapes, as well as a Shape handle that unifies them all. 
+ * It also contains defintions for Vector2 and Line, for vectors and lines, respectively. 
+ * Functions are defined to check if a point is contained in a shape, if a line is contained in a shape, or a shape intersects another shape.
  */
 
 ///A circle structure
@@ -26,13 +30,45 @@ typedef struct Line {
 } Line;
 ///A 2D n-sided polygon
 typedef struct Polygon {
-	Vector2 pos; ///The displacement of the shape
-	Vector2 origin; ///The rotational origin of the shape
-	Vector2 *points; ///The buffer of the points in the polygon
-	Vector2 *transformed; ///The cached version of the points
-	size_t num_points; ///The number of points in the buffer
-	float rotation; ///The degrees of rotation of the shape
-	float scale; ///The scale factor of the shape
+	/**
+	 * \brief The offset of the Polygon
+	 *
+	 * Polygon points are stored assuming the shape is anchored at 0,0. The pos member sets where the Polygon is in space.
+	 */
+	Vector2 pos; 
+	/**
+	 * \brief The rotational origin of the shape
+	 *
+	 * To achieve a spinning behavior when rotating, the origin of a Polygon should be placed at its center.
+	 */
+	Vector2 origin; 
+	/**
+	 * \private
+	 * The buffer of the points in the Polygon
+	 */
+	Vector2 *points;
+	/**
+	 * \private
+	 * The cached version of the transformed points
+	 */
+	Vector2 *transformed;
+	/**
+	 * \private
+	 * The number of points in the Polygon buffers
+	 */
+	size_t num_points;
+	/**
+	 * \brief The rotation of the shape, given in degrees
+	 * 
+	 * Rotation is applied relative to the Polygon 's origin
+	 */
+	float rotation;
+	/**
+	 * \brief The scale factor of the shape, where 1 is no scaling
+	 *
+	 * Multiplier uniformly applied to all points in the Polygon. 0 will not necessarily produce sensible results. 
+	 */
+	float scale;
 } Polygon;
 ///A generic handle for a 2D shape
 typedef struct Shape {
