@@ -5,16 +5,13 @@
 
 // *** SIMULATION ***
 // A node in the quadtree
-typedef struct QuadNode {
-	struct QuadNode *children[4]; // The four children of the node that are the four quarters, NULL if this is a leaf
+typedef struct QuadTree {
+	struct QuadTree *children[4]; // The four children of the node that are the four quarters, NULL if this is a leaf
 	Rect region; // The region that this node contains
 	ArrayList contains; // The indices that this node has
-} QuadNode;
-//A structure that recursively divides game space into quarters to make collision efficient
-typedef struct QuadTree {
-	QuadNode *root; //The root node of the quadtree
-	ArrayList entities; //All of the entities stored in the quadtree (list of ArcadeObject)
-	ArrayList groups; //The different groups stored in the quadtree (list of Group)
+	ArrayList *entities; //All of the entities stored in the quadtree (list of ArcadeObject)
+	ArrayList *groups; //The different groups stored in the quadtree (list of Group)
+	bool root; //if the quadtree is root
 } QuadTree;
 //A structure that divides game space into tiles to allow static objects
 typedef struct SpatialMap {
@@ -27,7 +24,7 @@ typedef struct SpatialMap {
 typedef struct World {
 	Window *window; //pointer to the window for drawing
 	Camera camera; //the camera instance
-	QuadTree entities; //the game entities
+	QuadTree *entities; //the game entities
 	ArrayList items; //a list of user-defined data
 	ArrayList layers; //a list of the maps (list of SpatialMap)
 	int r, g, b; //background color, black by default
@@ -66,34 +63,36 @@ typedef void (*WorldCollide)(World, ArcadeObject*, void*, ArcadeObject*, void*);
 
 // *** QUADTREES ***
 // Create a new quadtree where the leaf nodes will have at least min_width and min_height
-QuadTree qt_new(float width, float height, float min_width, float min_height);
+QuadTree *qt_new(QuadTree *parent, Rect region, float min_width, float min_height);
+//Find the smallest node that contains the given rectangle
+QuadTree *qt_get_child(QuadTree *tree, Rect region);
 // Add an arcade object to the quadtree and return its index
 size_t qt_add(QuadTree *tree, ArcadeObject obj);
 // Register a group to the quadtree and return a pointer to its heap-allocated location
 Group *qt_add_group(QuadTree *tree, Group group);
 // Get a pointer to the given arcade object
-ArcadeObject *qt_get(QuadTree tree, size_t index);
+ArcadeObject *qt_get(QuadTree *tree, size_t index);
 // Check for an arcade object at the given location. No particular order in returning
 // NULL indicates no object was found
-ArcadeObject *qt_point_query(QuadTree tree, Vector2 point, Group *query_as);
+ArcadeObject *qt_point_query(QuadTree *tree, Vector2 point, Group *query_as);
 // Check for an arcade object at the given region. No particular order in returning
 // NULL indicates no object was found
-ArcadeObject *qt_region_query(QuadTree tree, Shape region, Group *query_as);
+ArcadeObject *qt_region_query(QuadTree *tree, Shape region, Group *query_as);
 // Checks if a point of the quadtree is empty of solid objects
-bool qt_point_free(QuadTree tree, Vector2 point);
+bool qt_point_free(QuadTree *tree, Vector2 point);
 // Checks if a region of the quadtree is empty of solid objects
-bool qt_region_free(QuadTree tree, Shape region);
+bool qt_region_free(QuadTree *tree, Shape region);
 // Remove an object from the quadtree and return it
 ArcadeObject qt_remove(QuadTree *tree, size_t index);
 // Clear all data from the quadtree but retain allocated memory
 void qt_clear(QuadTree *tree);
 // Return the number of objects inserted into the quadtree
-size_t qt_len(QuadTree tree);
+size_t qt_len(QuadTree *tree);
 // Run the collision checks and do whatever action collide performs
 // Objects will not interact with objects that have blacklisted groups
-void qt_collisions(QuadTree tree, World world, WorldCollide collide);
+void qt_collisions(QuadTree *tree, World world, WorldCollide collide);
 // Destroy the quadtree and deallocate its memory
-void qt_destroy(QuadTree tree);
+void qt_destroy(QuadTree *tree);
 
 // *** SPATIAL MAPS ***
 // Create a new spatial map of a user-specified type
