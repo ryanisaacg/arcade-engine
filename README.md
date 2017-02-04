@@ -31,11 +31,6 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 ##Roadmap
 - [ ] Variable draw depths
 - [ ] Add functions to load "Tiled" files into the TileMap
-- [ ] Define or research a texture atlas format
-	- [ ] Implement render-to-texture features
-	- [ ] Implement screenshot saving
-	- [ ] Create a texture atlas packaging tool
-	- [ ] Implement loading this texture atlas
 - [ ] Doxygen or equivalent documentation
 - [ ] Test coverage of existing modules
 - [ ] Simple HTML5 game build support
