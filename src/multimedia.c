@@ -1,4 +1,4 @@
-#include "graphics.h"
+#include "multimedia.h"
 #include "geom.h"
 #include "simulation.h"
 

@@ -1,7 +1,7 @@
 #pragma once
 
 #include "geom.h"
-#include "graphics.h"
+#include "multimedia.h"
 
 /**
  * \file simulation.h

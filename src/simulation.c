@@ -1,5 +1,5 @@
 #include "geom.h"
-#include "graphics.h"
+#include "multimedia.h"
 #include "simulation.h"
 
 #include <math.h>
