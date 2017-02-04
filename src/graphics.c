@@ -58,69 +58,70 @@ TextureRegion anim_step(Animation *anim) {
 	}
 	return anim_get_current(*anim);
 }
-Camera cam_new(Window *window, Rect viewport) {
+
+Camera cam_new(Window *window, Rect viewport, bool letterbox) {
 	return (Camera) {
 		.game_area = viewport,
 		.window = window,
-		.follow_index = -1
+		.letterbox = letterbox,
+		.offset_x = 0,
+		.offset_y = 0,
+		.scale = vec2_new(1, 1)
 	};
 }
 
-static int xproject(Camera cam, float x) {
-	return (int)(x * cam.window->width / cam.game_area.width);
-}
-
-static int yproject(Camera cam, float y) {
-	return (int)(y * cam.window->height / cam.game_area.height);
-}
-
-static float xunproject(Camera cam, float x) {
-	return x * cam.game_area.width / cam.window->width;
-}
-
-static float yunproject(Camera cam, float y) {
-	return y * cam.game_area.height / cam.window->height;
+void cam_update(Camera *cam) {
+	cam->scale = vec2_new(cam->window->width / cam->game_area.width, cam->window->height / cam->game_area.height);
+	if(cam->letterbox) {
+		float aspect_ratio = cam->game_area.width / cam->game_area.height;
+		float expected_width = cam->window->width * aspect_ratio; //calculate the correct width for the aspect ratio
+		if(expected_width < cam->window->width) {
+			//handle vertical letterboxing (bars on the top and bottom)
+			float difference = cam->window->width - expected_width;
+			cam->offset_x = (int)(difference / 2);
+			cam->scale = vec2_new(expected_width, cam->window->height / cam->game_area.height);
+		} else if(expected_width > cam->window->width) {
+			//handle horizontal letterboxing (bars on the sides)
+			float expected_height = cam->window->width / aspect_ratio;
+			float difference = cam->window->height - expected_height;
+			cam->offset_y = (int)(difference / 2);
+			cam->scale = vec2_new(cam->window->width / cam->game_area.width, expected_height);
+		}
+	}
 }
 
 SDL_Point cam_project_point(Camera cam, Vector2 point) {
 	return (SDL_Point) { 
-		.x = xproject(cam, cam.game_area.x + point.x),
-		.y = yproject(cam, cam.game_area.y + point.y) 
+		.x = (int)(point.x * cam.scale.x) + cam.offset_x,
+		.y = (int)(point.y * cam.scale.y) + cam.offset_y
 	};
 }
 
 Vector2 cam_unproject_point(Camera cam, SDL_Point screen) {
 	return (Vector2) {
-		.x = xunproject(cam, screen.x) + cam.game_area.x, 
-		.y = yunproject(cam, screen.y) + cam.game_area.y 
+		.x = screen.x / cam.scale.x - cam.offset_x,
+		.y = screen.y / cam.scale.y - cam.offset_y
 	};
 }
 
-SDL_Rect cam_project_rect(Camera cam, Rect game_area) {
+SDL_Rect cam_project_rect(Camera cam, Rect area) {
 	return (SDL_Rect) {
-		.x = xproject(cam, cam.game_area.x + game_area.x),
-		.y = yproject(cam, cam.game_area.y + game_area.y),
-		.w = xproject(cam, game_area.width),
-		.h = yproject(cam, game_area.height)
+		.x = (int)(area.x * cam.scale.x) + cam.offset_x,
+		.y = (int)(area.y * cam.scale.y) + cam.offset_y,
+		.w = (int)(area.x * cam.scale.x),
+		.h = (int)(area.y * cam.scale.y)
 	};
 }
 
 Rect cam_unproject_rect(Camera cam, SDL_Rect screen) {
 	return (Rect) {
-		.x = xunproject(cam, screen.x) + cam.game_area.x,
-		.y = yunproject(cam, screen.y) + cam.game_area.y,
-		.width = xunproject(cam, screen.w),
-		.height = yunproject(cam, screen.h)
+		.x = screen.x / cam.scale.x - cam.offset_x,
+		.y = screen.y / cam.scale.y - cam.offset_y,
+		.width = screen.w / cam.scale.x,
+		.height = screen.h / cam.scale.y
 	};
 }
 
-void cam_set_follow(Camera *cam, ArcadeObject *obj) {
-	cam->follow_index = obj->index;
-}
-
-void cam_clear_follow(Camera *cam) {
-	cam->follow_index = -1;
-}
 AssetManager asset_new(Window window) {
 	return (AssetManager) {
 		.window = window,

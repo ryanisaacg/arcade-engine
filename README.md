@@ -23,6 +23,7 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- Support for basic animations
 	- Automatically draw objects in the World struct
 	- Automatically draw tilemaps in the World struct
+	- A Camera that can be configured to letterbox or stretch
 - Input
 	- Keyboard and mouse support
 	- Previous-frame keyboard and mouse state polling
@@ -30,8 +31,6 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 ##Roadmap
 - [ ] Variable draw depths
 - [ ] Add functions to load "Tiled" files into the TileMap
-- [x] Add window scaling
-	- [ ] Allow the user to configure window scaling to letterbox rather than stretch
 - [ ] Define or research a texture atlas format
 	- [ ] Implement render-to-texture features
 	- [ ] Implement screenshot saving

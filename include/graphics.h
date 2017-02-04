@@ -62,10 +62,11 @@ typedef struct AssetManager {
 //Determine what is drawn to the screen
 typedef struct Camera {
 	Rect game_area; //The area of the world to draw
-	Vector2 follow_padding; //The distance the object is kept from the edge of the screen
-	Vector2 follow_speed; // the speed at which the camera tracks the follow object
 	Window *window; //The Window that is being drawn to
-	int follow_index; //The object that the camera should follow, -1 to not follow
+	bool letterbox; //If the camera should respond to mismatched aspect ratios by using bars
+	int offset_x; //The amount all projections should be offset on the x axis
+	int offset_y; //The amount all projections should be offset on the y axis
+	Vector2 scale; //The scale that will be applied to all images
 } Camera;
 
 // *** TEXTURES ***
@@ -147,7 +148,7 @@ void asset_destroy(AssetManager assets);
 
 // *** CAMERA ***
 //Create a new camera
-Camera cam_new(Window *window, Rect viewport);
+Camera cam_new(Window *window, Rect viewport, bool letterbox);
 //Project a point from game coordinates to the screen
 SDL_Point cam_project_point(Camera cam, Vector2 point);
 //Unproject a point from the screen to the game
@@ -156,3 +157,5 @@ Vector2 cam_unproject_point(Camera cam, SDL_Point screen);
 SDL_Rect cam_project_rect(Camera cam, Rect game_area);
 //Unproject a rectangle from the screen to the game
 Rect cam_unproject_rect(Camera cam, SDL_Rect screen);
+//Update a camera's offset and scale; must be called after Window is resized or Camera is changed
+void cam_update(Camera *cam);
