@@ -70,20 +70,32 @@ typedef struct Polygon {
 	 */
 	float scale;
 } Polygon;
-///A generic handle for a 2D shape
+/**
+ * \brief A generic handle for a 2D shape
+ * 
+ * Uses a union that combines the Rect, Circle, and Polygon structures
+ */
 typedef struct Shape {
+	//Store the shape types in a union
+	/// \private
 	union {
 		Rect r;
 		Circ c;
 		Polygon p;
-	} data; ///Store the shape types in a union
-	enum { SHAPE_IS_RECT, SHAPE_IS_CIRC, SHAPE_IS_POLY} type; ///The type of shape it's storing
-	float rot; ///Store the rotation
+	} data; 
+	///The type of shape it's storing
+	/// \private
+	enum { SHAPE_IS_RECT, SHAPE_IS_CIRC, SHAPE_IS_POLY} type; 
+	//The rotation of the shape
+	/// \private
+	float rot; 
 } Shape;
 
 // *** COLLISION FUNCTIONS ***
-/// Checks to see if a Circ is entirely contained within another
-bool engulfs_circ(Circ outer, Circ inner); // TODO : Implement
+/// \brief Checks to see if a Circ is entirely contained within another
+///
+/// \TODO: Implement
+bool engulfs_circ(Circ outer, Circ inner);
 /// Checks to see if a Rect is entirely contained within another
 bool engulfs_rect(Rect outer, Rect inner);
 /// Checks to see if a Circ is entirely contained within a Rect
