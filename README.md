@@ -29,11 +29,16 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- Previous-frame keyboard and mouse state polling
 
 ##Roadmap
-- [ ] Variable draw depths
+
 - [ ] Add functions to load "Tiled" files into the TileMap
 - [ ] Doxygen or equivalent documentation
 - [ ] Test coverage of existing modules
 - [ ] Simple HTML5 game build support
+
+###Low priority
+
+- [ ] Variable draw depths
+- [ ] Allow users to configure target framerates
 
 ##Why C?
 Adequate solutions to the problems solved by this library exist in other language or are trivial to implement, and I've found most other languages unsuitable for game development. Stack allocation is a must, which rules out many higher-level languages. Additionally, distribution without requiring the end user install a Virtual Machine or Runtime.
