@@ -75,6 +75,11 @@ typedef struct Camera {
 	int offset_y; ///The amount all projections should be offset on the y axis
 	Vector2 scale; ///The scale that will be applied to all images
 } Camera;
+///A music track; only one track can be played at once
+typedef struct Music {
+	///\private
+	Mix_Music *music;
+} Music;
 
 // *** TEXTURES ***
 Texture texture_new(Window window, char *texture_path);
@@ -185,3 +190,21 @@ Rect cam_unproject_rect(Camera cam, SDL_Rect screen);
  * Must be called after Window is resized or Camera is changed
  */
 void cam_update(Camera *cam);
+
+
+// *** MUSIC ***
+Music music_load(char *path);
+void music_play(Music track, int times);
+void music_fade_in(Music track, int times, int milliseconds);
+void music_loop(Music track);
+void music_fade_in_loop(Music track, int times, int milliseconds);
+bool music_is_playing();
+bool music_is_paused();
+bool music_is_fading();
+void music_start();
+void music_pause();
+void music_stop();
+void music_rewind();
+void music_fade_out();
+void music_set_position(double seconds);
+void music_destroy(Music track);
