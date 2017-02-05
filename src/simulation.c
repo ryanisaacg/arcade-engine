@@ -180,7 +180,7 @@ static void load_object_layer(AssetManager assets, World *world, tmx_map *map, t
 		if(tile->animation) {
 			TextureRegion *frames = malloc(sizeof(TextureRegion) * tile->animation_len);
 		} else {
-			Texture tex = asset_load(assets, tile->image->source);
+			Texture tex = asset_load_texture(assets, tile->image->source);
 			TextureRegion region = texregion_new_sized(tex, rect_new(tile->ul_x, tile->ul_y, tile->image->width, tile->image->height));
 			sprite = spr_new_static(region, shape_get_position(shape));
 		}
