@@ -449,7 +449,7 @@ void music_fade_in_loop(Music track, int milliseconds) {
 	Mix_FadeInMusic(track.music, -1, milliseconds);
 }
 
-bool music_is_playing() {
+void music_resume() {
 	Mix_ResumeMusic();
 }
 
@@ -459,6 +459,18 @@ void music_pause() {
 
 void music_stop() {
 	Mix_HaltMusic();
+}
+
+bool music_is_playing() {
+	return Mix_PlayingMusic();
+}
+
+bool music_is_paused() {
+	return Mix_PausedMusic();
+}
+
+bool music_is_fading() {
+	return Mix_FadingMusic() != MIX_NO_FADING;
 }
 
 void music_rewind() {
