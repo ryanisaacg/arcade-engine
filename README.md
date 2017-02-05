@@ -27,16 +27,16 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 - Input
 	- Keyboard and mouse support
 	- Previous-frame keyboard and mouse state polling
+- Sound
+	- Play or repeat sound effects with multiple instances of each sound
+	- Play or loop a music track in the background
+	- Fade music in or out
 
 ##Roadmap
 
 - [ ] Add functions to load "Tiled" files into the TileMap
 - [ ] Test coverage of existing modules
 - [ ] Simple HTML5 game build support
-- [ ] Play non-looping sounds
-	- [ ] Play a sound at a given volume
-- [ ] Play looping music
-	- [ ] Play the music at a given volume
 
 ###Low priority
 

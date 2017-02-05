@@ -1,6 +1,7 @@
 #pragma once
 
 #include <SDL2/SDL.h>
+#include <SDL2/SDL_mixer.h>
 
 #include "array_list.h"
 #include "hashmap.h"
@@ -64,7 +65,7 @@ typedef struct Window {
 ///A struct to store loaded textures to allow simple memory management and disable texture duplication
 typedef struct AssetManager {
 	Window window; ///The window to use to load textures
-	HashMap *data; ///The hashmap to store the texture data in
+	HashMap *data; ///The hashmap to store the multimedia data in (Texture, Sound, and Music)
 } AssetManager;
 ///Determine what is drawn to the screen
 typedef struct Camera {
@@ -80,6 +81,24 @@ typedef struct Music {
 	///\private
 	Mix_Music *music;
 } Music;
+///A sound sample
+typedef struct Sound {
+	///\private
+	Mix_Chunk *chunk;
+	/**
+	 * \brief The default volume for playing the sound sample from 0 to 128
+	 *
+	 * Can be overriden by playing the sound with the sound_play_volume function
+	 */
+	int volume;
+} Sound;
+
+// *** INITIALIZATION
+/// Initialize all dependency multimedia libraries
+void multimedia_init();
+/// Deinitialize all dependency multimedia libraries
+void multimedia_quit();
+
 
 // *** TEXTURES ***
 Texture texture_new(Window window, char *texture_path);
@@ -117,7 +136,7 @@ void spr_center_origin(Sprite *spr);
 // *** WINDOWING ***
 /// Pack attributes into a configuration struct
 WindowConfig window_config_new(int width, int height, const char *title);
-/// Spawn a window with the given configuration (Initializes multimedia libraries and spawns an SDL window)
+/// Spawn a window with the given configuration
 Window window_new(WindowConfig config);
 /**
  * \brief Runs the event loop and check for keyboard and mouse events
@@ -161,15 +180,19 @@ Vector2 window_get_mouse_pos(Window window);
  * camera is an optional Camera argument (NULL = no camera)
  */
 void window_draw(Window window, Camera *cam, struct Sprite sprite);
-/// Cleans up the Window and all multimedia libraries
+/// Cleans up the Window
 void window_destroy(Window window);
 
 
 // *** ASSETS ***
 ///Create a new asset manager using that window
 AssetManager asset_new(Window window);
-///Load or retrieve a raw texture from a file
-Texture asset_load(AssetManager assets, char *path);
+///Load or retrieve a raw Texture from a file
+Texture asset_load_texture(AssetManager assets, char *path);
+///Load or retrieve a Music track from a file
+Music asset_load_music(AssetManager assets, char *path);
+///Load or retrieve a Sound sample from a file
+Sound asset_load_sound(AssetManager assets, char *path);
 ///Destroy the manager and the loaded textures
 void asset_destroy(AssetManager assets);
 
@@ -193,18 +216,55 @@ void cam_update(Camera *cam);
 
 
 // *** MUSIC ***
-Music music_load(char *path);
+/// Load music from a file
+Music music_new(char *path);
+/// Play a music track a certain number of times through
 void music_play(Music track, int times);
+/// Fade in a music track over a certain number of milliseconds a certain number of times through
 void music_fade_in(Music track, int times, int milliseconds);
+/// Loop a music track indefinitely
 void music_loop(Music track);
-void music_fade_in_loop(Music track, int times, int milliseconds);
+/// Fade in a music track over a certain number of milliseconds then loop indefinitely
+void music_fade_in_loop(Music track, int milliseconds);
+/// Checks if a music track is currently playing
 bool music_is_playing();
+/// Check if a music track is paused
 bool music_is_paused();
+/// Check if a music track is fading in or out
 bool music_is_fading();
-void music_start();
+/// Resume the music track if it is paused
+void music_resume();
+/// Pause the music track; only use when music is playing
 void music_pause();
+/// Stop the music track
 void music_stop();
+/// Rewind the music to the beginning
 void music_rewind();
-void music_fade_out();
+/// Fade out the current track and then stop over a given number of milliseconds
+void music_fade_out(int milliseconds);
+/// Set a position in seconds for a point in the music track
 void music_set_position(double seconds);
+/**
+ * \brief Call the given function when the music finishes
+ *
+ * DO NOT call music or sound functions in the callback
+ */
+void music_finished_callback(void (*callback)());
+/// Sets the volume of the music (from 0 to 128)
+void music_set_volume(int volume);
+/// Deallocate a music track
 void music_destroy(Music track);
+
+// *** SOUND ***
+/// Load a sound from a file
+Sound sound_new(char *path);
+/// Play a sound at its stored volume
+void sound_play(Sound sound);
+/// Play a sound at a specific volume from 0 to 128
+void sound_play_volume(Sound sound, int volume);
+/// Play a sound a given number of times at its stored volume
+void sound_repeat(Sound sound, int loops);
+/// Play a sound a given number of times at a specific volume from 0 to 128
+void sound_repeat_volume(Sound sound, int loops, int volume);
+/// Deallocate a sound sample
+void sound_destroy(Sound sound);
