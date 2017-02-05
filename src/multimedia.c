@@ -13,7 +13,7 @@
 #define SDL_NUM_KEYS 284
 
 void multimedia_init() {
-	if(SDL_Init(SDL_INIT_VIDEO) < 0) {
+	if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
 		fprintf(stderr, "SDL could not initialize! SDL Error: %s\n", SDL_GetError());
 		exit(-1);
 	}
