@@ -179,7 +179,7 @@ Vector2 window_get_mouse_pos(Window window);
  *
  * camera is an optional Camera argument (NULL = no camera)
  */
-void window_draw(Window window, Camera *cam, struct Sprite sprite);
+void window_draw(Window window, Camera *cam, Sprite sprite);
 /// Cleans up the Window
 void window_destroy(Window window);
 
