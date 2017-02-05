@@ -35,6 +35,8 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 ##Roadmap
 
 - [ ] Add functions to load "Tiled" files into the TileMap
+- [ ] Add JSON-based object type definition
+- [ ] Joystick and game controller support
 - [ ] Test coverage of existing modules
 - [ ] Simple HTML5 game build support
 
