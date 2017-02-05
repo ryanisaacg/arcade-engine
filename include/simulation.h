@@ -57,6 +57,8 @@ typedef struct World {
 	ArrayList items; //a list of user-defined data
 	///\private
 	ArrayList layers; //a list of the maps (list of SpatialMap)
+	///\private
+	ArrayList sprites; //a list of static sprites
 	int r; ///the red component of the background color
 	int g; ///the green component of the background color
 	int b; ///the blue component of the background color
@@ -172,6 +174,8 @@ size_t world_add(World *world, ArcadeObject object, void *data);
 size_t world_add_map(World *world, SpatialMap map);
 /// Add a group to the world and get its heap allocated location
 Group *world_add_group(World *world, Group group);
+/// Add a static sprite to be drawn each frame
+void world_add_sprite(World *world, Sprite sprite);
 /// Check if a point is empty within the world
 bool world_point_free(World world, Vector2 point, ArcadeObject *ignore);
 /// Check if a region is free within the world

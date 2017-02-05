@@ -522,6 +522,10 @@ Group *world_add_group(World *world, Group group) {
 	return qt_add_group(world->entities, group);
 }
 
+void world_add_sprite(World *world, Sprite sprite) {
+	al_add(&world->sprites, &sprite);
+}
+
 SpatialMap *world_get_map(World world, size_t index) {
 	return al_get(world.layers, index);
 }
@@ -642,6 +646,10 @@ static void entity_draw(World world, ArcadeObject *obj, void *data) {
 }
 
 void world_draw(World world) {
+	for(size_t i = 0; i < world.sprites.length; i++) {
+		Sprite *spr = al_get(world.sprites, i);
+		window_draw(*(world.window), &(world.camera), *spr);
+	}
 	for(size_t i = 0; i < world.layers.length; i++) {
 		SpatialMap *map = al_get(world.layers, i);
 		if(!map->drawable) continue;
