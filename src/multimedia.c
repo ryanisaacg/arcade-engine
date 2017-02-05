@@ -27,11 +27,16 @@ void multimedia_init() {
 		fprintf(stderr, "SDL_mixer could not initialize. MIX Error: %s\n", Mix_GetError());
 		exit(-1);
 	}
+	if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
+		fprintf(stderr, "SDL_mixer could not connect to audio drivers. MIX Error: %s\n", Mix_GetError());
+		exit(-1);
+	}
 }
 
 void multimedia_quit() {
 	SDL_Quit();
 	IMG_Quit();
+	Mix_CloseAudio();
 	Mix_Quit();
 }
 
