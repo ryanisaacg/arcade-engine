@@ -182,7 +182,13 @@ static void load_object_layer(AssetManager assets, World *world, tmx_map *map, t
 }
 
 static void load_image_layer(AssetManager assets, World *world, tmx_map *map, tmx_layer *current) {
-
+	tmx_image *image = current->content.image;
+	Texture tex = asset_load_texture(assets, image->source);
+	TextureRegion region = texregion_new(tex);
+	Sprite sprite = spr_new_static(region, vec2_new(0, 0));
+	sprite.scale.x = image->width / tex.width;
+	sprite.scale.y = image->height / tex.height;
+	world_add_sprite(world, sprite);
 }
 
 World level_get_world(Level level) {
