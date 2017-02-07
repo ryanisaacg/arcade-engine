@@ -1,5 +1,6 @@
 #pragma once
 
+#include "config.h"
 #include "geom.h"
 #include "multimedia.h"
 
@@ -105,9 +106,18 @@ typedef struct Game {
 	ArrayList levels; ///the levels in the game (list of Game)
 	size_t current_level_index; ///The index of the current level
 } Game;
+///A struct to load properties of objects that allow them to spawn types of ArcadeObject s 
+typedef struct Spawner {
+	///\private
+	ArcadeObject obj;
+	///\private
+	void *data;
+} Spawner;
 
 typedef void (*WorldUpdate)(World, ArcadeObject*, void*);
 typedef void (*WorldCollide)(World, ArcadeObject*, void*, ArcadeObject*, void*);
+
+typedef void *(*SpawnerFunction)(HashMap*);
 
 // *** QUADTREES ***
 /// Create a new quadtree where the leaf nodes will have at least min_width and min_height
@@ -238,3 +248,10 @@ void game_set_level(size_t index);
 void game_next_level();
 /// Move the game back a level (global state)
 void game_prev_level();
+
+/// Create a new Spawner using a document
+Spawner spawn_new(Document doc, char *name, SpawnerFunction func);
+/// Get the default arcade object from the Spawner
+ArcadeObject spawn_get_obj(Spawner spawn);
+/// Get the default data from the Spawner
+void *spawn_get_data(Spawner spawn);
