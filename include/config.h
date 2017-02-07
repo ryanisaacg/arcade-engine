@@ -5,9 +5,15 @@
  * \brief Allows loading a custom INI-like configuration format designed for defining game entity types
  * 
  * A document contained a list of sectioned key-value pairs, where keys are strings and values may be scalars, 2d vectors, or 3d vectors.
+ *
+ * Sections may inherit from other sections, denoted by a colon character [SubSection] : [Section]. Only single inheritance is permitted.
  * 
  * A key may contain any character except the '=' symbol and a newline. A value is one, two, or three numeric values separated by commas. 'true' is 1, 'false' is 0. Trailing commas are acceptable.
  * 
+ * Whitespace within section titles and key names is significant, and no whitespace may precede the opening bracket of a section title.
+ *
+ * No line may be longer than 1023 characters.
+ *
  * The document takes the format:
  * 
  * [Section]
