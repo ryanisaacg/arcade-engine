@@ -18,21 +18,18 @@ elseif(CMAKE_COMPILER_IS_GNUCC)
 endif()
 
 #DEPENDENCIES
-add_subdirectory(data-structures)
+add_subdirectory(tmx)
 
 #INCLUDES
-include_directories(include data-structures/include)
+include_directories(include tmx/src)
 file(GLOB SOURCES src/*.c)
 file(GLOB INCLUDES include/*.h)
-
-include_directories(sdl2/include sdl2_image/include)
-link_directories(sdl2/lib sdl2_image/lib)
 
 #LINK LIBRARY
 add_library(arcade-engine STATIC ${SOURCES} ${INCLUDES})
 set_property(TARGET arcade-engine PROPERTY C_STANDARD 99)
 set_target_properties(arcade-engine PROPERTIES LINKER_LANGUAGE C)
-target_link_libraries(arcade-engine m data-structures SDL2 SDL2_image)
+target_link_libraries(arcade-engine m data-structures SDL2 SDL2_image SDL2_mixer tmx)
 
 #CREATE TESTS
 add_executable(tests tests/tests.c)

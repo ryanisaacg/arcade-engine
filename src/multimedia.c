@@ -1,9 +1,9 @@
-#include "graphics.h"
+#include "multimedia.h"
 #include "geom.h"
+#include "simulation.h"
 
-#include <SDL.h>
 #include <stdlib.h>
-#include <SDL_image.h>
+#include <SDL2/SDL_image.h>
 #include <stdio.h>
 #include <stdio.h>
 #include <string.h>
@@ -11,6 +11,34 @@
 #include "util.h"
 
 #define SDL_NUM_KEYS 284
+
+void multimedia_init() {
+	if(SDL_Init(SDL_INIT_EVERYTHING) < 0) {
+		fprintf(stderr, "SDL could not initialize! SDL Error: %s\n", SDL_GetError());
+		exit(-1);
+	}
+	int flags = IMG_INIT_JPG | IMG_INIT_PNG;
+	if(IMG_Init(flags) != flags) {
+		fprintf(stderr, "SDL_Image could not initialize. IMG Error: %s\n", IMG_GetError());
+		exit(-1);
+	}
+	flags = MIX_INIT_MP3 | MIX_INIT_OGG;
+	if(Mix_Init(flags) != flags) {
+		fprintf(stderr, "SDL_mixer could not initialize. MIX Error: %s\n", Mix_GetError());
+		exit(-1);
+	}
+	if(Mix_OpenAudio(MIX_DEFAULT_FREQUENCY, MIX_DEFAULT_FORMAT, 2, 1024) == -1) {
+		fprintf(stderr, "SDL_mixer could not connect to audio drivers. MIX Error: %s\n", Mix_GetError());
+		exit(-1);
+	}
+}
+
+void multimedia_quit() {
+	SDL_Quit();
+	IMG_Quit();
+	Mix_CloseAudio();
+	Mix_Quit();
+}
 
 Animation anim_new(TextureRegion *frames, size_t num_frames, size_t steps_per_frame) {
 	ArrayList list = al_prealloc(sizeof(TextureRegion), frames, num_frames);
@@ -58,59 +86,67 @@ TextureRegion anim_step(Animation *anim) {
 	}
 	return anim_get_current(*anim);
 }
-Camera cam_new(Window *window, Rect viewport) {
+
+Camera cam_new(Window *window, Rect viewport, bool letterbox) {
 	return (Camera) {
 		.game_area = viewport,
 		.window = window,
-		.follow_index = -1
+		.letterbox = letterbox,
+		.offset_x = 0,
+		.offset_y = 0,
+		.scale = vec2_new(1, 1)
 	};
 }
 
-static int xproject(Camera cam, float x) {
-	return (int)(x * cam.window->width / cam.game_area.width);
-}
-
-static int yproject(Camera cam, float y) {
-	return (int)(y * cam.window->height / cam.game_area.height);
-}
-
-static float xunproject(Camera cam, float x) {
-	return x * cam.game_area.width / cam.window->width;
-}
-
-static float yunproject(Camera cam, float y) {
-	return y * cam.game_area.height / cam.window->height;
+void cam_update(Camera *cam) {
+	cam->scale = vec2_new(cam->window->width / cam->game_area.width, cam->window->height / cam->game_area.height);
+	if(cam->letterbox) {
+		float aspect_ratio = cam->game_area.width / cam->game_area.height;
+		float expected_width = cam->window->width * aspect_ratio; //calculate the correct width for the aspect ratio
+		if(expected_width < cam->window->width) {
+			//handle vertical letterboxing (bars on the top and bottom)
+			float difference = cam->window->width - expected_width;
+			cam->offset_x = (int)(difference / 2);
+			cam->scale = vec2_new(expected_width, cam->window->height / cam->game_area.height);
+		} else if(expected_width > cam->window->width) {
+			//handle horizontal letterboxing (bars on the sides)
+			float expected_height = cam->window->width / aspect_ratio;
+			float difference = cam->window->height - expected_height;
+			cam->offset_y = (int)(difference / 2);
+			cam->scale = vec2_new(cam->window->width / cam->game_area.width, expected_height);
+		}
+	}
 }
 
 SDL_Point cam_project_point(Camera cam, Vector2 point) {
 	return (SDL_Point) { 
-		.x = xproject(cam, cam.game_area.x + point.x),
-		.y = yproject(cam, cam.game_area.y + point.y) 
+		.x = (int)(point.x * cam.scale.x) + cam.offset_x,
+		.y = (int)(point.y * cam.scale.y) + cam.offset_y
 	};
 }
 
 Vector2 cam_unproject_point(Camera cam, SDL_Point screen) {
 	return (Vector2) {
-		.x = xunproject(cam, screen.x) + cam.game_area.x, 
-		.y = yunproject(cam, screen.y) + cam.game_area.y 
+		.x = screen.x / cam.scale.x - cam.offset_x,
+		.y = screen.y / cam.scale.y - cam.offset_y
 	};
 }
 
-SDL_Rect cam_project_rect(Camera cam, Rect game_area) {
+SDL_Rect cam_project_rect(Camera cam, Rect area) {
 	return (SDL_Rect) {
-		.x = xproject(cam, cam.game_area.x + game_area.x),
-		.y = yproject(cam, cam.game_area.y + game_area.y),
-		.w = xproject(cam, game_area.width),
-		.h = yproject(cam, game_area.height)
+		.x = (int)(area.x * cam.scale.x) + cam.offset_x,
+		.y = (int)(area.y * cam.scale.y) + cam.offset_y,
+		.w = (int)(area.x * cam.scale.x),
+		.h = (int)(area.y * cam.scale.y)
 	};
 }
 
 Rect cam_unproject_rect(Camera cam, SDL_Rect screen) {
 	return (Rect) {
-		.x = xunproject(cam, screen.x) + cam.game_area.x,
-		.y = yunproject(cam, screen.y) + cam.game_area.y,
-		.width = xunproject(cam, screen.w),
-		.height = yunproject(cam, screen.h)
+		.x = screen.x / cam.scale.x - cam.offset_x,
+		.y = screen.y / cam.scale.y - cam.offset_y,
+		.width = screen.w / cam.scale.x,
+		.height = screen.h / cam.scale.y
 	};
 }
 
@@ -121,7 +157,7 @@ AssetManager asset_new(Window window) {
 	};
 }
 
-Texture asset_load(AssetManager assets, char *path) {
+Texture asset_load_texture(AssetManager assets, char *path) {
 	int hash = path[0] + path[1] + path[2] + path[3];
 	Texture *texture;
 	if(hm_has(assets.data, hash, path)) {
@@ -132,6 +168,32 @@ Texture asset_load(AssetManager assets, char *path) {
 		hm_put(assets.data, hash, path, texture);
 	}
 	return *texture;
+}
+
+Music asset_load_music(AssetManager assets, char *path) {
+	int hash = path[0] + path[1] + path[2] + path[3];
+	Music *music;
+	if(hm_has(assets.data, hash, path)) {
+		music = hm_get(assets.data, hash, path);
+	} else {
+		music = malloc(sizeof(Music));
+		*music = music_new(path);
+		hm_put(assets.data, hash, path, music);
+	}
+	return *music;
+}
+
+Sound asset_load_sound(AssetManager assets, char *path) {
+	int hash = path[0] + path[1] + path[2] + path[3];
+	Sound *sound;
+	if(hm_has(assets.data, hash, path)) {
+		sound = hm_get(assets.data, hash, path);
+	} else {
+		sound = malloc(sizeof(Sound));
+		*sound = sound_new(path);
+		hm_put(assets.data, hash, path, sound);
+	}
+	return *sound;
 }
 
 void asset_destroy(AssetManager assets) {
@@ -233,15 +295,6 @@ WindowConfig window_config_new(int width, int height, const char *title) {
 }
 
 Window window_new(WindowConfig config) {
-	if(SDL_Init(SDL_INIT_VIDEO) < 0) {
-		fprintf(stderr, "SDL could not initialize! SDL Error: %s\n", SDL_GetError());
-		exit(-1);
-	}
-	int flags = IMG_INIT_JPG | IMG_INIT_PNG;
-	if(IMG_Init(flags) != flags) {
-		fprintf(stderr, "SDL_Image could not initialize. IMG Error: %s\n", IMG_GetError());
-		exit(-1);
-	}
 	SDL_Window *window = SDL_CreateWindow(config.title, 
 			SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, config.width, config.height, 
 			(SDL_WINDOW_FULLSCREEN_DESKTOP & config.fullscreen) |
@@ -367,6 +420,123 @@ void window_draw(Window window, Camera *cam, Sprite sprite) {
 void window_destroy(Window window) {
 	SDL_DestroyRenderer(window.rend);
 	SDL_DestroyWindow(window.window);
-	SDL_Quit();
-	IMG_Quit();
+}
+
+// SOUND AND MUSIC
+Music music_new(char *path) {
+	Mix_Music *msc = Mix_LoadMUS(path);
+	if(msc == NULL) {
+		fprintf(stderr, "Unable to load music file %s; SDL_Mixer error: %s\n", path, Mix_GetError());
+	}
+	return (Music) {
+		.music = msc
+	};
+}
+
+void music_play(Music track, int times) {
+	Mix_PlayMusic(track.music, times);
+}
+
+void music_fade_in(Music track, int times, int milliseconds) {
+	Mix_FadeInMusic(track.music, times, milliseconds);
+}
+
+void music_loop(Music track) {
+	Mix_PlayMusic(track.music, -1);
+}
+
+void music_fade_in_loop(Music track, int milliseconds) {
+	Mix_FadeInMusic(track.music, -1, milliseconds);
+}
+
+void music_resume() {
+	Mix_ResumeMusic();
+}
+
+void music_pause() {
+	Mix_PauseMusic();
+}
+
+void music_stop() {
+	Mix_HaltMusic();
+}
+
+bool music_is_playing() {
+	return Mix_PlayingMusic();
+}
+
+bool music_is_paused() {
+	return Mix_PausedMusic();
+}
+
+bool music_is_fading() {
+	return Mix_FadingMusic() != MIX_NO_FADING;
+}
+
+void music_rewind() {
+	Mix_SetMusicPosition(0);
+}
+
+void music_fade_out(int milliseconds) {
+	Mix_FadeOutMusic(milliseconds);
+}
+
+void music_set_position(double seconds) {
+	Mix_SetMusicPosition(seconds);
+}
+
+void music_finished_callback(void (*callback)()) {
+	Mix_HookMusicFinished(callback);
+}
+
+void music_set_volume(int volume) {
+	Mix_VolumeMusic(volume);
+}
+
+void music_destroy(Music track) {
+	Mix_FreeMusic(track.music);
+}
+
+Sound sound_new(char *path) {
+	Mix_Chunk *chunk = Mix_LoadWAV(path);
+	if(chunk == NULL) {
+		fprintf(stderr, "Unable to load sound file %s; SDL_mixer error: %s\n", path, Mix_GetError());
+	}
+	return (Sound) {
+		.chunk = chunk,
+		.volume = MIX_MAX_VOLUME
+	};
+}
+
+static void play_channel(Mix_Chunk *chunk, int loops, int volume) {
+	int channel = Mix_PlayChannel(-1, chunk, loops);
+	if(channel == -1) {
+		int num_channels = Mix_AllocateChannels(-1); //-1 gets channels
+		Mix_AllocateChannels(num_channels * 2);
+		channel = Mix_PlayChannel(-1, chunk, loops);
+		if(channel == -1) {
+			fprintf(stderr, "Error trying to play sound: %s\n", Mix_GetError());
+		}
+	}
+	Mix_Volume(channel, volume);
+}
+
+void sound_play(Sound sound) {
+	play_channel(sound.chunk, 0, sound.volume);
+}
+
+void sound_play_volume(Sound sound, int volume) {
+	play_channel(sound.chunk, 0, volume);
+}
+
+void sound_repeat(Sound sound, int loops) {
+	play_channel(sound.chunk, loops, sound.volume);
+}
+
+void sound_repeat_volume(Sound sound, int loops, int volume) {
+	play_channel(sound.chunk, loops, volume);
+}
+
+void sound_destroy(Sound sound) {
+	Mix_FreeChunk(sound.chunk);
 }

@@ -1,7 +1,9 @@
-#Arcade Engine
+# README
+
 A 2D game engine written in pure C for writing arcade-style games. Arcade-style games feature things like pixel-based physics rather than a unit-based physics engine, pixel-perfect cameras, and pixel-based scaling techniques. 
 
-##Current Featurelist
+## Current Featurelist
+
 - Simulation
 	- Basic vector and line math for 2D
 	- Basic matrix manipulation for a 3x3 matrix
@@ -20,23 +22,28 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- Support for drawing only part of a single texture image
 	- Support for basic animations
 	- Automatically draw objects in the World struct
+	- Automatically draw tilemaps in the World struct
+	- A Camera that can be configured to letterbox or stretch
 - Input
 	- Keyboard and mouse support
 	- Previous-frame keyboard and mouse state polling
+- Sound
+	- Play or repeat sound effects with multiple instances of each sound
+	- Play or loop a music track in the background
+	- Fade music in or out
 
 ##Roadmap
-- [ ] Variable draw depths
-- [ ] Draw the spatial maps
+
 - [ ] Add functions to load "Tiled" files into the TileMap
-- [ ] Add window scaling
-- [ ] Define or research a texture atlas format
-	- [ ] Implement render-to-texture features
-	- [ ] Implement screenshot saving
-	- [ ] Create a texture atlas packaging tool
-	- [ ] Implement loading this texture atlas
-- [ ] Doxygen or equivalent documentation
+- [ ] Add JSON-based object type definition
+- [ ] Joystick and game controller support
 - [ ] Test coverage of existing modules
 - [ ] Simple HTML5 game build support
+
+###Low priority
+
+- [ ] Variable draw depths
+- [ ] Allow users to configure target framerates
 
 ##Why C?
 Adequate solutions to the problems solved by this library exist in other language or are trivial to implement, and I've found most other languages unsuitable for game development. Stack allocation is a must, which rules out many higher-level languages. Additionally, distribution without requiring the end user install a Virtual Machine or Runtime.
