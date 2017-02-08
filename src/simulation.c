@@ -681,3 +681,15 @@ void world_destroy(World world) {
 	}
 	al_destroy(world.layers);
 }
+
+Spawner spawn_new(Document doc, char *name, SpawnerFunction func) {
+
+}
+
+ArcadeObject spawn_get_obj(Spawner spawn) {
+	return spawn.obj;
+}
+
+void *spawn_get_data(Spawner spawn) {
+	return spawn.data;
+}
