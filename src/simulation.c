@@ -4,6 +4,7 @@
 
 #include <math.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <tmx.h>
 
 //The side of a quad tree bucket square at the smallest level
@@ -324,18 +325,18 @@ ArcadeObject *qt_region_query(QuadTree *tree, Shape region, Group *query_as) {
 	return NULL;
 }
 
-bool qt_point_free(QuadTree *tree, Vector2 point) {
+bool qt_point_free(QuadTree *tree, Vector2 point, ArcadeObject *ignore) {
 	for(size_t i = 0; i < tree->contains.length; i++) {
 		size_t *index = al_get(tree->contains, i);
 		ArcadeObject *obj = al_get(*tree->entities, *index);
-		if(obj->alive && obj->solid && shape_contains(obj->bounds, point)) {
+		if(obj != ignore && obj->alive && obj->solid && shape_contains(obj->bounds, point)) {
 			return false;
 		}
 	}
 	for(size_t i = 0; i < 4; i++) {
 		QuadTree *child = tree->children[i];
 		if(child != NULL && rect_contains(child->region, point)) {
-			bool free = qt_point_free(child, point);
+			bool free = qt_point_free(child, point, ignore);
 			if(!free) {
 				return false;
 			}
@@ -344,18 +345,18 @@ bool qt_point_free(QuadTree *tree, Vector2 point) {
 	return true;
 }
 
-bool qt_region_free(QuadTree *tree, Shape region) {
+bool qt_region_free(QuadTree *tree, Shape region, ArcadeObject *ignore) {
 	for(size_t i = 0; i < tree->contains.length; i++) {
 		size_t *index = al_get(tree->contains, i);
 		ArcadeObject *obj = al_get(*tree->entities, *index);
-		if(obj->alive && obj->solid && overlaps_shape(obj->bounds, region)) {
+		if(obj != ignore && obj->alive && obj->solid && overlaps_shape(obj->bounds, region)) {
 			return false;
 		}
 	}
 	for(size_t i = 0; i < 4; i++) {
 		QuadTree *child = tree->children[i];
 		if(child != NULL && overlaps_shape(shape_rect(child->region), region)) {
-			bool free = qt_region_free(child, region);
+			bool free = qt_region_free(child, region, ignore);
 			if(!free) {
 				return false;
 			}
@@ -540,23 +541,23 @@ ArcadeObject world_remove(World *world, size_t index) {
 	return qt_remove(world->entities, index);
 }
 
-bool world_point_free(World world, Vector2 point, ArcadeObject *query_as) {
+bool world_point_free(World world, Vector2 point, ArcadeObject *ignore) {
 	for(size_t i = 0; i < world.layers.length; i++) {
 		SpatialMap *map = al_get(world.layers, i);
 		if(sm_has(*map, point.x, point.y))
 			return false;
 	}
-	return qt_point_free(world.entities, point);
+	return qt_point_free(world.entities, point, ignore);
 }
 
-bool world_region_free(World world, Shape region, ArcadeObject *query_as) {
+bool world_region_free(World world, Shape region, ArcadeObject *ignore) {
 	for(size_t i = 0; i < world.layers.length; i++) {
 		SpatialMap *map = al_get(world.layers, i);
 		if(!sm_free(*map, region)) {
 			return false;
 		}
 	}
-	return qt_region_free(world.entities, region);
+	return qt_region_free(world.entities, region, ignore);
 }
 
 static inline Vector2 try_move(World world, ArcadeObject *obj, Vector2 velocity) {

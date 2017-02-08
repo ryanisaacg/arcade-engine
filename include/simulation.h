@@ -142,9 +142,9 @@ ArcadeObject *qt_point_query(QuadTree *tree, Vector2 point, Group *query_as);
 /// NULL indicates no object was found
 ArcadeObject *qt_region_query(QuadTree *tree, Shape region, Group *query_as);
 /// Checks if a point of the quadtree is empty of solid objects
-bool qt_point_free(QuadTree *tree, Vector2 point);
+bool qt_point_free(QuadTree *tree, Vector2 point, ArcadeObject *ignore);
 /// Checks if a region of the quadtree is empty of solid objects
-bool qt_region_free(QuadTree *tree, Shape region);
+bool qt_region_free(QuadTree *tree, Shape region, ArcadeObject *ignore);
 /// Remove an object from the quadtree and return it
 ArcadeObject qt_remove(QuadTree *tree, size_t index);
 /// Clear all data from the quadtree but retain allocated memory
@@ -184,6 +184,7 @@ size_t world_add(World *world, ArcadeObject object, void *data);
 size_t world_add_map(World *world, SpatialMap map);
 /// Add a group to the world and get its heap allocated location
 Group *world_add_group(World *world, Group group);
+// Get the object of the specified index
 /// Add a static sprite to be drawn each frame
 void world_add_sprite(World *world, Sprite sprite);
 /// Check if a point is empty within the world
