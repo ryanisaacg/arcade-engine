@@ -150,9 +150,8 @@ static void load_layer(AssetManager assets, World *world, tmx_map *map, tmx_laye
 	tmx_tile *first = tmx_get_tile(map, gids[0]);
 	tmx_tileset *ts = first->tileset;
 	SpatialMap spatial_map = sm_new(sizeof(TextureRegion), map->width, map->height, ts->tile_width, ts->tile_height, current->visible);
-	Texture source = asset_load_texture(assets, ts->image->source);
-	for(int x = 0; x < map->width; x++) {
-		for(int y = 0; y < map->height; y++) {
+	for(unsigned int x = 0; x < map->width; x++) {
+		for(unsigned int y = 0; y < map->height; y++) {
 			tmx_tile *tile = tmx_get_tile(map, gids[x * map->width + y]);
 			Texture tex = asset_load_texture(assets, tile->image->source);
 			TextureRegion region = texregion_new_sized(tex, rect_new(tile->ul_x, tile->ul_y, ts->tile_width, ts->tile_height));
