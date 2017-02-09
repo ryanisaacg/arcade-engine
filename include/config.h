@@ -30,8 +30,8 @@ typedef struct Document {
 	HashMap *items; //a map of char* to (a map of char* to (float* of length 3))
 } Document;
 
-/// Load a document from a file into memory
-Document config_new(char *filepath);
+/// Load a document from a string in memory
+Document config_new(char *contents);
 /// Get all the sections of a file
 ArrayList config_get_sections(Document doc);
 /// Get all the keys of a section

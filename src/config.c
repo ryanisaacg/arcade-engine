@@ -3,8 +3,7 @@
 
 #include <string.h>
 
-Document config_new(char *filepath) {
-	char *contents = read_file(filepath);
+Document config_new(char *contents) {
 	char line[1024];
 	char *line_position = line;
 	Document doc = {
