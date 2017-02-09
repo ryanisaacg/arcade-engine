@@ -31,10 +31,13 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- Play or repeat sound effects with multiple instances of each sound
 	- Play or loop a music track in the background
 	- Fade music in or out
+- Tooling
+	- Use Tiled to create levels
+
+A quick note about Tiled: arcade-engine does not support loading all Tiled levels. It does allow you to use Tiled features that map to arcade-engine features, but does not support necessarily every feature.
 
 ##Roadmap
 
-- [ ] Add functions to load "Tiled" files into the TileMap
 - [ ] Add JSON-based object type definition
 - [ ] Joystick and game controller support
 - [ ] Test coverage of existing modules
