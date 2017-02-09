@@ -167,6 +167,12 @@ static void load_object_layer(AssetManager assets, World *world, tmx_map *map, t
 		tmx_tile *tile = tmx_get_tile(map, obj->gid);
 		if(tile->animation) {
 			TextureRegion *frames = malloc(sizeof(TextureRegion) * tile->animation_len);
+			for(size_t i = 0; i < tile->animation_len; i++) {
+				Texture tex = asset_load_texture(assets, tmx_get_tile(map, tile->animation[i].tile_id)->image->source);
+				frames[i] = texregion_new_sized(tex, rect_new(tile->ul_x, tile->ul_y, tile->image->width, tile->image->height));
+			}
+			Animation anim = anim_new(frames, tile->animation_len, tile->animation[0].duration);
+			sprite = spr_new_animated(anim, shape_get_position(shape));
 		} else {
 			Texture tex = asset_load_texture(assets, tile->image->source);
 			TextureRegion region = texregion_new_sized(tex, rect_new(tile->ul_x, tile->ul_y, tile->image->width, tile->image->height));
