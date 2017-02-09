@@ -58,6 +58,14 @@ Document config_new(char *contents) {
 	return doc;
 }
 
+void config_concat(Document source, Document dest) {
+	ArrayList keys = hm_get_keys(source.items);
+	for(size_t i = 0; i < keys.length; i++) {
+		char *key = al_get(keys, i);
+		hm_put(dest.items, *key, key, hm_get(source.items, *key, key));
+	}
+}
+
 ArrayList config_get_sections(Document doc) {
 	return hm_get_keys(doc.items);
 }

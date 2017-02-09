@@ -32,6 +32,8 @@ typedef struct Document {
 
 /// Load a document from a string in memory
 Document config_new(char *contents);
+/// Adds all the keys from source to dest, overwriting on collision
+void config_concat(Document source, Document dest);
 /// Get all the sections of a file
 ArrayList config_get_sections(Document doc);
 /// Get all the keys of a section
