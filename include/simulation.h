@@ -106,18 +106,19 @@ typedef struct Game {
 	ArrayList levels; ///the levels in the game (list of Game)
 	size_t current_level_index; ///The index of the current level
 } Game;
+
+typedef void *(*SpawnerFunction)(HashMap*);
 ///A struct to load properties of objects that allow them to spawn types of ArcadeObject s 
 typedef struct Spawner {
 	///\private
-	ArcadeObject obj;
+	Document document;
 	///\private
-	void *data;
+	SpawnerFunction func;
 } Spawner;
 
 typedef void (*WorldUpdate)(World, ArcadeObject*, void*);
 typedef void (*WorldCollide)(World, ArcadeObject*, void*, ArcadeObject*, void*);
 
-typedef void *(*SpawnerFunction)(HashMap*);
 
 // *** QUADTREES ***
 /// Create a new quadtree where the leaf nodes will have at least min_width and min_height
@@ -251,8 +252,8 @@ void game_next_level();
 void game_prev_level();
 
 /// Create a new Spawner using a document
-Spawner spawn_new(Document doc, char *name, SpawnerFunction func);
-/// Get the default arcade object from the Spawner
-ArcadeObject spawn_get_obj(Spawner spawn);
+Spawner spawn_new(Document doc, SpawnerFunction func);
+/// Sets up an ArcadeObject
+void spawn_get_obj(Spawner spawn, ArcadeObject *obj, char *name);
 /// Get the default data from the Spawner
-void *spawn_get_data(Spawner spawn);
+void *spawn_get_data(Spawner spawn, char *name);

@@ -702,14 +702,29 @@ void world_destroy(World world) {
 	al_destroy(world.layers);
 }
 
-Spawner spawn_new(Document doc, char *name, SpawnerFunction func) {
-
+Spawner spawn_new(Document doc, SpawnerFunction func) {
+	return (Spawner) {
+		.document = doc,
+		.func = func
+	};
 }
 
-ArcadeObject spawn_get_obj(Spawner spawn) {
-	return spawn.obj;
+void spawn_get_obj(Spawner spawn, ArcadeObject *obj, char *name) {
+	Document doc = spawn.document;
+	float *velocity = config_get_value(doc, name, "velocity");
+	obj->velocity = vec2_new(velocity[0], velocity[1]);
+	float *acceleration = config_get_value(doc, name, "acceleration");
+	obj->acceleration = vec2_new(acceleration[0], acceleration[1]);
+	float *max_velocity = config_get_value(doc, name, "max-velocity");
+	obj->max_velocity = vec2_new(max_velocity[0], max_velocity[1]);
+	float *drag = config_get_value(doc, name, "drag");
+	obj->drag = vec2_new(drag[0], drag[1]);
+	float *solid = config_get_value(doc, name, "solid");
+	obj->solid = *solid != 0;
+	float *bounce = config_get_value(doc, name, "bounce");
+	obj->bounce = *bounce != 0;
 }
 
-void *spawn_get_data(Spawner spawn) {
-	return spawn.data;
+void *spawn_get_data(Spawner spawn, char *name) {
+	return spawn.func(hm_get(spawn.document.items, *name, name));
 }
