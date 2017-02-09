@@ -332,6 +332,7 @@ ArcadeObject *qt_point_query(QuadTree *tree, Vector2 point, Group *query_as) {
 			}
 		}
 	}
+	return NULL;
 }
 
 ArcadeObject *qt_region_query(QuadTree *tree, Shape region, Group *query_as) {
