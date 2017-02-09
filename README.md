@@ -38,7 +38,6 @@ A quick note about Tiled: arcade-engine does not support loading all Tiled level
 
 ##Roadmap
 
-- [ ] Add JSON-based object type definition
 - [ ] Joystick and game controller support
 - [ ] Test coverage of existing modules
 - [ ] Simple HTML5 game build support

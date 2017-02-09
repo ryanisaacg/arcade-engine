@@ -231,7 +231,9 @@ bool arcobj_interacts(ArcadeObject *a, ArcadeObject *b);
 
 // *** LEVELS ***
 /// Load a level from a filename, loading the assets using the asset manager provided
-Level level_load(char *filename, AssetManager assets, size_t data_size);
+///
+/// spawner is an optional parameter, NULL for no spawner
+Level level_load(char *filename, Spawner *spawner, AssetManager assets, size_t data_size);
 /// Get a copy of the levels world or a reference, depending on if it is persistent
 World level_get_world(Level level);
 /// Deallocate the memory for the level and its backing world
@@ -239,7 +241,9 @@ void level_destroy(Level level);
 
 // *** GAME ***
 /// Creates a new game instance, loading the levels defined in level_names in the order defined in indices
-Game game_new(WindowConfig config, char **level_names, size_t *indices, size_t num_levels, size_t data_size);
+/// 
+/// spawner is an optional Spawner that will be applied to all loaded objects
+Game game_new(WindowConfig config, char **level_names, size_t *indices, size_t num_levels, size_t data_size, Spawner *spawner);
 /// Takes control of execution and sets global data
 void game_start(Game game, WorldUpdate update, WorldCollide collide);
 /// Uses global state

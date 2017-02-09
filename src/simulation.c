@@ -32,12 +32,12 @@ bool arcobj_interacts(ArcadeObject *a, ArcadeObject *b) {
 bool keep_going;
 Game game;
 
-Game game_new(WindowConfig config, char **level_names, size_t *indices, size_t num_levels, size_t data_size) {
+Game game_new(WindowConfig config, char **level_names, size_t *indices, size_t num_levels, size_t data_size, Spawner *spawner) {
 	ArrayList levels = al_new_sized(sizeof(Level), num_levels);
 	Window window = window_new(config);
 	AssetManager assets = asset_new(window);
 	for(size_t i = 0; i < num_levels; i++) {
-		Level lvl = level_load(level_names[i], assets, data_size);
+		Level lvl = level_load(level_names[i], spawner, assets, data_size);
 		al_add(&levels, &lvl);
 	}
 	Window *win_alloced = malloc(sizeof(Window));
@@ -111,10 +111,10 @@ bool group_interacts(Group *a, Group *b) {
 }
 
 static void load_layer(AssetManager assets, World *world, tmx_map *map, tmx_layer *current);
-static void load_object_layer(AssetManager assets, World *world, tmx_map *map, tmx_layer *current);
+static void load_object_layer(AssetManager assets, World *world, tmx_map *map, tmx_layer *current, Spawner *spawner);
 static void load_image_layer(AssetManager assets, World *world, tmx_map *map, tmx_layer *current);
 
-Level level_load(char *filename, AssetManager assets, size_t data_size) {
+Level level_load(char *filename, Spawner *spawner, AssetManager assets, size_t data_size) {
 	tmx_map *map = tmx_load(filename);
 	if(map == NULL) {
 		tmx_perror("Loading the TileMap");
@@ -135,7 +135,7 @@ Level level_load(char *filename, AssetManager assets, size_t data_size) {
 			load_layer(assets, &world, map, current_layer);
 			break;
 		case L_OBJGR:
-			load_object_layer(assets, &world, map, current_layer);	
+			load_object_layer(assets, &world, map, current_layer, spawner);	
 			break;
 		case L_IMAGE:
 			load_image_layer(assets, &world, map, current_layer);
@@ -161,7 +161,7 @@ static void load_layer(AssetManager assets, World *world, tmx_map *map, tmx_laye
 	world_add_map(world, spatial_map);
 }
 
-static void load_object_layer(AssetManager assets, World *world, tmx_map *map, tmx_layer *current) {
+static void load_object_layer(AssetManager assets, World *world, tmx_map *map, tmx_layer *current, Spawner *spawner) {
 	tmx_object *obj = current->content.objgr->head;
 	while(obj != NULL) {
 		switch(obj->shape) {
@@ -195,8 +195,14 @@ static void load_object_layer(AssetManager assets, World *world, tmx_map *map, t
 			shape_set_rotation(&shape, obj->rotation);
 			sprite.angle = obj->rotation;
 		}
+		ArcadeObject aobj = arcobj_new(shape, false, sprite);
+		void *data = NULL;
+		if(spawner != NULL) {
+			spawn_get_obj(*spawner, &aobj, obj->type);
+			data = spawn_get_data(*spawner, obj->type);
+		}
 		//TODO: Loading of custom properties with function pointer
-		world_add(world, arcobj_new(shape, false, sprite), NULL); //TODO: load if the object shoud be solid from the TMX file 
+		world_add(world, aobj, data); //TODO: load if the object shoud be solid from the TMX file 
 		obj = obj->next;
 	}
 }
