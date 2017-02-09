@@ -142,6 +142,10 @@ Level level_load(char *filename, Spawner *spawner, AssetManager assets, size_t d
 			break;
 		}
 	}
+	return (Level) {
+		.data = world,
+		.persistent = true
+	};
 }
 
 //Every layer must only use one tileset
