@@ -101,8 +101,8 @@ SDL_Rect cam_project_rect(Camera cam, Rect area) {
 	return (SDL_Rect) {
 		.x = (int)(area.x * cam.scale.x) + cam.offset_x,
 		.y = (int)(area.y * cam.scale.y) + cam.offset_y,
-		.w = (int)(area.x * cam.scale.x),
-		.h = (int)(area.y * cam.scale.y)
+		.w = (int)(area.width * cam.scale.x),
+		.h = (int)(area.height * cam.scale.y)
 	};
 }
 
