@@ -29,7 +29,7 @@ file(GLOB INCLUDES include/*.h)
 add_library(arcade-engine STATIC ${SOURCES} ${INCLUDES})
 set_property(TARGET arcade-engine PROPERTY C_STANDARD 99)
 set_target_properties(arcade-engine PROPERTIES LINKER_LANGUAGE C)
-target_link_libraries(arcade-engine m SDL2 SDL2_image SDL2_mixer tmx xml2)
+target_link_libraries(arcade-engine m SDL2 SDL2_image SDL2_mixer tmx xml2 z)
 
 #CREATE TESTS
 add_executable(tests tests/tests.c)
