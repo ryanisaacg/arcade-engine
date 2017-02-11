@@ -19,7 +19,7 @@ int main() {
 	world_add(&world, obj, NULL);
 	while(window_should_contine(window)) {
 		window_events(&window);
-		world_update(world, 1, update, collision);
+		world_update(world, update, collision);
 		window_start_draw(&window, 0, 0, 0);
 		world_draw(world);
 		window_end_draw(window);
