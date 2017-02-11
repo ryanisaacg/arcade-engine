@@ -36,20 +36,6 @@ add_executable(tests tests/tests.c)
 set_property(TARGET tests PROPERTY C_STANDARD 99)
 target_link_libraries(tests arcade-engine)
 
-#EXECUTE TESTS
-enable_testing()
-add_test(NAME VectorLength COMMAND tests veclen)
-add_test(NAME VectorScale COMMAND tests vecscl)
-add_test(NAME VectorArithmetic COMMAND tests vecari)
-add_test(NAME VectorRotation COMMAND tests vecrot)
-add_test(NAME LineIntersect COMMAND tests lineint)
-add_test(NAME RectIntersect COMMAND tests rectint)
-add_test(NAME RectEngulf COMMAND tests recteng)
-add_test(NAME RectOverlaps COMMAND tests rectovr)
-add_test(NAME CircOverlaps COMMAND tests circovr)
-add_test(NAME RectCirOverlaps COMMAND tests rectcirc)
-add_test(NAME QuadTrees COMMAND tests quadtree)
-
 #CREATE EXAMPLE
 add_executable(example example.c)
 set_property(TARGET example PROPERTY C_STANDARD 99)
