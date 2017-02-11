@@ -9,6 +9,7 @@ char *vector_length() {
 	Vector2 vec = vec2_new(3.f, 4.f);
 	assert("Vector2 Length 1", vec2_len2(vec) == 25.f);
 	assert("Vector2 Length 2", vec2_len(vec) == 5.f);
+	return NULL;
 }
 
 char *vector_scale() {
@@ -22,6 +23,7 @@ char *vector_scale() {
 	Vector2 doubled = vec2_scl(unit, 2.f);
 	assert("Scaling vectors", vec2_len(doubled) == 2.f);
 	assert("Scaling vectors 2", doubled.x == 2.f);
+	return NULL;
 }
 
 char *vector_arithmetic() {
@@ -32,6 +34,7 @@ char *vector_arithmetic() {
 	assert("Vector subtracting", !vec2_eql(vec2_sub(a, b), c));
 	assert("Vector subtracting 2", vec2_eql(vec2_sub(c, a), b));
 	assert("Vector2 subtracting 3", vec2_eql(vec2_sub(c, b), a));
+	return NULL;
 }
 
 char *vector_rotation() {
@@ -43,6 +46,7 @@ char *vector_rotation() {
 	assert("Vector rotation 4", vec2_eql(vec2_rotate(b, 270.f), a));
 	assert("Vector rotation 5", vec2_eql(vec2_rotate(a, 0.f), a));
 	assert("Vector rotation 6", vec2_eql(vec2_rotate(b, 0.f), b));
+	return NULL;
 }
 
 char *line_intersect() {
@@ -64,6 +68,7 @@ char *line_intersect() {
 	assert("Line intersect 7", !line_intersects(l3,l2));
 	assert("Line intersect 8", line_intersects(l3,l1));
 	assert("Line intersect 9", line_intersects(l4,l3));
+	return NULL;
 }
 
 char *rect_intersect() {
@@ -76,6 +81,7 @@ char *rect_intersect() {
 	assert("Rectangle line retrieval bottom", line_eql(bot, rect_bottom(rect)));
 	assert("Rectangle line retrieval right" ,line_eql(r, rect_right(rect)));
 	assert("Rectangle line retrieval left", line_eql(l, rect_left(rect)));
+	return NULL;
 }
 
 char *rect_engulf_test() {
@@ -88,6 +94,7 @@ char *rect_engulf_test() {
 	assert("Engulf rect 4", !engulfs_rect(b,a));
 	assert("Engulf rect 5", !engulfs_rect(c,a));
 	assert("Engulf rect 6", !engulfs_rect(c,b));
+	return NULL;
 }
 
 char *rect_overlaps_test() {
@@ -103,6 +110,7 @@ char *rect_overlaps_test() {
 	assert("Rect overlap test 6", overlaps_rect(b,c));
 	assert("Rect overlap test 7", overlaps_rect(c,b));
 	assert("Rect overlap test 8", overlaps_rect(d,a));
+	return NULL;
 }
 
 char *circle_overlaps_test() {
@@ -115,6 +123,7 @@ char *circle_overlaps_test() {
 	assert("Circle overlap test 4", overlaps_circ(c, a));
 	assert("Circle overlap test 5", overlaps_circ(b, c));
 	assert("Circle overlap test 6", overlaps_circ(c, b));
+	return NULL;
 }
 
 char *rect_circ_overlaps_test() {
@@ -123,6 +132,7 @@ char *rect_circ_overlaps_test() {
 	Rect c = rect_new(-10.f, -20.f, 1.f, 5.f);
 	assert("Rect circle overlap test 1", overlaps_rect_circ(a, b));
 	assert("Rect circle overlap test 2", !overlaps_rect_circ(c, b));
+	return NULL;
 }
 
 char *tests() {	
@@ -136,7 +146,10 @@ char *tests() {
 	run_test(rect_overlaps_test);
 	run_test(circle_overlaps_test);
 	run_test(rect_circ_overlaps_test);
+	return NULL;
 }
+
+int tests_run;
 
 #undef main
 int main() {
