@@ -40,6 +40,10 @@ A quick note about Tiled: arcade-engine does not support loading all Tiled level
 
 - [ ] Joystick and game controller support
 - [ ] Test coverage of existing modules
+	- [x] Geom tests
+	- [x] Config file tests
+	- [x] Tiled integration tests
+	- [ ] Level loading test
 - [ ] Simple HTML5 game build support
 
 ###Low priority
