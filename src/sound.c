@@ -3,7 +3,7 @@
 #include <stdio.h>
 
 // SOUND AND MUSIC
-Music music_new(char *path) {
+Music music_new(const char *path) {
 	Mix_Music *msc = Mix_LoadMUS(path);
 	if(msc == NULL) {
 		fprintf(stderr, "Unable to load music file %s; SDL_Mixer error: %s\n", path, Mix_GetError());
@@ -77,7 +77,7 @@ void music_destroy(Music track) {
 	Mix_FreeMusic(track.music);
 }
 
-Sound sound_new(char *path) {
+Sound sound_new(const char *path) {
 	Mix_Chunk *chunk = Mix_LoadWAV(path);
 	if(chunk == NULL) {
 		fprintf(stderr, "Unable to load sound file %s; SDL_mixer error: %s\n", path, Mix_GetError());
