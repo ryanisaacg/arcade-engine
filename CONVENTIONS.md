@@ -1,12 +1,11 @@
-#Conventions
+# Conventions
 
 Coding styles and conventions, mostly so I remember them for myself. They follow in no particular order.
 
-##Type definitions
+## Type definitions
 
 - If a type never needs to be referred to by name, it should not have a name (anonymous inner structs).
 - All types should be used through typedef where possible.
-- If a type does not refer to itself only a typedefed name is necessary.
 - Types should be in PascalCase.
 - Never typedef a number, struct, union, or enum pointer.
 - Always typedef function pointers.
@@ -55,6 +54,6 @@ Coding styles and conventions, mostly so I remember them for myself. They follow
 - When passing non-named values to an object initializer, use the C99 .name = value syntax.
 ##Indentation
 - Only indent to indicate a new lexical scope.
-- Labels switch 'case' statements should be set back an indent level.
+- Labels and switch 'case' statements should be set back an indent level.
 - Indent and align with tab characters. 
 - Tabs should be used as four characters wide.
