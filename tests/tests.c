@@ -16,6 +16,7 @@ char *tests() {
 	run_test(circle_overlaps_test);
 	run_test(rect_circ_overlaps_test);
 	run_test(test_config_scalar);
+	run_test(test_config_2d);
 	return NULL;
 }
 
