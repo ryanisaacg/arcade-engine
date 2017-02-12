@@ -39,6 +39,7 @@ Document config_new(char *contents) {
 					memcpy(value, value_start, length);
 					value[length] = '\0';
 					*current_data = atof(value);
+					value_start = contents + 1;
 					current_data++;
 				}
 			}	
