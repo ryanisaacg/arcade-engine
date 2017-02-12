@@ -201,7 +201,7 @@ Rect poly_bounding_box(const Polygon poly);
 ///Update the points of the polygon
 void poly_update(Polygon poly);
 ///Deallocate the polygon
-void poly_destroy(const Polygon poly);
+void poly_destroy(Polygon poly);
 
 // *** SHAPES ***
 ///Create a shape from a rectangle
