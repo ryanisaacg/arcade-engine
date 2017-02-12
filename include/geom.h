@@ -95,134 +95,136 @@ typedef struct Shape {
 /// \brief Checks to see if a Circ is entirely contained within another
 ///
 /// \TODO: Implement
-bool engulfs_circ(Circ outer, Circ inner);
-/// Checks to see if a Rect is entirely contained within another
-bool engulfs_rect(Rect outer, Rect inner);
-/// Checks to see if a Circ is entirely contained within a Rect
-bool engulfs_rect_circ(Rect outer, Circ inner);
-/// Checks to see if a Rect is entirely contaiend within a Circ
-bool engulfs_circ_rect(Circ outer, Rect inner);
-/// Checks to see if two Circ s bound any of the same area
-bool overlaps_circ(Circ a, Circ b);
-/// Checks to see if two Polygon s bound any of the same area
-bool overlaps_poly(Polygon a, Polygon b);
-/// Checks to see if two Rect s bound any of the same area
-bool overlaps_rect(Rect a, Rect b);
-/// Checks to see if a Rect and Circ bound any of the same area
-bool overlaps_rect_circ(Rect a, Circ b);
-/// Checks to see if a Polygon and Rect bound any of the same area
-bool overlaps_poly_rect(Polygon a, Rect b);
-/// Checks to see if a Polygon and Circ bound any of the same area
-bool overlaps_poly_circ(Polygon a, Circ b);
-/// Checks to see if two Shape s bound any of the same area
-bool overlaps_shape(Shape a, Shape b);
+bool engulfs_circ(const Circ outer, const Circ inner);
+/// Checks to see if a const Rect is entirely contained within another
+bool engulfs_rect(const Rect outer, const Rect inner);
+/// Checks to see if a const Circ is entirely contained within a const Rect
+bool engulfs_rect_circ(const Rect outer, const Circ inner);
+/// Checks to see if a const Rect is entirely contaiend within a const Circ
+bool engulfs_circ_rect(const Circ outer, const Rect inner);
+/// Checks to see if two const Circ s bound any of the same area
+bool overlaps_circ(const Circ a, const Circ b);
+/// Checks to see if two const Polygon s bound any of the same area
+bool overlaps_poly(const Polygon a, const Polygon b);
+/// Checks to see if two const Rect s bound any of the same area
+bool overlaps_rect(const Rect a, const Rect b);
+/// Checks to see if a const Rect and const Circ bound any of the same area
+bool overlaps_rect_circ(const Rect a, const Circ b);
+/// Checks to see if a const Polygon and const Rect bound any of the same area
+bool overlaps_poly_rect(const Polygon a, const Rect b);
+/// Checks to see if a const Polygon and const Circ bound any of the same area
+bool overlaps_poly_circ(const Polygon a, const Circ b);
+/// Checks to see if two const Shape s bound any of the same area
+bool overlaps_shape(const Shape a, const Shape b);
 
 // *** VECTORS ***
 ///Create a new vector with an x and a y 
-Vector2 vec2_new(float x, float y);
+Vector2 vec2_new(const float x, const float y);
 ///Find the square of the length of a vector
-float vec2_len2(Vector2 vec);
+float vec2_len2(const Vector2 vec);
 ///Find the length of a vector
-float vec2_len(Vector2 vec);
+float vec2_len(const Vector2 vec);
 ///Dot product two vectors
-float vec2_dot(Vector2 a, Vector2 b);
+float vec2_dot(const Vector2 a, const Vector2 b);
 ///Cross product two vectors
-float vec2_cross(Vector2 a, Vector2 b);
+float vec2_cross(const Vector2 a, const Vector2 b);
 ///Normalize a vector
-Vector2 vec2_nor(Vector2 vec);
+Vector2 vec2_nor(const Vector2 vec);
 ///Scale a vector
-Vector2 vec2_scl(Vector2 vec, float scalar);
+Vector2 vec2_scl(const Vector2 vec, const float scalar);
 ///Set the length of the vector
-Vector2 vec2_with_len(Vector2 vec, float len);
+Vector2 vec2_with_len(const Vector2 vec, const float len);
 ///Rotate a vector 
-Vector2 vec2_rotate(Vector2 vec, float angle_in_degrees);
+Vector2 vec2_rotate(const Vector2 vec, const float angle_in_degrees);
 ///Add two vectors
-Vector2 vec2_add(Vector2 a, Vector2 b);
+Vector2 vec2_add(const Vector2 a, const Vector2 b);
 ///Subtract two vectors
-Vector2 vec2_sub(Vector2 a, Vector2 b);
+Vector2 vec2_sub(const Vector2 a, const Vector2 b);
 ///Invert a vector2
-Vector2 vec2_neg(Vector2 vec);
+Vector2 vec2_neg(const Vector2 vec);
 ///Check if two vectors are equal
-bool vec2_eql(Vector2 a, Vector2 b);
+bool vec2_eql(const Vector2 a, const Vector2 b);
 ///Get the angle a vector makes with the x-axis
-float vec2_angle(Vector2 a);
+float vec2_angle(const Vector2 a);
 
 
 // *** LINES ***
 ///Create a new line between two points
-Line line_new(Vector2 start, Vector2 end);
+Line line_new(const Vector2 start, const Vector2 end);
 ///Check if two lines intersect; the end points are included
-bool line_intersects(Line a, Line b);
+bool line_intersects(const Line a, const Line b);
 ///Check if two lines are equal
-bool line_eql(Line a, Line b);
+bool line_eql(const Line a, const Line b);
 
 // *** CIRCLES ***
 ///Create a new circle
-Circ circ_new(float x, float y, float radius);
+Circ circ_new(const float x, const float y, const float radius);
 ///Check if a point is in a circle
-bool circ_contains(Circ c, Vector2 v);
+bool circ_contains(const Circ c, const Vector2 v);
 ///Check if a circle intersects a line
-bool circ_intersects(Circ c, Line l);
+bool circ_intersects(const Circ c, const Line l);
 ///Get the rect bounding box of a circle
-Rect circ_bounding_box(Circ circ);
+Rect circ_bounding_box(const Circ circ);
 
 
 // *** RECTANGLES ***
 ///Create a new rectangle
-Rect rect_new(float x, float y, float width, float height);
+Rect rect_new(const float x, const float y, const float width, const float height);
 ///Get the left side of the rect
-Line rect_left(Rect r);
+Line rect_left(const Rect r);
 ///Get the right side of the rect
-Line rect_right(Rect r);
+Line rect_right(const Rect r);
 ///Get the top of the rect
-Line rect_top(Rect r);
+Line rect_top(const Rect r);
 ///Get the bottom of the rect
-Line rect_bottom(Rect r);
+Line rect_bottom(const Rect r);
 ///Check if a rect contains a point
-bool rect_contains(Rect r, Vector2 point);
+bool rect_contains(const Rect r, const Vector2 point);
 ///Check to see if a rect intersects a line
-bool rect_intersects(Rect r, Line l);
+bool rect_intersects(const Rect r, const Line l);
 
 // *** POLYGONS ***
 ///Create a new polygon from a list of vertices
-Polygon poly_new(Vector2 position, Vector2 *points, size_t num_points);
+///
+///Consider 'points' to be now owned by the Polygon; when poly_destroy is called it will be freed
+Polygon poly_new(const Vector2 position, Vector2 *points, const size_t num_points);
 ///Create a new polygon from a rectangle
-Polygon poly_from_rect(Rect rect);
+Polygon poly_from_rect(const Rect rect);
 ///Get a transformed vertex from a polygon
-Vector2 poly_get_vertex(Polygon poly, size_t index);
+Vector2 poly_get_vertex(const Polygon poly, const size_t index);
 ///Find if a polygon contains a point
-bool poly_contains(Polygon poly, Vector2 point);
+bool poly_contains(const Polygon poly, const Vector2 point);
 ///Find if a polygon collided with a line
-bool poly_intersects(Polygon poly, Line line);
+bool poly_intersects(const Polygon poly, const Line line);
 ///Find the bounds of a polygon as a rect
-Rect poly_bounding_box(Polygon poly);
+Rect poly_bounding_box(const Polygon poly);
 ///Update the points of the polygon
 void poly_update(Polygon poly);
 ///Deallocate the polygon
-void poly_destroy(Polygon poly);
+void poly_destroy(const Polygon poly);
 
 // *** SHAPES ***
 ///Create a shape from a rectangle
-Shape shape_rect(Rect r);
+Shape shape_rect(const Rect r);
 ///Create a shape from a circle
-Shape shape_circ(Circ c);
+Shape shape_circ(const Circ c);
 ///Create a shape from a polygon
-Shape shape_poly(Polygon p);
+Shape shape_poly(const Polygon p);
 ///Set the shape's top-left corner
-void shape_set_position(Shape *s, Vector2 position);
+void shape_set_position(Shape *s, const Vector2 position);
 ///Get the position of a shape's top-left corner
-Vector2 shape_get_position(Shape s);
+Vector2 shape_get_position(const Shape s);
 ///Checks to see if a shape contains a point
-bool shape_contains(Shape s, Vector2 point);
+bool shape_contains(const Shape s, const Vector2 point);
 ///Checks to see if a shape bounds or intersects a line
-bool shape_intersects(Shape s, Line line);
+bool shape_intersects(const Shape s, const Line line);
 ///Get the smallest rectangle that fully envelpos the shape
-Rect shape_bounding_box(Shape s);
-///Get the rotation of a Shape
-float shape_get_rotation(Shape s);
-///Set the rotation of a Shape; a Shape backed by a Rect will be converted into a Polygon
-void shape_set_rotation(Shape *s, float rotation);
-///Rotates a shape by a given amount; a Shape backed by a Rect will be converted into a Polygon
-void shape_rotate(Shape *s, float amount);
+Rect shape_bounding_box(const Shape s);
+///Get the rotation of a const Shape
+float shape_get_rotation(const Shape s);
+///Set the rotation of a const Shape; a const Shape backed by a const Rect will be converted into a const Polygon
+void shape_set_rotation(Shape *s, const float rotation);
+///Rotates a shape by a given amount; a const Shape backed by a const Rect will be converted into a const Polygon
+void shape_rotate(Shape *s, const float amount);
 ///Get the center of a shape
-Vector2 shape_get_center(Shape s);
+Vector2 shape_get_center(const Shape s);
