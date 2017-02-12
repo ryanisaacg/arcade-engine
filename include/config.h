@@ -16,7 +16,7 @@
  *
  * The document takes the format:
  * 
- * [Section]
+ * :Section
  * key1 = 1
  * key 2 = 2, 3.5
  * key three = true, false, -1
