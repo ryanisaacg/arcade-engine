@@ -3,57 +3,49 @@
 
 #include <string.h>
 
+static bool str_equal(void *a, void *b) {
+	return strcmp(a, b) == 0;
+}
+
 Document config_new(char *contents) {
-	char line[1024];
-	char *line_position = line;
 	Document doc = {
-		.items = hm_new()
+		.items = hm_new_eqfunc(str_equal)
 	};
 	char *current_section = NULL;
 	while(*contents) {
-		while(*contents != '\n') { //consume characters until a newline is found
-			*line_position = *contents;
-			contents++;
-			line_position++;
-		}
-		*line_position = '\0'; //Null terminate the line string
-		line_position = line;
-		if(line[0] == '[') {
-			//Parse a section header
-			char *end = line;
-			while(*end != ']') end++; //Move to the next closing bracket
-			current_section = malloc(end - line); 
-			memcpy(current_section, line, end - line); //Copy the section name
-			hm_put(doc.items, *current_section, current_section, hm_new()); //Put a new map into the map
+		if(*contents == ':') {
+			char *section_start = contents + 1;
+			while(*(++contents) != '\n'); //consume all characters not including the newline
+			size_t length = contents - section_start;
+			current_section = malloc(length + 1);
+			memcpy(current_section, section_start, length);	
+			current_section[length] = '\0';
+			hm_put(doc.items, *current_section, current_section, hm_new_eqfunc(str_equal)); //Put a new map into the map
 		} else {
-			char *check = line;
-			bool contents = false; //If any non-whitespace characters were found
-			while(!contents && check - line < 1024) {  //check for non_whitespace characters
-				contents = *check != ' ' || *check != '\t' || *check != '\r' || *check != '\n'; 
-				check++;
-			} 
-			if(!contents) { //If the line was empty
-				continue;
-			}
-			char *end_key = line;
-			while(*end_key != '=') end_key++; //Seek the end of the key
-			char *key = malloc(end_key - line);
-			memcpy(key, line, end_key - line);
-			char *start_value = end_key;
-			char *end_value = end_key;
-			float *data_start = malloc(sizeof(float) * 3);
-			float *data = data_start;
-			while(*end_value != '\n') { //Seek the values
-				end_value++;
-				if(*end_value == ',' || *end_value == '\n') { //Seek the end of a value
-					*data = strtof(start_value, &end_value);
-					data++;
-					start_value = end_value;
+			char *key_start = contents;
+			while(*(++contents) != '='); //consume all characters up to but not including the equal
+			size_t length = contents - key_start;
+			char *key = malloc(length + 1);
+			memcpy(key, key_start, length);
+			key[length] = '\0';
+			char *value_start = contents + 1;
+			float *data = malloc(sizeof(float) * 3);
+			float *current_data = data;
+			char value[1024];
+			while(*contents != '\n') { //while more values remain
+				contents++;
+				if(*contents == ',' || *contents == '\n') {
+					length = contents - value_start;
+					memcpy(value, value_start, length);
+					value[length] = '\0';
+					*current_data = atof(value);
+					current_data++;
 				}
-			}
+			}	
 			HashMap *pairs = hm_get(doc.items, *current_section, current_section); //Get the key-value pairs of the current section
-			hm_put(pairs, *key, key, data_start); //put this key-value pair into it
+			hm_put(pairs, *key, key, data); //put this key-value pair into it
 		}
+		contents++;
 	}
 	return doc;
 }
