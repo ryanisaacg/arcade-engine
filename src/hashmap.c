@@ -1,5 +1,6 @@
 #include "hashmap.h"
 #include <stdbool.h>
+#include <stdlib.h>
 #include "util.h"
 
 static int get_hash(int key);
