@@ -5,8 +5,6 @@
 #include <stdlib.h>
 #include <string.h>
 
-#define SDL_NUM_KEYS 284
-
 Animation anim_new(TextureRegion *frames, size_t num_frames, size_t steps_per_frame) {
 	ArrayList list = al_prealloc(sizeof(TextureRegion), frames, num_frames);
 	list.length = num_frames;
@@ -215,17 +213,18 @@ Window window_new(WindowConfig config) {
 		.window = window,
 		.rend = rend,
 		.stay_open = true,
-		.keys = malloc(sizeof(bool) * SDL_NUM_KEYS),
-		.prev_keys = malloc(sizeof(bool) * SDL_NUM_KEYS),
-		.mouse = { 0 },
-		.prev_mouse = { 0 },
+		.keys = ks_new(),
+		.prev_keys = ks_new(),
+		.mouse = ms_new(),
+		.prev_mouse = ms_new(),
 	};
 }
 
 void window_events(Window *window) {
 	window->prev_mouse = window->mouse;
 	window->mouse.wheel_up = window->mouse.wheel_down = false;
-	memcpy(window->prev_keys, window->keys, sizeof(bool) * SDL_NUM_KEYS);
+	ks_cpy(window->prev_keys, window->keys);
+	window->prev_mouse = window->mouse;
 	SDL_Event e;
 	while(SDL_PollEvent(&e)) {
 		switch(e.type) {
@@ -233,10 +232,10 @@ void window_events(Window *window) {
 			window->stay_open = false;
 			break;
 		case SDL_KEYDOWN:
-			window->keys[e.key.keysym.scancode] = true;
+			ks_set_state(window->keys, e.key.keysym.scancode, true);
 			break;
 		case SDL_KEYUP:
-			window->keys[e.key.keysym.scancode] = false;
+			ks_set_state(window->keys, e.key.keysym.scancode, true);
 			break;
 		case SDL_MOUSEWHEEL:
 			if(e.wheel.y > 0) {
@@ -247,12 +246,15 @@ void window_events(Window *window) {
 			break;
 		}
 	}
-	Uint32 state = SDL_GetMouseState(NULL, NULL);
+	int x, y;
+	Uint32 state = SDL_GetMouseState(&x, &y);
 	window->mouse.left = state & SDL_BUTTON_LEFT;
 	window->mouse.right = state & SDL_BUTTON_RIGHT;
 	window->mouse.middle = state & SDL_BUTTON_MIDDLE;
 	window->mouse.x1 = state & SDL_BUTTON_X1;
 	window->mouse.x2 = state & SDL_BUTTON_X2;
+	window->mouse.x = x;
+	window->mouse.y = y;
 }
 
 void window_start_draw(Window *window, int r, int g, int b) {
@@ -275,43 +277,6 @@ bool window_should_contine(Window window) {
 	return window.stay_open;
 }
 
-bool window_key_pressed(Window window, int key_code) {
-	return window.keys[key_code];
-}
-
-static bool mouse_state_pressed(MouseState mouse, int button) {
-	switch(button) {
-	case SDL_BUTTON_LEFT:
-		return mouse.left;
-	case SDL_BUTTON_RIGHT:
-		return mouse.right;
-	case SDL_BUTTON_MIDDLE:
-		return mouse.middle;
-	case SDL_BUTTON_X1:
-		return mouse.x1;
-	case SDL_BUTTON_X2:
-		return mouse.x2;
-	}
-	return false;
-}
-
-bool window_mouse_pressed(Window window, int button) {
-	return mouse_state_pressed(window.mouse, button);
-}
-
-bool window_key_was_pressed(Window window, int key_code) {
-	return window.prev_keys[key_code];
-}
-
-bool window_mouse_was_pressed(Window window, int button) {
-	return mouse_state_pressed(window.prev_mouse, button);
-}
-
-Vector2 window_get_mouse_pos(Window window) {
-	int x, y;
-	SDL_GetMouseState(&x, &y);
-	return vec2_new(x, y);
-}
 
 void window_draw(Window window, Camera *cam, Sprite sprite) {
 	TextureRegion region = spr_image(sprite);

@@ -4,6 +4,8 @@
  */
 #include "geom.h"
 #include "graphics.h"
+#include "input.h"
 #include "simulation.h"
+#include "sound.h"
 
 #undef main

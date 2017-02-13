@@ -3,6 +3,7 @@
 #include <SDL2/SDL.h>
 
 #include "array_list.h"
+#include "input.h"
 #include "geom.h"
 
 /**
@@ -45,17 +46,13 @@ typedef struct WindowConfig {
 	int width, height;
 	const char *title;
 } WindowConfig;
-///The state of the mouse buttons
-typedef struct MouseState {
-	bool left, right, middle, x1, x2, wheel_up, wheel_down;
-} MouseState;
 ///Represent an sdl window and attached ancillary items
 typedef struct Window {
 	SDL_Window *window; ///the backing window
 	SDL_Renderer *rend; ///hardware renderer attached to window
 	bool stay_open; ///if the window should remain open
 	MouseState mouse, prev_mouse; ///mouse input state
-	bool *keys, *prev_keys; ///keyboard input state
+	KeyboardState keys, prev_keys; ///keyboard input state
 	Uint32 frame_start; ///the clock time at which the frame started
 	int width, height; ///the width and height of the window
 } Window;
@@ -124,24 +121,6 @@ void window_start_draw(Window *window, int r, int g, int b);
 void window_end_draw(Window window);
 /// If the Window has received a close event
 bool window_should_contine(Window window);
-/**
- * \brief Checks to see if a given key is currently held down 
- *
- * Key constants are given by SDL key constants. Specifically, the SDL_SCANCODE_XXX constant should be used.
- */
-bool window_key_pressed(Window window, int key_code);
-/** 
- * \brief Checks to see if a given mouse button is currently held down 
- *
- * Button constants are given by SDL button constants
- */
-bool window_mouse_pressed(Window window, int button);
-/// Checks to see if a key was held last frame
-bool window_key_was_pressed(Window window, int key_code);
-/// Checks to see if a button was held last frame
-bool window_mouse_was_pressed(Window window, int button);
-/// Gets the mouse position in screen coordinates
-Vector2 window_get_mouse_pos(Window window);
 /**
  * \brief Draw a Sprite to the Window
  *
