@@ -1,6 +1,7 @@
 #include "config.h"
 #include "util.h"
 
+#include <stdlib.h>
 #include <string.h>
 
 static bool str_equal(void *a, void *b) {
