@@ -31,6 +31,9 @@ void multimedia_init() {
 		fprintf(stderr, "SDL_mixer could not connect to audio drivers. MIX Error: %s\n", Mix_GetError());
 		exit(-1);
 	}
+	if(SDL_JoystickEventState(SDL_ENABLE) <= 0) {
+		fprintf(stderr, "SDL could not initialize game controllers. SDL Error: %s\n", SDL_GetError());
+	}
 }
 
 void multimedia_quit() {
