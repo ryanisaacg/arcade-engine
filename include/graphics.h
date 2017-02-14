@@ -53,6 +53,7 @@ typedef struct Window {
 	bool stay_open; ///if the window should remain open
 	MouseState mouse, prev_mouse; ///mouse input state
 	KeyboardState keys, prev_keys; ///keyboard input state
+	ArrayList controllers; /// a list of GamepadState s
 	Uint32 frame_start; ///the clock time at which the frame started
 	int width, height; ///the width and height of the window
 } Window;

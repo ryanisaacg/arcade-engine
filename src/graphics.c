@@ -217,6 +217,7 @@ Window window_new(WindowConfig config) {
 		.prev_keys = ks_new(),
 		.mouse = ms_new(),
 		.prev_mouse = ms_new(),
+		.controllers = gs_load_controllers()
 	};
 }
 
@@ -255,6 +256,7 @@ void window_events(Window *window) {
 	window->mouse.x2 = state & SDL_BUTTON_X2;
 	window->mouse.x = x;
 	window->mouse.y = y;
+	for(size_t i = 0; i < window->controllers.length; i++) gs_update(al_get(window->controllers, i));
 }
 
 void window_start_draw(Window *window, int r, int g, int b) {
@@ -296,4 +298,6 @@ void window_draw(Window window, Camera *cam, Sprite sprite) {
 void window_destroy(Window window) {
 	SDL_DestroyRenderer(window.rend);
 	SDL_DestroyWindow(window.window);
+	for(size_t i = 0; i < window.controllers.length; i++) gs_destroy(al_get(window.controllers, i));
+	al_destroy(window.controllers);
 }
