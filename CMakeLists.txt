@@ -40,3 +40,8 @@ target_link_libraries(tests arcade-engine)
 add_executable(example example.c)
 set_property(TARGET example PROPERTY C_STANDARD 99)
 target_link_libraries(example arcade-engine)
+
+#CREATE GAMEPAD EXAMPLE
+add_executable(gpexample gamepad-example.c)
+set_property(TARGET gpexample PROPERTY C_STANDARD 99)
+target_link_libraries(gpexample arcade-engine)
