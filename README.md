@@ -28,6 +28,7 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 - Input
 	- Keyboard and mouse support
 	- Previous-frame keyboard and mouse state polling
+	- Creation of InputActions that combine multiple keys or mouse buttons
 - Sound
 	- Play or repeat sound effects with multiple instances of each sound
 	- Play or loop a music track in the background
