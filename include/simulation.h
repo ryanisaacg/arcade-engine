@@ -116,8 +116,9 @@ typedef struct Spawner {
 	SpawnerFunction func;
 } Spawner;
 
-typedef void (*WorldUpdate)(World, ArcadeObject*, void*);
-typedef void (*WorldCollide)(World, ArcadeObject*, void*, ArcadeObject*, void*);
+typedef void (*WorldUpdateFunc)(World);
+typedef void (*WorldObjectUpdateFunc)(World, ArcadeObject*, void*);
+typedef void (*WorldCollideFunc)(World, ArcadeObject*, void*, ArcadeObject*, void*);
 
 
 // *** QUADTREES ***
@@ -154,7 +155,7 @@ void qt_clear(QuadTree *tree);
 size_t qt_len(QuadTree *tree);
 /// Run the collision checks and do whatever action collide performs
 /// Objects will not interact with objects that have blacklisted groups
-void qt_collisions(QuadTree *tree, World world, WorldCollide collide);
+void qt_collisions(QuadTree *tree, World world, WorldCollideFunc collide);
 /// Destroy the quadtree and deallocate its memory
 void qt_destroy(QuadTree *tree);
 
@@ -201,9 +202,9 @@ SpatialMap *world_get_map(World world, size_t index);
 /// Remove the arcade object at an index
 ArcadeObject world_remove(World *world, size_t index);
 /// Run an update step, where update is the function to apply to the game objects and collide is the function to handle collisions
-void world_update(World world, WorldUpdate update, WorldCollide collide);
+void world_update(World world, WorldUpdateFunc update, WorldObjectUpdateFunc obj_update, WorldCollideFunc collide);
 /// Apply a function to all arcade objects in the world
-void world_foreach(World world, WorldUpdate update);
+void world_foreach(World world, WorldObjectUpdateFunc update);
 /// Draw the world to the screeen
 void world_draw(World world);
 /// Deallocate the world's memory
@@ -245,7 +246,7 @@ void level_destroy(Level level);
 /// spawner is an optional Spawner that will be applied to all loaded objects
 Game game_new(WindowConfig config, char **level_names, size_t *indices, size_t num_levels, size_t data_size, Spawner *spawner);
 /// Takes control of execution and sets global data
-void game_start(Game game, WorldUpdate update, WorldCollide collide);
+void game_start(Game game, WorldUpdateFunc update, WorldObjectUpdateFunc obj_update, WorldCollideFunc collide);
 /// Uses global state
 void game_stop();
 /// Move the game to the level at the given index (global state)

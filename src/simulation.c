@@ -54,12 +54,12 @@ Game game_new(WindowConfig config, char **level_names, size_t *indices, size_t n
 	};
 }
 
-void game_start(Game g, WorldUpdate update, WorldCollide collide) {
+void game_start(Game g, WorldUpdateFunc update, WorldObjectUpdateFunc obj_update, WorldCollideFunc collide) {
 	game = g;
 	keep_going = true;
 	while(window_should_contine(*(g.window)) && keep_going) {
 		window_events(g.window);
-		world_update(g.current, update, collide);
+		world_update(g.current, update, obj_update, collide);
 		window_start_draw(g.window, 0, 0, 0);
 		world_draw(g.current);
 		window_end_draw(*(g.window));
@@ -230,7 +230,7 @@ void level_destroy(Level level) {
 	world_destroy(level.data);
 }
 
-static void qt_collide(QuadTree *subtree, World world, size_t current, WorldCollide collide);
+static void qt_collide(QuadTree *subtree, World world, size_t current, WorldCollideFunc collide);
 
 QuadTree *qt_new(QuadTree *parent, Rect region, float min_width, float min_height) {
 	if(region.width < min_width || region.height < min_height)
@@ -395,7 +395,7 @@ bool qt_region_free(QuadTree *tree, Shape region, ArcadeObject *ignore) {
 	return true;
 }
 
-void qt_collisions(QuadTree *tree, World world, WorldCollide collide) {
+void qt_collisions(QuadTree *tree, World world, WorldCollideFunc collide) {
 	for(size_t i = 0; i < tree->contains.length; i++) {
 		size_t *value = al_get(tree->contains, i);
 		ArcadeObject *obj = qt_get(tree, *value);
@@ -410,7 +410,7 @@ void qt_collisions(QuadTree *tree, World world, WorldCollide collide) {
 	}
 }
 
-static void qt_collide(QuadTree *subtree, World world, size_t current, WorldCollide collide) {
+static void qt_collide(QuadTree *subtree, World world, size_t current, WorldCollideFunc collide) {
 	for(size_t i = 0; i < subtree->contains.length; i++) {
 		size_t *value = al_get(subtree->contains, i);
 		size_t other = *value;
@@ -659,17 +659,18 @@ static inline void move_entity(World world, ArcadeObject *obj, void *data) {
 	obj->velocity = velocity;
 }
 
-void world_update(World world, WorldUpdate update, WorldCollide collide) {
+void world_update(World world, WorldUpdateFunc update, WorldObjectUpdateFunc obj_update, WorldCollideFunc collide) {
+	update(world);
 	world_foreach(world, move_entity);
 	if(update != NULL) {
-		world_foreach(world, update);
+		world_foreach(world, obj_update);
 	}
 	if(collide != NULL) {
 		qt_collisions(world.entities, world, collide);
 	}
 }
 
-void world_foreach(World world, WorldUpdate update) {
+void world_foreach(World world, WorldObjectUpdateFunc update) {
 	size_t length = qt_len(world.entities);
 	for(size_t i = 0; i < length; i++) {
 		ArcadeObject *obj = qt_get(world.entities, i);

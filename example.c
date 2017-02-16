@@ -2,7 +2,9 @@
 
 #include "arcade.h"
 
-void update(World world, ArcadeObject *obj, void *data) {
+void update(World world) {}
+
+void obj_update(World world, ArcadeObject *obj, void *data) {
 	obj->sprite.position = shape_get_position(obj->bounds);
 }
 
@@ -19,7 +21,7 @@ int main() {
 	world_add(&world, obj, NULL);
 	while(window_should_contine(window)) {
 		window_events(&window);
-		world_update(world, update, collision);
+		world_update(world, update, obj_update, collision);
 		window_start_draw(&window, 0, 0, 0);
 		world_draw(world);
 		window_end_draw(window);
