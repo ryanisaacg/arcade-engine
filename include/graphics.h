@@ -49,13 +49,17 @@ typedef struct WindowConfig {
 } WindowConfig;
 ///Represent an sdl window and attached ancillary items
 typedef struct Window {
-	SDL_Window *window; ///the backing window
-	SDL_Renderer *rend; ///hardware renderer attached to window
-	bool stay_open; ///if the window should remain open
+	///\private
+	SDL_Window *window; //the backing window
+	///\private
+	SDL_Renderer *rend; //hardware renderer attached to window
+	///private
+	bool stay_open;
 	MouseState mouse, prev_mouse; ///mouse input state
 	KeyboardState keys, prev_keys; ///keyboard input state
 	ArrayList controllers; /// a list of GamepadState s
-	Uint32 frame_start; ///the clock time at which the frame started
+	///\private
+	Uint32 frame_start; //the clock time at which the frame started
 	int width, height; ///the width and height of the window
 	unsigned int framerate; ///the number of game ticks and draw calls per second
 } Window;
