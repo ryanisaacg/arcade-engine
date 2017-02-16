@@ -17,6 +17,7 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- Object groups that govern which objects interact
 	- A Level object which manages loading and storing a game state
 	- A Game to combine Levels, a World, and a Window
+	- A configurable target tickrate
 - Graphics
 	- Use SDL2's Renderer API for hardware-accelerated graphics
 	- Support for drawing only part of a single texture image
@@ -49,7 +50,6 @@ A quick note about Tiled: arcade-engine does not support loading all Tiled level
 ###Low priority
 
 - [ ] Variable draw depths
-- [ ] Allow users to configure target framerates
 
 ##Why C?
 Adequate solutions to the problems solved by this library exist in other language or are trivial to implement, and I've found most other languages unsuitable for game development. Stack allocation is a must, which rules out many higher-level languages. Additionally, distribution without requiring the end user install a Virtual Machine or Runtime.

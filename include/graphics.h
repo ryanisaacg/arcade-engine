@@ -44,6 +44,7 @@ typedef struct Sprite {
 typedef struct WindowConfig {
 	bool resizable, fullscreen, borderless;
 	int width, height;
+	unsigned int framerate;
 	const char *title;
 } WindowConfig;
 ///Represent an sdl window and attached ancillary items
@@ -56,6 +57,7 @@ typedef struct Window {
 	ArrayList controllers; /// a list of GamepadState s
 	Uint32 frame_start; ///the clock time at which the frame started
 	int width, height; ///the width and height of the window
+	unsigned int framerate; ///the number of game ticks and draw calls per second
 } Window;
 ///Determine what is drawn to the screen
 typedef struct Camera {
