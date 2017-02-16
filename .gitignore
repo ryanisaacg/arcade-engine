@@ -1,4 +1,5 @@
 build
+jsbuild
 docs
 *.swp
 .vscode
