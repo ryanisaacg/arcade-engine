@@ -20,6 +20,7 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- A configurable target tickrate
 - Graphics
 	- Use SDL2's Renderer API for hardware-accelerated graphics
+		- Backends to DirectX on Windows and OpenGL on *nix
 	- Support for drawing only part of a single texture image
 	- Support for basic animations
 	- Automatically draw objects in the World struct
@@ -41,11 +42,6 @@ A quick note about Tiled: arcade-engine does not support loading all Tiled level
 ##Roadmap
 
 - [ ] Joystick and game controller support
-- [ ] Test coverage of existing modules
-	- [x] Geom tests
-	- [x] Config file tests
-	- [x] Tiled integration tests
-	- [ ] Level loading test
 - [ ] Simple HTML5 game build support
 
 ###Low priority
