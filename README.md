@@ -41,6 +41,10 @@ A quick note about Tiled: arcade-engine does not support loading all Tiled level
 
 ##Roadmap
 
+- [ ] Handle missing config values gracefully
+- [ ] Differentiate between disabled and dead objects
+- [ ] Replace dead objects to reduce memory allocation
+- [ ] Define particle emitters with config files
 - [ ] Joystick and game controller support
 - [ ] Simple HTML5 game build support
 
