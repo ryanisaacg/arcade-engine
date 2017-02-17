@@ -10,6 +10,9 @@
 Vector2 vec2_new(float x, float y) {
 	return (Vector2){x, y};
 }
+Vector2 vec2_new_directed(const float magnitude, const float direction) {
+	return vec2_rotate(vec2_new(magnitude, 0), direction);
+}
 //Find the square of the length of a vector
 float vec2_len2(Vector2 vec) {
 	return vec.x * vec.x + vec.y * vec.y;

@@ -120,6 +120,8 @@ bool overlaps_shape(const Shape a, const Shape b);
 // *** VECTORS ***
 ///Create a new vector with an x and a y 
 Vector2 vec2_new(const float x, const float y);
+///Create a new vector with magnitude and direction
+Vector2 vec2_new_directed(const float magnitude, const float direction);
 ///Find the square of the length of a vector
 float vec2_len2(const Vector2 vec);
 ///Find the length of a vector
