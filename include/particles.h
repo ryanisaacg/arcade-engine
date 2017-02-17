@@ -25,6 +25,8 @@ typedef struct Particle {
 	float rotational_velocity;
 	///\private
 	int life;
+	///\private
+	ParticleContactAction action;
 } Particle;
 
 /**
@@ -54,7 +56,7 @@ typedef struct ParticleEmitter {
 	///The smallest angle of acceleration the particle can spawn with
 	float min_accel_dir;
 	///The largest angle of acceleration the particle can spawn with
-	float min_accel_dir;
+	float max_accel_dir;
 	///The smallest acceleration magnitude the particle can spawn with
 	float min_accel;
 	///The largest acceleration magnitude the particle can spawn with
@@ -72,13 +74,17 @@ typedef struct ParticleEmitter {
 	///The maximum angle of the sprite the particle can spawn with
 	float max_rotation;
 	///The minimum amount the sprite will spin per frame
-	float min_rotational_velocity
+	float min_rotational_velocity;
 	///The maximum amount the sprite will spin per frame
 	float max_rotational_velocity;
 	///The minimum amount of frames the sprite will live
 	int min_life;
 	///The maximum amount of frames the sprite will live
 	int max_life;
+	///If acceleration is proportional to velocity or absolute, and the same for jerk
+	bool relative;
+	///The action for particles to take when encountering a wall
+	ParticleContactAction action;
 } ParticleEmitter;
 
 ///Apply transformations to a particle
@@ -87,6 +93,8 @@ void part_step(Particle *part);
 ///Create a particle emitter with the given parameters
 ParticleEmitter pe_new(const Sprite sprite, const int min_life, const int max_life);
 ///Spawn a new particle using the emitter
-Particle pe_spawn(const ParticleEmitter *pe);
+Particle pe_spawn(const ParticleEmitter *pe, const Vector2 location);
+///Spawn a burst of particles at the given position
+void pe_burst(const ParticleEmitter *pe, ArrayList *particles, const Vector2 location, const int min, const int max);
 ///Add a particle to the given array list
-void pe_add_to(const ParticleEmitter *pe, ArrayList *particles);
+void pe_add_to_list(const ParticleEmitter *pe, Vector2 location, ArrayList *particles);
