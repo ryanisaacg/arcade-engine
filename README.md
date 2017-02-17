@@ -43,7 +43,6 @@ A quick note about Tiled: arcade-engine does not support loading all Tiled level
 
 - [ ] Basic UI Toolkit
 	- [ ] Add support for Menus in the game as well as Levels
-- [ ] Handle missing config values gracefully
 - [ ] Differentiate between disabled and dead objects
 - [ ] Replace dead objects to reduce memory allocation
 - [ ] Define particle emitters with config files

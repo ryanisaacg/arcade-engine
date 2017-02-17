@@ -68,6 +68,19 @@ ArrayList config_get_keys(Document doc, char *section) {
 	return hm_get_keys(hm_get(doc.items, *section, section));
 }
 
-float *config_get_value(Document doc, char *section, char *key) {
-	return hm_get(hm_get(doc.items, *section, section), *key, key);
+static float zero[3] = { 0 };
+
+float *config_get_value(Document doc, char *section_name, char *key) {
+	HashMap *section = hm_get(doc.items, *section_name, section_name);
+	if(section == NULL) {
+		return zero;
+	} else {
+		float *value = hm_get(section, *key, key);
+		if(value == NULL) {
+			return zero;
+		} else {
+			return value;
+		}
+	}
+	return hm_get(section, *key, key);
 }
