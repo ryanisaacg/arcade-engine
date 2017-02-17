@@ -3,6 +3,7 @@
 #include "config.h"
 #include "geom.h"
 #include "multimedia.h"
+#include "particles.h"
 
 /**
  * \file simulation.h
@@ -56,6 +57,8 @@ typedef struct World {
 	QuadTree *entities; //the game entities
 	///\private
 	ArrayList items; //a list of user-defined data
+	///private
+	ArrayList particles; //a list of the currently active particles
 	///\private
 	ArrayList layers; //a list of the maps (list of SpatialMap)
 	///\private
@@ -188,6 +191,8 @@ size_t world_add_map(World *world, SpatialMap map);
 Group *world_add_group(World *world, Group group);
 /// Add a static sprite to be drawn each frame
 void world_add_sprite(World *world, Sprite sprite);
+/// Adds a burst of particles to the world
+void world_add_particles(World *world, const ParticleEmitter *pe, const Vector2 position, const int min, const int max);
 /// Check if a point is empty within the world
 bool world_point_free(World world, Vector2 point, ArcadeObject *ignore);
 /// Check if a region is free within the world

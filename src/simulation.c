@@ -527,6 +527,7 @@ World world_new(Window *window, float width, float height, float qt_buckets_size
 		.entities = qt_new(NULL, rect_new(0, 0, width, height), qt_buckets_size, qt_buckets_size),
 		.items = al_new(data_size),
 		.layers = al_new(sizeof(SpatialMap)),
+		.particles = al_new(sizeof(Particle)),
 		.camera = cam_new(window, rect_new(0, 0, width, height), true),
 		.r = 0,
 		.g = 0,
@@ -539,6 +540,10 @@ size_t world_add(World *world, ArcadeObject object, void *data_object) {
 	size_t index = qt_add(world->entities, object);
 	world_get(*world, index)->index = index;
 	return index;
+}
+
+void world_add_particles(World *world, const ParticleEmitter *pe, const Vector2 position, const int min, const int max) {
+	pe_burst(pe, &(world->particles), position, min, max);
 }
 
 ArcadeObject *world_get(World world, size_t index) {
@@ -660,6 +665,10 @@ static inline void move_entity(World world, ArcadeObject *obj, void *data) {
 }
 
 void world_update(World world, WorldUpdateFunc update, WorldObjectUpdateFunc obj_update, WorldCollideFunc collide) {
+	for(size_t i  = 0; i < world.particles.length; i++) {
+		Particle *p = al_get(world.particles, i);
+		part_step(p);
+	}
 	update(world);
 	world_foreach(world, move_entity);
 	if(update != NULL) {
@@ -687,6 +696,10 @@ void world_draw(World world) {
 	for(size_t i = 0; i < world.sprites.length; i++) {
 		Sprite *spr = al_get(world.sprites, i);
 		window_draw(*(world.window), &(world.camera), *spr);
+	}
+	for(size_t i = 0; i < world.particles.length; i++) {
+		Particle *p = al_get(world.particles, i);
+		window_draw(*(world.window), &(world.camera), p->sprite);
 	}
 	for(size_t i = 0; i < world.layers.length; i++) {
 		SpatialMap *map = al_get(world.layers, i);
