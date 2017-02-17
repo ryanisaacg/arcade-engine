@@ -186,7 +186,6 @@ size_t world_add(World *world, ArcadeObject object, void *data);
 size_t world_add_map(World *world, SpatialMap map);
 /// Add a group to the world and get its heap allocated location
 Group *world_add_group(World *world, Group group);
-// Get the object of the specified index
 /// Add a static sprite to be drawn each frame
 void world_add_sprite(World *world, Sprite sprite);
 /// Check if a point is empty within the world
