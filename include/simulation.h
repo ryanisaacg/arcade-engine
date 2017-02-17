@@ -89,7 +89,8 @@ typedef struct ArcadeObject {
 	Vector2 max_velocity; ///The absolute value the velocity should not exceed
 	Vector2 drag; ///The amount to oppose motion each frame (always tends towards 0)
 	bool solid; ///If other objects are stopped on collision 
-	bool alive; ///If the object should be considered in updates
+	bool active; ///If the object should be considered in updates
+	bool alive; ///If the object is alive
 	bool bounce; ///Should the object bounce off obstacles elastically
 	Group *group; ///The group that determines interactions between objects
 	size_t index; ///The index of the object in the world (set automatically)

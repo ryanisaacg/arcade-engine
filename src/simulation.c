@@ -20,6 +20,7 @@ ArcadeObject arcobj_new(Shape bounds, bool solid, Sprite spr) {
 		.drag = vec2_new(0, 0), 
 		.solid = solid, 
 		.alive = true, 
+		.active = true,
 		.bounce = false, 
 		.group = NULL,
 	};
@@ -319,7 +320,7 @@ ArcadeObject *qt_point_query(QuadTree *tree, Vector2 point, Group *query_as) {
 	for(size_t i = 0; i < tree->contains.length; i++) {
 		size_t *index = al_get(tree->contains, i);
 		ArcadeObject *obj = al_get(*tree->entities, *index);
-		if(obj->alive && (obj->group == NULL || group_interacts(obj->group, query_as)) && shape_contains(obj->bounds, point)) {
+		if(obj->active && obj->alive && (obj->group == NULL || group_interacts(obj->group, query_as)) && shape_contains(obj->bounds, point)) {
 			return obj;
 		}
 	}
@@ -339,7 +340,7 @@ ArcadeObject *qt_region_query(QuadTree *tree, Shape region, Group *query_as) {
 	for(size_t i = 0; i < tree->contains.length; i++) {
 		size_t *index = al_get(tree->contains, i);
 		ArcadeObject *obj = al_get(*tree->entities, *index);
-		if(obj->alive && (obj->group == NULL || group_interacts(obj->group, query_as)) && overlaps_shape(obj->bounds, region)) {
+		if(obj->alive && obj->active && (obj->group == NULL || group_interacts(obj->group, query_as)) && overlaps_shape(obj->bounds, region)) {
 			return obj;
 		}
 	}
@@ -359,7 +360,7 @@ bool qt_point_free(QuadTree *tree, Vector2 point, ArcadeObject *ignore) {
 	for(size_t i = 0; i < tree->contains.length; i++) {
 		size_t *index = al_get(tree->contains, i);
 		ArcadeObject *obj = al_get(*tree->entities, *index);
-		if(obj != ignore && obj->alive && obj->solid && shape_contains(obj->bounds, point)) {
+		if(obj != ignore && obj->alive && obj->active && obj->solid && shape_contains(obj->bounds, point)) {
 			return false;
 		}
 	}
@@ -379,7 +380,7 @@ bool qt_region_free(QuadTree *tree, Shape region, ArcadeObject *ignore) {
 	for(size_t i = 0; i < tree->contains.length; i++) {
 		size_t *index = al_get(tree->contains, i);
 		ArcadeObject *obj = al_get(*tree->entities, *index);
-		if(obj != ignore && obj->alive && obj->solid && overlaps_shape(obj->bounds, region)) {
+		if(obj != ignore && obj->alive && obj->active && obj->solid && overlaps_shape(obj->bounds, region)) {
 			return false;
 		}
 	}
@@ -399,7 +400,7 @@ void qt_collisions(QuadTree *tree, World world, WorldCollideFunc collide) {
 	for(size_t i = 0; i < tree->contains.length; i++) {
 		size_t *value = al_get(tree->contains, i);
 		ArcadeObject *obj = qt_get(tree, *value);
-		if(obj->alive) {
+		if(obj->alive && obj->active) {
 			qt_collide(tree, world, *value, collide);
 		}
 	}
@@ -417,7 +418,7 @@ static void qt_collide(QuadTree *subtree, World world, size_t current, WorldColl
 		if(current != other) {
 			ArcadeObject *a = world_get(world, current);
 			ArcadeObject *b = world_get(world, other);
-			if(a->alive && b->alive && overlaps_shape(a->bounds, b->bounds) 
+			if(a->alive && b->alive && a->active && b->active && overlaps_shape(a->bounds, b->bounds) 
 					&& (a->group == NULL || b->group == NULL || group_interacts(a->group, b->group))) {
 				void *a_data = world_get_data(world, current);
 				void *b_data = world_get_data(world, other);
@@ -699,7 +700,7 @@ void world_foreach(World world, WorldObjectUpdateFunc update) {
 	size_t length = qt_len(world.entities);
 	for(size_t i = 0; i < length; i++) {
 		ArcadeObject *obj = qt_get(world.entities, i);
-		if(!obj->alive) continue;
+		if(!obj->alive || !obj->active) continue;
 		update(world, obj, al_get(world.items, i));
 	}
 }

@@ -18,6 +18,7 @@ A 2D game engine written in pure C for writing arcade-style games. Arcade-style 
 	- A Level object which manages loading and storing a game state
 	- A Game to combine Levels, a World, and a Window
 	- A configurable target tickrate
+	- Objects can be either dead or disabled, where dead objects are subject to reclamation
 - Graphics
 	- Use SDL2's Renderer API for hardware-accelerated graphics
 		- Backends to DirectX on Windows and OpenGL on *nix
@@ -43,7 +44,6 @@ A quick note about Tiled: arcade-engine does not support loading all Tiled level
 
 - [ ] Basic UI Toolkit
 	- [ ] Add support for Menus in the game as well as Levels
-- [ ] Differentiate between disabled and dead objects
 - [ ] Replace dead objects to reduce memory allocation
 - [ ] Define particle emitters with config files
 - [ ] Joystick and game controller support
