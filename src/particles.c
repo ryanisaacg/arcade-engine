@@ -10,6 +10,7 @@ void part_step(Particle *part) {
 	part->velocity = vec2_add(part->velocity, part->acceleration);
 	part->acceleration = vec2_add(part->acceleration, part->jerk);
 	part->sprite.angle += part->rotational_velocity;
+	part->life -= 1;
 }
 
 ParticleEmitter pe_new(const Sprite sprite, const int min_life, const int max_life) {
