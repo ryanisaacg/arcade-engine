@@ -52,3 +52,8 @@ Rect sdl_rect_conv(SDL_Rect rect) {
 SDL_Rect rect_conv(Rect rect) {
 	return (SDL_Rect){ (int)rect.x, (int)rect.y, (int)rect.width, (int)rect.height };
 }
+
+float random_float(float min, float max) {
+	float generated = rand();
+	return generated / RAND_MAX * (max - min) + min; 
+}
