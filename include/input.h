@@ -34,6 +34,12 @@ typedef struct GamepadState {
 	bool dpad_up, dpad_down, dpad_left, dpad_right, bumper_left, bumper_right, face_a, face_b, face_x, face_y, stick_left, stick_right, start;
 } GamepadState;
 
+/// An abstract input action that allows checking keyboard masks as one call
+typedef struct InputAction {
+	ArrayList keys; ///An ArrayList of ints that are the indices of the keys to check
+	MouseState buttons; ///A MouseState where the buttons that are marked true are checked
+} InputAction;
+
 // *** KEYS ***
 /// Instantiate a blank keyboard state
 KeyboardState ks_new(); 
@@ -57,3 +63,9 @@ ArrayList gs_load_controllers();
 void gs_update(GamepadState *pad);
 /// Unbind the controller from the program
 void gs_destroy(GamepadState *state);
+
+// *** INPUT ACTIONS ***
+/// Create an input action from a list of keys and a representative mouse state
+InputAction ia_new(const ArrayList keys, const MouseState mask);
+/// Checks an input action against given states
+bool ia_active(const InputAction action, const KeyboardState keyboard, const MouseState mouse);

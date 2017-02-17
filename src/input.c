@@ -4,6 +4,8 @@
 #include <stdlib.h>
 #include <string.h>
 
+#include "util.h"
+
 #define SDL_NUM_KEYS 284
 
 KeyboardState ks_new() {
@@ -77,4 +79,26 @@ void gs_update(GamepadState *pad) {
 
 void gs_destroy(GamepadState *state) {
 	SDL_GameControllerClose(state->controller);
+}
+
+InputAction ia_new(ArrayList keys, MouseState mask) {
+	return (InputAction) {
+		.keys = keys,
+		.buttons = mask
+	};
+}
+
+bool ia_active(const InputAction action, KeyboardState keyboard, MouseState mouse) {
+	for(size_t i = 0; i < action.keys.length; i++) {
+		int *index = al_get(action.keys, i);
+		if(!ks_is_pressed(keyboard, *index))
+			return false;
+	}
+	return	(mouse.left && action.buttons.left) || 
+			(mouse.right && action.buttons.right) ||
+			(mouse.middle && action.buttons.middle) ||
+			(mouse.x1 && action.buttons.x1) ||
+			(mouse.x2 && action.buttons.x2) ||
+			(mouse.wheel_up && action.buttons.wheel_up) ||
+			(mouse.wheel_down && action.buttons.wheel_down);
 }

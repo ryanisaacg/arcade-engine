@@ -199,6 +199,7 @@ WindowConfig window_config_new(int width, int height, const char *title) {
 		.borderless = false,
 		.width = width,
 		.height = height,
+		.framerate = 60,
 		.title = title 
 	};
 }
@@ -211,6 +212,9 @@ Window window_new(WindowConfig config) {
 	SDL_Renderer *rend = SDL_CreateRenderer(window, -1, SDL_RENDERER_ACCELERATED);
 	return (Window) {
 		.window = window,
+		.width = config.width,
+		.height = config.height,
+		.framerate = config.framerate,
 		.rend = rend,
 		.stay_open = true,
 		.keys = ks_new(),
@@ -269,8 +273,8 @@ void window_start_draw(Window *window, int r, int g, int b) {
 void window_end_draw(Window window) {
 	SDL_RenderPresent(window.rend);
 	Uint32 current = SDL_GetTicks();
-	Uint32 delay = 16 - (current - window.frame_start);
-	if(16 > current - window.frame_start) {
+	Uint32 delay = window.framerate - (current - window.frame_start);
+	if(window.framerate > current - window.frame_start) {
 		SDL_Delay(delay);
 	}
 }
