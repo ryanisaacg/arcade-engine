@@ -46,7 +46,6 @@ ArrayList gs_load_controllers() {
 			}
 			GamepadState state = (GamepadState) {
 				.controller = controller,
-				{ 0 }
 			};
 			al_add(&controllers, &state);
 		}
