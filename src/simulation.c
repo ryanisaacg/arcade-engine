@@ -668,6 +668,22 @@ void world_update(World world, WorldUpdateFunc update, WorldObjectUpdateFunc obj
 	for(size_t i  = 0; i < world.particles.length; i++) {
 		Particle *p = al_get(world.particles, i);
 		part_step(p);
+		if(!world_point_free(world, p->sprite.position, NULL)) {
+			switch(p->action) {
+			case DIES_ON_CONTACT:
+				p->life = 0;
+				break;
+			case BOUNCE_ON_CONTACT:
+				p->velocity = vec2_neg(p->velocity);
+				break;
+			case NO_CONTACT_ACTION:
+				break;
+			}
+		}
+		if(p->life <= 0) {
+			al_remove_index(&(world.particles), i);
+			i--;
+		}
 	}
 	update(world);
 	world_foreach(world, move_entity);

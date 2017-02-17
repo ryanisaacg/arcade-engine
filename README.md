@@ -41,7 +41,6 @@ A quick note about Tiled: arcade-engine does not support loading all Tiled level
 
 ##Roadmap
 
-- [ ] Particle-world interaction
 - [ ] Basic UI Toolkit
 	- [ ] Add support for Menus in the game as well as Levels
 - [ ] Handle missing config values gracefully
