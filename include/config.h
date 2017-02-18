@@ -27,7 +27,7 @@
 /// Represents a configuration document
 typedef struct Document {
 	///\private
-	HashMap *items; //a map of char* to (a map of char* to (float* of length 3))
+	HashMap items; //a map of char* to (a map of char* to (float* of length 3))
 } Document;
 
 /// Load a document from a string in memory

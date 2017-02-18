@@ -13,7 +13,7 @@
 ///A struct to store loaded textures to allow simple memory management and disable texture duplication
 typedef struct AssetManager {
 	Window window; ///The window to use to load textures
-	HashMap *data; ///The hashmap to store the multimedia data in (Texture, Sound, and Music)
+	HashMap data; ///The hashmap to store the multimedia data in (Texture, Sound, and Music)
 } AssetManager;
 
 // *** INITIALIZATION

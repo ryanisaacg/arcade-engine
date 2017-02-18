@@ -4,13 +4,9 @@
 #include <stdlib.h>
 #include <string.h>
 
-static bool str_equal(void *a, void *b) {
-	return strcmp(a, b) == 0;
-}
-
 Document config_new(char *contents) {
 	Document doc = {
-		.items = hm_new_eqfunc(str_equal)
+		.items = hm_new_eqfunc(sizeof(char**), sizeof(HashMap), str_equal)
 	};
 	char *current_section = NULL;
 	while(*contents) {
@@ -21,7 +17,8 @@ Document config_new(char *contents) {
 			current_section = malloc(length + 1);
 			memcpy(current_section, section_start, length);	
 			current_section[length] = '\0';
-			hm_put(doc.items, *current_section, current_section, hm_new_eqfunc(str_equal)); //Put a new map into the map
+			HashMap map = hm_new_eqfunc(sizeof(char**), sizeof(float) * 3, str_equal);
+			hm_put(&(doc.items), *current_section, &current_section, &map);//Put a new map into the map
 		} else {
 			char *key_start = contents;
 			while(*(++contents) != '='); //consume all characters up to but not including the equal
@@ -55,8 +52,9 @@ Document config_new(char *contents) {
 void config_concat(Document source, Document dest) {
 	ArrayList keys = hm_get_keys(source.items);
 	for(size_t i = 0; i < keys.length; i++) {
-		char *key = al_get(keys, i);
-		hm_put(dest.items, *key, key, hm_get(source.items, *key, key));
+		char **key_ptr = al_get(keys, i);
+		char *key = *key_ptr;
+		hm_put(&(dest.items), *key, &key, hm_get(source.items, *key, &key));
 	}
 }
 
@@ -65,22 +63,22 @@ ArrayList config_get_sections(Document doc) {
 }
 
 ArrayList config_get_keys(Document doc, char *section) {
-	return hm_get_keys(hm_get(doc.items, *section, section));
+	return hm_get_keys(*(HashMap*)hm_get(doc.items, *section, &section));
 }
 
 static float zero[3] = { 0 };
 
 float *config_get_value(Document doc, char *section_name, char *key) {
-	HashMap *section = hm_get(doc.items, *section_name, section_name);
+	HashMap *section = hm_get(doc.items, *section_name, &section_name);
 	if(section == NULL) {
 		return zero;
 	} else {
-		float *value = hm_get(section, *key, key);
+		float *value = hm_get(*section, *key, &key);
 		if(value == NULL) {
 			return zero;
 		} else {
 			return value;
 		}
 	}
-	return hm_get(section, *key, key);
+	return hm_get(*section, *key, &key);
 }
