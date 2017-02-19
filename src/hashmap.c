@@ -22,7 +22,7 @@ HashMap hm_new(size_t key_size, size_t value_size) {
 HashMap hm_new_eqfunc(size_t key_size, size_t value_size, ArbitraryEqualFunc eq_func) {
 	return (HashMap) {
 		.buffer = malloc((sizeof(int) + key_size + value_size) * 32),
-		.has_buffer = malloc(sizeof(bool) * 32),
+		.has_buffer = calloc(32, sizeof(bool)),
 		.key_size = key_size,
 		.value_size = value_size,
 		.length = 32,
