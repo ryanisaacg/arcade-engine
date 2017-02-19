@@ -57,3 +57,7 @@ float random_float(float min, float max) {
 	float generated = rand();
 	return generated / RAND_MAX * (max - min) + min; 
 }
+
+bool str_equal(void *a, void *b) {
+	return strcmp(a, b) == 0;
+}
