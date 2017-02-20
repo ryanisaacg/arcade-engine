@@ -28,4 +28,5 @@ void hm_put(HashMap *map, int hash, void *key, void *value);
 void *hm_get(HashMap map, int hash, void *key);
 ArrayList hm_get_keys(HashMap map);
 bool hm_has(HashMap map, int hash, void *key);
+void hm_remove(HashMap *map, int hash, void *key);
 void hm_destroy(HashMap map);

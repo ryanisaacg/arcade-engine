@@ -74,6 +74,19 @@ bool hm_has(HashMap map, int hash, void *key) {
 	return hm_get(map, hash, key) != NULL;
 }
 
+void hm_remove(HashMap *map, int hash, void *key) {
+	int index = hash % map->length;
+	int start = index;
+	bool found = false;
+	while(!(found = map->eq_func(key, map->keys + index * map->key_size))) {
+		index = (index + 1) % map->length;
+		if(index == start) break;
+	}
+	if(found) {
+		map->has[index] = false;
+	}
+}
+
 void hm_destroy(HashMap map) {
 	free(map.hashes);
 	free(map.keys);
