@@ -46,12 +46,12 @@ A quick note about Tiled: arcade-engine does not support loading all Tiled level
 	- [ ] Add support for Menus in the game as well as Levels
 - [ ] Replace dead objects to reduce memory allocation
 - [ ] Define particle emitters with config files
-- [ ] Joystick and game controller support
 - [ ] Simple HTML5 game build support
 
 ###Low priority
 
 - [ ] Variable draw depths
+- [ ] Joystick and game controller support
 
 ##Why C?
 Adequate solutions to the problems solved by this library exist in other language or are trivial to implement, and I've found most other languages unsuitable for game development. Stack allocation is a must, which rules out many higher-level languages. Additionally, distribution without requiring the end user install a Virtual Machine or Runtime.
