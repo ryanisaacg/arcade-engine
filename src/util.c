@@ -59,5 +59,7 @@ float random_float(float min, float max) {
 }
 
 bool str_equal(void *a, void *b) {
-	return strcmp(a, b) == 0;
+	char **a_ = a;
+	char **b_ = b;
+	return strcmp(*a_, *b_) == 0;
 }

@@ -7,9 +7,6 @@
 #include "util.h"
 
 static bool void_ptr_equals(void *a, void *b);
-static int get_hash_value(char *buffer, size_t index, size_t length);
-static void *get_key_ptr(char *buffer, size_t index, size_t length);
-static void *get_value_ptr(char *buffer, size_t index, size_t length, size_t key);
 
 static bool void_ptr_equals(void *a, void *b) {
 	return a == b;
@@ -20,85 +17,68 @@ HashMap hm_new(size_t key_size, size_t value_size) {
 }
 
 HashMap hm_new_eqfunc(size_t key_size, size_t value_size, ArbitraryEqualFunc eq_func) {
+	return hm_new_sized(key_size, value_size, eq_func, 32);
+}
+
+HashMap hm_new_sized(size_t key_size, size_t value_size, ArbitraryEqualFunc eq_func, size_t size) {
 	return (HashMap) {
-		.buffer = malloc((sizeof(int) + key_size + value_size) * 32),
-		.has_buffer = calloc(32, sizeof(bool)),
+		.has = calloc(sizeof(int), size),
+		.hashes = calloc(sizeof(int), size),
+		.keys = malloc(key_size * size),
+		.values = malloc(value_size * size),
 		.key_size = key_size,
 		.value_size = value_size,
-		.length = 32,
+		.length = size,
 		.items = 0,
-		.keys = al_new(key_size),
+		.keys_list = al_new(key_size),
 		.eq_func = eq_func
 	};
 }
 
 void hm_put(HashMap *map, int hash, void *key, void *value) {
-	size_t chunk_size = sizeof(int) + map->key_size + map->value_size; //the size of each hash entry in memory
 	//if we should resize the array
 	if(map->items * 2 > map->length) {
-		map->length *= 2; //double the map capacity
-		char *old = map->buffer; //store the old buffer temorarily
-		map->buffer = malloc(map->length * chunk_size); 
-		map->has_buffer = calloc(map->length, sizeof(bool));
-		size_t length = map->length / 2;
-		for(size_t i = 0; i < length; i++) {
-			//put the old data into the new map
-			hm_put(map, get_hash_value(old, i, chunk_size), get_key_ptr(old, i, chunk_size), get_value_ptr(old, i, chunk_size, map->key_size));
-		}
-		free(old);
+		size_t length = map->length * 2;
+		HashMap new = hm_new_sized(map->key_size, map->value_size, map->eq_func, length);
+		hm_destroy(*map);
+		*map = new;
 	}
 	int index = hash % map->length; //find the index to start at
-	while(map->has_buffer[index]) {//move forward until a free spot is found
+	while(map->has[index]) {//move forward until a free spot is found
 		index = (index + 1) % map->length; //wrap if necesary
-	} 
-	char *location = map->buffer + chunk_size * index; //find the start of the chunk
-	//find and set the chunk data
-	int *hash_location = (int*)location;
-	void *key_location = location + sizeof(int);
-	void *value_location = location + sizeof(int) + map->key_size;
-	*hash_location = hash;
-	memcpy(key_location, key, map->key_size);
-	memcpy(value_location, value, map->key_size);
-	map->has_buffer[index] = true; //mark the position as taken
-	al_add(&(map->keys), key); //add the key to the key list
+	}
+	map->hashes[index] = hash;
+	map->has[index] = true;
+	memcpy(map->keys + index * map->key_size, key, map->key_size);
+	memcpy(map->values + index * map->value_size, value, map->value_size);
+	al_add(&(map->keys_list), key); //add the key to the key list
 	map->items++; //increase the number of items
 }
 
 void *hm_get(HashMap map, int hash, void *key) {
 	int index = hash % map.length;
 	int start = index;
-	size_t chunk_size = sizeof(int) + map.key_size + map.value_size;
-	while(!map.eq_func(key, get_key_ptr(map.buffer, index, chunk_size))) {
+	while(!map.eq_func(key, map.keys + index * map.key_size)) {
 		index = (index + 1) % map.length; 
 		if(index == start) {
 			return NULL;
 		}
 	}
-	return get_value_ptr(map.buffer, index, chunk_size, map.key_size);
+	return map.values + index * map.value_size;
 }
 
 ArrayList hm_get_keys(HashMap map) {
-	return map.keys;
+	return map.keys_list;
 }
 bool hm_has(HashMap map, int hash, void *key) {
 	return hm_get(map, hash, key) != NULL;
 }
 
 void hm_destroy(HashMap map) {
-	free(map.buffer);
-	free(map.has_buffer);
-	al_destroy(map.keys);
+	free(map.hashes);
+	free(map.keys);
+	free(map.values);
+	free(map.has);
+	al_destroy(map.keys_list);
 }
 
-static int get_hash_value(char *buffer, size_t index, size_t length) {
-	int *hash = (int*)(buffer + index * length);
-	return *hash;
-}
-
-static void *get_key_ptr(char *buffer, size_t index, size_t length) {
-	return buffer + (index * length) + sizeof(int);
-}
-
-static void *get_value_ptr(char *buffer, size_t index, size_t length, size_t key) {
-	return buffer + (index * length) + sizeof(int) + key;
-}
