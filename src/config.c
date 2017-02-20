@@ -41,8 +41,8 @@ Document config_new(char *contents) {
 					current_data++;
 				}
 			}	
-			HashMap *pairs = hm_get(doc.items, *current_section, current_section); //Get the key-value pairs of the current section
-			hm_put(pairs, *key, key, data); //put this key-value pair into it
+			HashMap *pairs = hm_get(doc.items, *current_section, &current_section); //Get the key-value pairs of the current section
+			hm_put(pairs, *key, &key, data); //put this key-value pair into it
 		}
 		contents++;
 	}
