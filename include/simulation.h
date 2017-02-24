@@ -63,6 +63,8 @@ typedef struct World {
 	ArrayList layers; //a list of the maps (list of SpatialMap)
 	///\private
 	ArrayList sprites; //a list of static sprites
+	///\private
+	HashMap removable; 
 	int r; ///the red component of the background color
 	int g; ///the green component of the background color
 	int b; ///the blue component of the background color
@@ -234,6 +236,8 @@ bool group_interacts(Group *a, Group *b);
 ArcadeObject arcobj_new(Shape bounds, bool solid, Sprite spr);
 /// Checks to see if two objects should interact, to allow things like bullets to ignore friendly units
 bool arcobj_interacts(ArcadeObject *a, ArcadeObject *b);
+/// Checks to see if two arcade objects are equal
+bool arcobj_equal(ArcadeObject *a, ArcadeObject *b);
 
 // *** LEVELS ***
 /// Load a level from a filename, loading the assets using the asset manager provided

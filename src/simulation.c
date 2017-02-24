@@ -30,6 +30,10 @@ bool arcobj_interacts(ArcadeObject *a, ArcadeObject *b) {
 	return group_interacts(a->group, b->group);
 }
 
+bool arcobj_equal(ArcadeObject *a, ArcadeObject *b) {
+
+}
+
 bool keep_going;
 Game game;
 
@@ -522,6 +526,12 @@ void sm_destroy(SpatialMap map) {
 	al_destroy(map.has);
 }
 
+static bool size_t_equal(void *a, void *b) {
+	size_t **a_ = a;
+	size_t **b_ = b;
+	return **a_ == **b_;
+}
+
 World world_new(Window *window, float width, float height, float qt_buckets_size, size_t data_size) {
 	return (World) {
 		.window = window,
@@ -530,6 +540,7 @@ World world_new(Window *window, float width, float height, float qt_buckets_size
 		.layers = al_new(sizeof(SpatialMap)),
 		.particles = al_new(sizeof(Particle)),
 		.camera = cam_new(window, rect_new(0, 0, width, height), true),
+		.removable = hm_new_eqfunc(sizeof(size_t), sizeof(bool), size_t_equal),
 		.r = 0,
 		.g = 0,
 		.b = 0
@@ -663,6 +674,10 @@ static inline void move_entity(World world, ArcadeObject *obj, void *data) {
 		velocity.y = try_move(world, obj, y).y;
 	}
 	obj->velocity = velocity;
+	if(!obj->alive && !hm_has(world.removable, obj->index, &(obj->index))) {
+		bool x = true;
+		hm_put(&(world.removable), obj->index, &(obj->index), &x);
+	}
 }
 
 void world_update(World world, WorldUpdateFunc update, WorldObjectUpdateFunc obj_update, WorldCollideFunc collide) {
