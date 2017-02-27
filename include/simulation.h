@@ -155,6 +155,8 @@ bool qt_point_free(QuadTree *tree, Vector2 point, ArcadeObject *ignore);
 bool qt_region_free(QuadTree *tree, Shape region, ArcadeObject *ignore);
 /// Remove an object from the quadtree and return it
 ArcadeObject qt_remove(QuadTree *tree, size_t index);
+/// Overwrite an object's data in the quadtree
+void qt_set(QuadTree *tree, ArcadeObject obj, size_t index);
 /// Clear all data from the quadtree but retain allocated memory
 void qt_clear(QuadTree *tree);
 /// Return the number of objects inserted into the quadtree
@@ -236,8 +238,6 @@ bool group_interacts(Group *a, Group *b);
 ArcadeObject arcobj_new(Shape bounds, bool solid, Sprite spr);
 /// Checks to see if two objects should interact, to allow things like bullets to ignore friendly units
 bool arcobj_interacts(ArcadeObject *a, ArcadeObject *b);
-/// Checks to see if two arcade objects are equal
-bool arcobj_equal(ArcadeObject *a, ArcadeObject *b);
 
 // *** LEVELS ***
 /// Load a level from a filename, loading the assets using the asset manager provided

@@ -30,10 +30,6 @@ bool arcobj_interacts(ArcadeObject *a, ArcadeObject *b) {
 	return group_interacts(a->group, b->group);
 }
 
-bool arcobj_equal(ArcadeObject *a, ArcadeObject *b) {
-
-}
-
 bool keep_going;
 Game game;
 
@@ -304,6 +300,10 @@ ArcadeObject qt_remove(QuadTree *tree, size_t index) {
 	return value;
 }
 
+void qt_set(QuadTree *tree, ArcadeObject obj, size_t index) {
+	al_set(tree->entities, index, &obj);
+}
+
 void qt_clear(QuadTree *tree) {
 	al_clear(tree->entities);
 	al_clear(&tree->contains);
@@ -548,10 +548,20 @@ World world_new(Window *window, float width, float height, float qt_buckets_size
 }
 
 size_t world_add(World *world, ArcadeObject object, void *data_object) {
-	al_add(&world->items, data_object);
-	size_t index = qt_add(world->entities, object);
-	world_get(*world, index)->index = index;
-	return index;
+	ArrayList removable = hm_get_keys(world->removable);
+	if(removable.length == 0) {
+		al_add(&world->items, data_object);
+		size_t index = qt_add(world->entities, object);
+		world_get(*world, index)->index = index;
+		return index;
+	} else {
+		size_t *first = al_get(removable, 0);
+		al_set(&world->items, *first, data_object);
+		object.index = *first;
+		qt_set(world->entities, object, *first);
+		hm_remove(&(world->removable), *first, first);
+		return *first;
+	}
 }
 
 void world_add_particles(World *world, const ParticleEmitter *pe, const Vector2 position, const int min, const int max) {
